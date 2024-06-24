@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { Fragment, useCallback, useState } from "react";
-import Divider from "@mui/material/Divider"; 
+import Divider from "@mui/material/Divider";
 // GLOBAL CUSTOM COMPONENTS
 
 import Sticky from "components/sticky";
@@ -16,43 +16,41 @@ import { SearchInput } from "components/search-box";
  *  2. CHECKOUT-ALTERNATIVE
  */
 
-export default function ShopLayout2({
-  children
-}) {
+export default function ShopLayout2({ children }) {
   const pathname = usePathname();
   const [isFixed, setIsFixed] = useState(false);
-  const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []); 
-// FOR HANDLE TOP BAR AREA
+  const toggleIsFixed = useCallback((fixed) => setIsFixed(fixed), []);
+  // FOR HANDLE TOP BAR AREA
 
   let TOP_BAR_CONTENT = null;
-  const SHOW_TOP_BAR = ["/grocery-2", "/health-beauty", "/checkout-alternative"];
-  if (SHOW_TOP_BAR.includes(pathname)) TOP_BAR_CONTENT = <Topbar />; 
-// FOR HANDLE NAV BAR AREA
+  const SHOW_TOP_BAR = [
+    "/grocery-2",
+    "/health-beauty",
+    "/checkout-alternative",
+  ];
+  if (SHOW_TOP_BAR.includes(pathname)) TOP_BAR_CONTENT = <Topbar />;
+  // FOR HANDLE NAV BAR AREA
 
   let NAV_BAR_CONTENT = null;
   const SHOW_NAV_BAR = ["/checkout-alternative"];
-  if (SHOW_NAV_BAR.includes(pathname)) NAV_BAR_CONTENT = <Navbar elevation={0} />;
-  return <Fragment>
-      {
-      /* TOP BAR AREA */
-    }
-      {TOP_BAR_CONTENT}
+  if (SHOW_NAV_BAR.includes(pathname))
+    NAV_BAR_CONTENT = <Navbar elevation={0} />;
+  return (
+    <Fragment>
+      {/* TOP BAR AREA */}
+      {/* {TOP_BAR_CONTENT} */}
+      <Topbar />
 
-      {
-      /* HEADER */
-    }
+      {/* HEADER */}
       <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={70}>
         <Header isFixed={isFixed} midSlot={<SearchInput />} />
       </Sticky>
 
-      {
-      /* NAVIGATION BAR */
-    }
+      {/* NAVIGATION BAR */}
       {NAV_BAR_CONTENT ?? <Divider />}
 
-      {
-      /* BODY CONTENT */
-    }
+      {/* BODY CONTENT */}
       {children}
-    </Fragment>;
+    </Fragment>
+  );
 }

@@ -7,79 +7,79 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
-import useMediaQuery from "@mui/material/useMediaQuery"; 
+import useMediaQuery from "@mui/material/useMediaQuery";
 // MUI ICON COMPONENTS
 
 import Apps from "@mui/icons-material/Apps";
 import ViewList from "@mui/icons-material/ViewList";
-import FilterList from "@mui/icons-material/FilterList"; 
+import FilterList from "@mui/icons-material/FilterList";
 // Local CUSTOM COMPONENT
 
-import ProductFilterCard from "../product-filter-card"; 
+import ProductFilterCard from "../product-filter-card";
 // GLOBAL CUSTOM COMPONENTS
 
 import Sidenav from "components/side-nav";
 import { H5, Paragraph } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import ProductsGridView from "components/products-view/products-grid-view";
-import ProductsListView from "components/products-view/products-list-view"; 
+import ProductsListView from "components/products-view/products-list-view";
 // PRODUCT DATA
 
 import api from "utils/__api__/grocery-2";
-import productDatabase from "data/product-database"; 
+import productDatabase from "data/product-database";
 // TYPE
 
-const SORT_OPTIONS = [{
-  label: "Relevance",
-  value: "relevance"
-}, {
-  label: "Date",
-  value: "date"
-}, {
-  label: "Price Low to High",
-  value: "asc"
-}, {
-  label: "Price High to Low",
-  value: "desc"
-}];
+const SORT_OPTIONS = [
+  {
+    label: "Relevance",
+    value: "relevance",
+  },
+  {
+    label: "Date",
+    value: "date",
+  },
+  {
+    label: "Price Low to High",
+    value: "asc",
+  },
+  {
+    label: "Price High to Low",
+    value: "desc",
+  },
+];
 const initialFilters = {
   rating: 0,
   color: [],
   brand: [],
   sales: [],
-  price: [0, 300]
+  price: [0, 300],
 };
 export default async function ProductSearchPageView() {
-  
   const [view, setView] = useState("grid");
   const [sortBy, setSortBy] = useState("relevance");
-  const [filters, setFilters] = useState({ ...initialFilters
-  });
+  const [filters, setFilters] = useState({ ...initialFilters });
   // const featuredProducts = await api.getFeaturedProducts();
   // const bestHomeProducts = await api.getBestHomeProducts();
-  const downMd = useMediaQuery(theme => theme.breakpoints.down("md"));
+  const downMd = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const handleChangeFilters = (key, values) => {
-    setFilters(prev => ({ ...prev,
-      [key]: values
-    }));
+    setFilters((prev) => ({ ...prev, [key]: values }));
   };
 
-  const handleChangeSortBy = useCallback(v => setSortBy(v), []);
-  const toggleView = useCallback(v => () => setView(v), []);
-  const PRODUCTS = productDatabase.slice(95, 104).map(pro => ({ ...pro,
-    discount: 25
-  }));
+  const handleChangeSortBy = useCallback((v) => setSortBy(v), []);
+  const toggleView = useCallback((v) => () => setView(v), []);
+  const PRODUCTS = productDatabase
+    .slice(1, 10)
+    .map((pro) => ({ ...pro, discount: 25 }));
   // const PRODUCTS = [...(bestHomeProducts ?? []),...(featuredProducts??[])];
-  return <div className="bg-white pt-2 pb-4">
+  return (
+    <div className="bg-white pt-2 pb-4">
       <Container>
-        {
-        /* FILTER ACTION AREA */
-      }
+        {/* FILTER ACTION AREA */}
         <FlexBetween flexWrap="wrap" gap={2} mb={2}>
           <div>
             <H5 lineHeight={1} mb={1}>
-              Searching for “ mobile phone ”
+              Searching for “ tomato ”
             </H5>
             <Paragraph color="grey.600">48 results found</Paragraph>
           </div>
@@ -90,13 +90,24 @@ export default async function ProductSearchPageView() {
                 Sort by:
               </Paragraph>
 
-              <TextField select fullWidth size="small" value={sortBy} variant="outlined" placeholder="Sort by" onChange={e => handleChangeSortBy(e.target.value)} sx={{
-              flex: "1 1 0",
-              minWidth: "150px"
-            }}>
-                {SORT_OPTIONS.map(item => <MenuItem value={item.value} key={item.value}>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                value={sortBy}
+                variant="outlined"
+                placeholder="Sort by"
+                onChange={(e) => handleChangeSortBy(e.target.value)}
+                sx={{
+                  flex: "1 1 0",
+                  minWidth: "150px",
+                }}
+              >
+                {SORT_OPTIONS.map((item) => (
+                  <MenuItem value={item.value} key={item.value}>
                     {item.label}
-                  </MenuItem>)}
+                  </MenuItem>
+                ))}
               </TextField>
             </FlexBox>
 
@@ -106,47 +117,69 @@ export default async function ProductSearchPageView() {
               </Paragraph>
 
               <IconButton onClick={toggleView("grid")}>
-                <Apps fontSize="small" color={view === "grid" ? "primary" : "inherit"} />
+                <Apps
+                  fontSize="small"
+                  color={view === "grid" ? "primary" : "inherit"}
+                />
               </IconButton>
 
               <IconButton onClick={toggleView("list")}>
-                <ViewList fontSize="small" color={view === "list" ? "primary" : "inherit"} />
+                <ViewList
+                  fontSize="small"
+                  color={view === "list" ? "primary" : "inherit"}
+                />
               </IconButton>
 
-              {
-              /* SHOW IN THE SMALL DEVICE */
-            }
-              {downMd && <Sidenav handler={close => <IconButton onClick={close}>
+              {/* SHOW IN THE SMALL DEVICE */}
+              {downMd && (
+                <Sidenav
+                  handler={(close) => (
+                    <IconButton onClick={close}>
                       <FilterList fontSize="small" />
-                    </IconButton>}>
+                    </IconButton>
+                  )}
+                >
                   <Box px={3} py={2}>
-                    <ProductFilterCard filters={filters} changeFilters={handleChangeFilters} />
+                    <ProductFilterCard
+                      filters={filters}
+                      changeFilters={handleChangeFilters}
+                    />
                   </Box>
-                </Sidenav>}
+                </Sidenav>
+              )}
             </FlexBox>
           </FlexBox>
         </FlexBetween>
 
         <Grid container spacing={4}>
-          {
-          /* PRODUCT FILTER SIDEBAR AREA */
-        }
-          <Grid item xl={2} md={3} sx={{
-          display: {
-            md: "block",
-            xs: "none"
-          }
-        }}>
-            <ProductFilterCard filters={filters} changeFilters={handleChangeFilters} />
+          {/* PRODUCT FILTER SIDEBAR AREA */}
+          <Grid
+            item
+            xl={2}
+            md={3}
+            sx={{
+              display: {
+                md: "block",
+                xs: "none",
+              },
+            }}
+          >
+            <ProductFilterCard
+              filters={filters}
+              changeFilters={handleChangeFilters}
+            />
           </Grid>
 
-          {
-          /* PRODUCT VIEW AREA */
-        }
+          {/* PRODUCT VIEW AREA */}
           <Grid item xl={10} md={9} xs={12}>
-            {view === "grid" ? <ProductsGridView products={PRODUCTS} /> : <ProductsListView products={PRODUCTS} />}
+            {view === "grid" ? (
+              <ProductsGridView products={PRODUCTS} />
+            ) : (
+              <ProductsListView products={PRODUCTS} />
+            )}
           </Grid>
         </Grid>
       </Container>
-    </div>;
+    </div>
+  );
 }

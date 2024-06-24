@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useState } from "react"; 
+import { Fragment, useCallback, useState } from "react";
 // GLOBAL CUSTOM COMPONENTS
 
 import Sticky from "components/sticky";
@@ -17,42 +17,30 @@ import { MobileNavigationBar } from "components/mobile-navigation";
  *  5. SHOPS, SHOP-DETAILS
  */
 
-export default function ShopLayout1({
-  children
-}) {
+export default function ShopLayout1({ children }) {
   const [isFixed, setIsFixed] = useState(false);
-  const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
-  return <Fragment>
-      {
-      /* TOP BAR SECTION */
-    }
+  const toggleIsFixed = useCallback((fixed) => setIsFixed(fixed), []);
+  return (
+    <Fragment>
+      {/* TOP BAR SECTION */}
       <Topbar />
 
-      {
-      /* HEADER */
-    }
+      {/* HEADER */}
       <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300}>
         <Header isFixed={isFixed} midSlot={<SearchInputWithCategory />} />
       </Sticky>
 
-      {
-      /* NAVIGATION BAR */
-    }
-      <Navbar elevation={0} border={1} />
+      {/* NAVIGATION BAR */}
+      {/* <Navbar elevation={0} border={1} /> */}
 
-      {
-      /* BODY CONTENT */
-    }
+      {/* BODY CONTENT */}
       {children}
 
-      {
-      /* SMALL DEVICE BOTTOM NAVIGATION */
-    }
+      {/* SMALL DEVICE BOTTOM NAVIGATION */}
       <MobileNavigationBar />
 
-      {
-      /* FOOTER */
-    }
+      {/* FOOTER */}
       <Footer1 />
-    </Fragment>;
+    </Fragment>
+  );
 }

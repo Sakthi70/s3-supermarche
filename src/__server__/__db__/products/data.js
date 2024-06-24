@@ -36,5 +36,5 @@ const slugs = uniqueProducts.map(item => ({
 })); 
 // get product names for search
 
-const search = uniqueProducts.slice(0, 6).map(item => item?.title);
+const search = grocery2.slice(0, 6).map(item => item?.title);
 export { uniqueProducts, slugs, search };
