@@ -12,6 +12,7 @@ import usePasswordVisible from "../use-password-visible";
 // GLOBAL CUSTOM COMPONENTS
 
 import BazaarTextField from "components/BazaarTextField"; 
+import { loginWithCredentials } from "actions/auth";
 // ==============================================================
 
 
@@ -45,9 +46,9 @@ const LoginPageView = ({
   } = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: values => {
-      console.log(values);
-      closeDialog?.();
+    onSubmit: async(values) => {
+      await loginWithCredentials(values);
+      // closeDialog?.();
     }
   });
   return <form onSubmit={handleSubmit}>

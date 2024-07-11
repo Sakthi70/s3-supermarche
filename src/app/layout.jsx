@@ -1,5 +1,6 @@
 import { Open_Sans } from "next/font/google";
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { SessionProvider } from "next-auth/react";
+// import { GoogleAnalytics } from '@next/third-parties/google';
 export const openSans = Open_Sans({
   subsets: ["latin"]
 }); 
@@ -17,13 +18,15 @@ import SettingsProvider from "contexts/SettingContext";
 import RTL from "components/rtl";
 import ProgressBar from "components/progress"; 
 // IMPORT i18n SUPPORT FILE
-
 import "i18n";
-export default function RootLayout({
+import { auth } from "auth";
+export default async function RootLayout({
   children
 }) {
+  const session = await auth();
   return <html lang="en" suppressHydrationWarning>
       <body className={openSans.className}>
+        <SessionProvider session={session}>
         <CartProvider>
           <SettingsProvider>
             <ThemeProvider>
@@ -32,7 +35,8 @@ export default function RootLayout({
             </ThemeProvider>
           </SettingsProvider>
         </CartProvider>
-        <GoogleAnalytics gaId="G-XKPD36JXY0" />
+        {/* <GoogleAnalytics gaId="G-XKPD36JXY0" /> */}
+        </SessionProvider>
       </body>
     </html>;
 }
