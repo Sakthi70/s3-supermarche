@@ -8,7 +8,8 @@ import bcrypt from 'bcryptjs';
 export const { handlers: {GET, POST}, signIn, signOut, auth } = NextAuth({
     adapter:PrismaAdapter(db),
     session: {strategy:'jwt'},
-  providers: [Credentials({
+  providers: [
+    Credentials({
     id: "credentials",
     name: 'credentials',
       credentials: {
@@ -23,7 +24,6 @@ export const { handlers: {GET, POST}, signIn, signOut, auth } = NextAuth({
         }
       },
       authorize: async ( credentials) => {
-        console.log('Credentials',credentials);
         if(!credentials || !credentials.email || !credentials.password){
              return null;
         }

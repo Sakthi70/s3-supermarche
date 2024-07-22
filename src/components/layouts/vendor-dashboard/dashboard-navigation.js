@@ -32,17 +32,17 @@ export const navigation = [{
     path: "/admin/categories/create"
   }]
 },
- {
-  name: "Brands",
-  icon: duotone.Apps,
-  children: [{
-    name: "Brand List",
-    path: "/admin/brands"
-  }, {
-    name: "Create Brand",
-    path: "/admin/brands/create"
-  }]
-},
+//  {
+//   name: "Brands",
+//   icon: duotone.Apps,
+//   children: [{
+//     name: "Brand List",
+//     path: "/admin/brands"
+//   }, {
+//     name: "Create Brand",
+//     path: "/admin/brands/create"
+//   }]
+// },
  {
   name: "Orders",
   icon: duotone.Order,
@@ -70,48 +70,50 @@ export const navigation = [{
     path: "/admin/refund-setting"
   }]
 }, 
-{
-  name: "Sellers",
-  icon: duotone.Seller,
-  children: [{
-    name: "Seller List",
-    path: "/admin/sellers"
-  }, {
-    name: "Seller Package",
-    path: "/admin/seller-package"
-  }, {
-    name: "Package Payments",
-    path: "/admin/package-payments"
-  }, {
-    name: "Earning History",
-    path: "/admin/earning-history"
-  }, {
-    name: "Payouts",
-    path: "/admin/payouts"
-  }, {
-    name: "Payout Request",
-    path: "/admin/payout-requests"
-  }]
-}, {
+// {
+//   name: "Sellers",
+//   icon: duotone.Seller,
+//   children: [{
+//     name: "Seller List",
+//     path: "/admin/sellers"
+//   }, {
+//     name: "Seller Package",
+//     path: "/admin/seller-package"
+//   }, {
+//     name: "Package Payments",
+//     path: "/admin/package-payments"
+//   }, {
+//     name: "Earning History",
+//     path: "/admin/earning-history"
+//   }, {
+//     name: "Payouts",
+//     path: "/admin/payouts"
+//   }, {
+//     name: "Payout Request",
+//     path: "/admin/payout-requests"
+//   }]
+// },
+ {
   type: "label",
   label: "Vendor"
-}, {
-  name: "Earnings",
-  icon: duotone.ProjectChart,
-  children: [{
-    name: "Earning History",
-    path: "/vendor/earning-history"
-  }, {
-    name: "Payouts",
-    path: "/vendor/payouts"
-  }, {
-    name: "Payout Request",
-    path: "/vendor/payout-requests"
-  }, {
-    name: "Payout Settings",
-    path: "/vendor/payout-settings"
-  }]
 }, 
+// {
+//   name: "Earnings",
+//   icon: duotone.ProjectChart,
+//   children: [{
+//     name: "Earning History",
+//     path: "/vendor/earning-history"
+//   }, {
+//     name: "Payouts",
+//     path: "/vendor/payouts"
+//   }, {
+//     name: "Payout Request",
+//     path: "/vendor/payout-requests"
+//   }, {
+//     name: "Payout Settings",
+//     path: "/vendor/payout-settings"
+//   }]
+// }, 
 {
   name: "Refund Request",
   icon: duotone.Refund,
@@ -120,15 +122,18 @@ export const navigation = [{
   name: "Reviews",
   icon: duotone.Review,
   path: "/vendor/reviews"
-}, {
-  name: "Shop Setting",
-  icon: duotone.SiteSetting,
-  path: "/vendor/shop-settings"
-}, {
-  name: "Support Tickets",
-  icon: duotone.ElementHub,
-  path: "/vendor/support-tickets"
-}, {
+}, 
+// {
+//   name: "Shop Setting",
+//   icon: duotone.SiteSetting,
+//   path: "/vendor/shop-settings"
+// },
+//  {
+//   name: "Support Tickets",
+//   icon: duotone.ElementHub,
+//   path: "/vendor/support-tickets"
+// }, 
+{
   name: "Account Settings",
   icon: duotone.AccountSetting,
   path: "/vendor/account-settings"

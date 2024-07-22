@@ -17,7 +17,8 @@ import { H5, Small } from "./Typography";
 export default function DropZone({
   onChange,
   imageSize = "Upload 280*280 image",
-  title = "Drag & drop product image here"
+  title = "Drag & drop product image here",
+  multiple = false
 }) {
   const onDrop = useCallback(acceptedFiles => onChange(acceptedFiles), [onChange]);
   const {
@@ -27,7 +28,7 @@ export default function DropZone({
   } = useDropzone({
     onDrop,
     maxFiles: 10,
-    multiple: true,
+    multiple: multiple,
     accept: {
       "image/*": [".png", ".gif", ".jpeg", ".jpg"]
     }

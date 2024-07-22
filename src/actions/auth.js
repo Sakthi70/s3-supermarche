@@ -1,4 +1,5 @@
-import  {signIn, signOut} from 'auth';
+// import  {signIn, signOut} from 'auth';
+import { signIn, signOut } from "next-auth/react";
 import {revalidatePath} from 'next/cache';
 
 export const login = async (provider) => {
@@ -17,7 +18,6 @@ export const loginWithCredentials =async(formData)=>{
     password : formData.password,
     redirectTo: '/'
   };
-  console.log(rawFormData);
   try {
     await signIn("credentials", rawFormData);
   } catch(error){

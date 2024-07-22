@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -18,6 +18,8 @@ import { FlexBox } from "components/flex-box";
 // STYLED COMPONENTS
 
 import { UploadImageBox, StyledClear } from "../styles"; 
+import { createCategory, getCategories } from "actions/categories";
+import { useRouter } from "next/navigation";
 // FORM FIELDS VALIDATION
 
 const VALIDATION_SCHEMA = yup.object().shape({
@@ -28,14 +30,29 @@ const VALIDATION_SCHEMA = yup.object().shape({
 
 // ================================================================
 export default function CategoryForm(props) {
+  const router = useRouter()
   const [files, setFiles] = useState([]);
   const INITIAL_VALUES = {
     name: "",
     parent: [],
     featured: false
   };
+  
+  const [categories, setCategories]= useState([]);
 
-  const handleFormSubmit = () => {}; 
+  
+
+  useEffect(() => {
+    getCategories().then(val => {
+        setCategories(val.categories)
+    })
+  }, [])
+  
+
+  const handleFormSubmit = async(values) => {
+    console.log(files[0]);
+    await createCategory( values.name,files[0]).then(values => router.push('/admin/categories'))
+  }; 
 // HANDLE UPDATE NEW IMAGE VIA DROP ZONE
 
 
@@ -69,16 +86,18 @@ export default function CategoryForm(props) {
 
               <Grid item sm={6} xs={12}>
                 <TextField select fullWidth color="info" size="medium" name="parent" onBlur={handleBlur} value={values.parent} onChange={handleChange} placeholder="Parent Category" label="Select Parent Category" SelectProps={{
-              multiple: true
-            }}>
-                  <MenuItem value="electronics">Electronics</MenuItem>
-                  <MenuItem value="fashion">Fashion</MenuItem>
+              multiple: false
+            }}>{
+              categories && categories.map(data => <MenuItem key={data.id} value={data.id}>{data.name}</MenuItem>)
+            }
+                  
                 </TextField>
               </Grid>
 
               <Grid item xs={12}>
-                <DropZone title="Drop & drag category image" onChange={files => handleChangeDropZone(files)} />
-
+                {files.length < 1 && 
+                  <DropZone multiple={false} title="Drop & drag category image" onChange={files => handleChangeDropZone(files)} />
+                }
                 <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
                   {files.map((file, index) => {
                 return <UploadImageBox key={index}>

@@ -12,6 +12,7 @@ import BazaarSwitch from "components/BazaarSwitch";
 // STYLED COMPONENTS
 
 import { StyledTableRow, CategoryWrapper, StyledTableCell, StyledIconButton } from "../styles"; 
+import { deleteCategory } from "actions/categories";
 // ========================================================================
 
 
@@ -33,6 +34,9 @@ export default function CategoryRow({
   const hasSelected = selected.indexOf(name) !== -1;
 
   const handleNavigate = () => router.push(`/admin/categories/${slug}`);
+  const onDelete = async() => {
+    await deleteCategory(id).then(() => router.push(`/admin/categories`) )
+  };
 
   return <StyledTableRow tabIndex={-1} role="checkbox" selected={hasSelected}>
       <StyledTableCell align="left">#{id.split("-")[0]}</StyledTableCell>
@@ -62,7 +66,7 @@ export default function CategoryRow({
           <RemoveRedEye />
         </StyledIconButton>
 
-        <StyledIconButton>
+        <StyledIconButton onClick={onDelete}>
           <Delete />
         </StyledIconButton>
       </StyledTableCell>
