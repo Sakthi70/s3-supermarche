@@ -16,10 +16,12 @@ export const navigation = [{
   }, {
     name: "Create Product",
     path: "/admin/products/create"
-  }, {
-    name: "Product Reviews",
-    path: "/admin/products/reviews"
-  }]
+  }, 
+  // {
+  //   name: "Product Reviews",
+  //   path: "/admin/products/reviews"
+  // }
+]
 },
  {
   name: "Categories",
@@ -49,27 +51,29 @@ export const navigation = [{
   children: [{
     name: "Order List",
     path: "/admin/orders"
-  }, {
-    name: "Order Details",
-    path: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
-  }]
+  }, 
+  // {
+  //   name: "Order Details",
+  //   path: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
+  // }
+]
 }, 
 {
   name: "Customers",
   icon: duotone.Customers,
   path: "/admin/customers"
 }, 
-{
-  name: "Refunds",
-  icon: duotone.Refund,
-  children: [{
-    name: "Refund Request",
-    path: "/admin/refund-request"
-  }, {
-    name: "Refund Settings",
-    path: "/admin/refund-setting"
-  }]
-}, 
+// {
+//   name: "Refunds",
+//   icon: duotone.Refund,
+//   children: [{
+//     name: "Refund Request",
+//     path: "/admin/refund-request"
+//   }, {
+//     name: "Refund Settings",
+//     path: "/admin/refund-setting"
+//   }]
+// }, 
 // {
 //   name: "Sellers",
 //   icon: duotone.Seller,
@@ -93,10 +97,10 @@ export const navigation = [{
 //     path: "/admin/payout-requests"
 //   }]
 // },
- {
-  type: "label",
-  label: "Vendor"
-}, 
+//  {
+//   type: "label",
+//   label: "Vendor"
+// }, 
 // {
 //   name: "Earnings",
 //   icon: duotone.ProjectChart,
@@ -114,15 +118,16 @@ export const navigation = [{
 //     path: "/vendor/payout-settings"
 //   }]
 // }, 
-{
-  name: "Refund Request",
-  icon: duotone.Refund,
-  path: "/vendor/refund-request"
-}, {
-  name: "Reviews",
-  icon: duotone.Review,
-  path: "/vendor/reviews"
-}, 
+// {
+//   name: "Refund Request",
+//   icon: duotone.Refund,
+//   path: "/vendor/refund-request"
+// }, 
+// {
+//   name: "Reviews",
+//   icon: duotone.Review,
+//   path: "/vendor/reviews"
+// }, 
 // {
 //   name: "Shop Setting",
 //   icon: duotone.SiteSetting,

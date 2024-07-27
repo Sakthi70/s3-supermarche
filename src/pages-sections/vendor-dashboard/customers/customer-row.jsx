@@ -47,9 +47,9 @@ export default function CustomerRow({
         {email}
       </StyledTableCell>
 
-      <StyledTableCell align="left" sx={STYLE}>
+      {/* <StyledTableCell align="left" sx={STYLE}>
         {currency(balance)}
-      </StyledTableCell>
+      </StyledTableCell> */}
 
       <StyledTableCell align="left" sx={STYLE}>
         {orders}

@@ -30,11 +30,13 @@ const tableHeading = [{
   id: "category",
   label: "Category",
   align: "left"
-}, {
-  id: "brand",
-  label: "Brand",
-  align: "left"
-}, {
+},
+//  {
+//   id: "brand",
+//   label: "Brand",
+//   align: "left"
+// }, 
+{
   id: "price",
   label: "Price",
   align: "left"

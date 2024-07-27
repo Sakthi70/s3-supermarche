@@ -54,13 +54,13 @@ export default function ProductRow({
         <CategoryWrapper>{category}</CategoryWrapper>
       </StyledTableCell>
 
-      <StyledTableCell align="left">
+      {/* <StyledTableCell align="left">
         <Avatar src={brand} sx={{
         width: 55,
         height: "auto",
         borderRadius: 0
       }} />
-      </StyledTableCell>
+      </StyledTableCell> */}
 
       <StyledTableCell align="left">{currency(price)}</StyledTableCell>
 

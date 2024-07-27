@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 // GLOBAL CUSTOM COMPONENTS
 
 import { H6, Small } from "components/Typography"; 
+import { logout } from "actions/auth";
 // STYLED COMPONENT
 
 const Divider = styled("div")(({
@@ -23,6 +24,9 @@ export default function AccountPopover() {
   const open = Boolean(anchorEl);
 
   const handleClose = () => setAnchorEl(null);
+
+  const signOut =async() => await logout();
+
 
   return <div>
       <IconButton sx={{
@@ -70,16 +74,15 @@ export default function AccountPopover() {
       }
     }}>
         <Box px={2} pt={1}>
-          <H6>Gage Paquette</H6>
+          <H6>User</H6>
           <Small color="grey.500">Admin</Small>
         </Box>
 
         <Divider />
         <MenuItem>Profile</MenuItem>
-        <MenuItem>My Orders</MenuItem>
-        <MenuItem>Settings</MenuItem>
+        {/* <MenuItem>Settings</MenuItem> */}
         <Divider />
-        <MenuItem>Logout</MenuItem>
+        <MenuItem onClick={signOut}>Logout</MenuItem>
       </Menu>
     </div>;
 }

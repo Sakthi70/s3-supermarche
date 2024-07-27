@@ -14,11 +14,11 @@ import { FlexBox } from "components/flex-box";
 const TopbarForm = () => {
   const initialValues = {
     phone: "12345678910",
-    email: "ui.lib.drive@gmail.com",
+    email: "sample@gmail.com",
     links: [{
       id: 1,
-      name: "Theme FAQ's",
-      link: "https://www.themefaqs.com"
+      name: "FAQ's",
+      link: "https://www.faq.com"
     }, {
       id: 2,
       name: "Help",

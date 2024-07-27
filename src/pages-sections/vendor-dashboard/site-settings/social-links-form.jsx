@@ -78,7 +78,7 @@ const SocialLinksForm = () => {
             <Grid item xs={12}>
               <Divider />
             </Grid>
-
+{/* 
             <Grid item xs={12}>
               <H4>App Links</H4>
             </Grid>
@@ -97,7 +97,7 @@ const SocialLinksForm = () => {
               mr: 1
             }} />
           }} />
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12}>
               <Button type="submit" color="info" variant="contained">

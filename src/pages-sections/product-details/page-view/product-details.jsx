@@ -19,7 +19,7 @@ export default function ProductDetailsPageView(props) {
       <ProductTabs />
 
       {/* FREQUENTLY BOUGHT PRODUCTS AREA */}
-      <FrequentlyBought products={props.frequentlyBought} />
+      {/* <FrequentlyBought products={props.frequentlyBought} /> */}
 
       {/* AVAILABLE SHOPS AREA */}
       {/* <AvailableShops /> */}

@@ -19,10 +19,10 @@ export default function SearchArea({
   return <FlexBox mb={2} gap={2} justifyContent="space-between" flexWrap="wrap">
       <SearchInput placeholder={searchPlaceholder} />
 
-      <Button href={url} color="info" fullWidth={downSM} variant="contained" startIcon={<Add />} LinkComponent={Link} sx={{
+      {/* <Button href={url} color="info" fullWidth={downSM} variant="contained" startIcon={<Add />} LinkComponent={Link} sx={{
       minHeight: 44
     }}>
         {buttonText}
-      </Button>
+      </Button> */}
     </FlexBox>;
 }

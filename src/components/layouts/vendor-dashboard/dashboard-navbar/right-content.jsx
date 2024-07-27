@@ -13,7 +13,7 @@ export default function RightContent() {
       color: "grey.500"
     }} />} />
 
-      <NotificationsPopover />
+      {/* <NotificationsPopover /> */}
       <AccountPopover />
     </FlexBox>;
 }
