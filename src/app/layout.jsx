@@ -3,20 +3,20 @@ import { SessionProvider } from "next-auth/react";
 // import { GoogleAnalytics } from '@next/third-parties/google';
 export const openSans = Open_Sans({
   subsets: ["latin"]
-}); 
+});
 // THEME PROVIDER
 
-import ThemeProvider from "theme/theme-provider"; 
+import ThemeProvider from "theme/theme-provider";
 // PRODUCT CART PROVIDER
 
-import CartProvider from "contexts/CartContext"; 
+import CartProvider from "contexts/CartContext";
 // SITE SETTINGS PROVIDER
 
-import SettingsProvider from "contexts/SettingContext"; 
+import SettingsProvider from "contexts/SettingContext";
 // GLOBAL CUSTOM COMPONENTS
 
 import RTL from "components/rtl";
-import ProgressBar from "components/progress"; 
+import ProgressBar from "components/progress";
 // IMPORT i18n SUPPORT FILE
 import "i18n";
 import { auth } from "auth";
@@ -26,17 +26,17 @@ export default async function RootLayout({
   const session = await auth();
   return <html lang="en" suppressHydrationWarning>
       <body className={openSans.className}>
-        <SessionProvider session={session}>
-        <CartProvider>
-          <SettingsProvider>
-            <ThemeProvider>
-              <ProgressBar />
-              <RTL>{children}</RTL>
-            </ThemeProvider>
-          </SettingsProvider>
-        </CartProvider>
-        {/* <GoogleAnalytics gaId="G-XKPD36JXY0" /> */}
-        </SessionProvider>
+          <SessionProvider session={session}>
+            <CartProvider>
+              <SettingsProvider>
+                <ThemeProvider>
+                  <ProgressBar />
+                  <RTL>{children}</RTL>
+                </ThemeProvider>
+              </SettingsProvider>
+            </CartProvider>
+            {/* <GoogleAnalytics gaId="G-XKPD36JXY0" /> */}
+          </SessionProvider>
       </body>
     </html>;
 }
