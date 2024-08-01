@@ -4,6 +4,6 @@ import CategoryForm from "../category-form";
 import PageWrapper from "../../page-wrapper";
 export default function CreateCategoryPageView() {
   return <PageWrapper title="Create Category">
-      <CategoryForm />
+      <CategoryForm isEdit={false} />
     </PageWrapper>;
 }

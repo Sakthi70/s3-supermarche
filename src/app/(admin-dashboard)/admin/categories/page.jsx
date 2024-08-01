@@ -1,4 +1,3 @@
-import { getCategories } from "actions/categories";
 import { CategoriesPageView } from "pages-sections/vendor-dashboard/categories/page-view";
 // API FUNCTIONS
 
@@ -15,6 +14,5 @@ export const metadata = {
 
 
 export default async function Categories() {
-  const {categories} = await getCategories();
-  return <CategoriesPageView categories={categories||[]} />;
+  return <CategoriesPageView />;
 }

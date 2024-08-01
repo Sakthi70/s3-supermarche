@@ -13,16 +13,17 @@ import SearchInput from "components/SearchInput";
 export default function SearchArea({
   searchPlaceholder = "Search Product...",
   buttonText = "Add Product",
-  url = "/"
+  url = "/",
+  handleSearch =() => {}
 }) {
   const downSM = useMediaQuery(theme => theme.breakpoints.down("sm"));
   return <FlexBox mb={2} gap={2} justifyContent="space-between" flexWrap="wrap">
-      <SearchInput placeholder={searchPlaceholder} />
+      <SearchInput placeholder={searchPlaceholder} onChange={handleSearch}/>
 
-      {/* <Button href={url} color="info" fullWidth={downSM} variant="contained" startIcon={<Add />} LinkComponent={Link} sx={{
+      <Button href={url} color="info" fullWidth={downSM} variant="contained" startIcon={<Add />} LinkComponent={Link} sx={{
       minHeight: 44
     }}>
         {buttonText}
-      </Button> */}
+      </Button>
     </FlexBox>;
 }

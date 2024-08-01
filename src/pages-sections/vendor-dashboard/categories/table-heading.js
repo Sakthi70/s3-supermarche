@@ -1,10 +1,6 @@
 
 // TABLE HEADING DATA LIST
 export const tableHeading = [{
-  id: "id",
-  label: "ID",
-  align: "left"
-}, {
   id: "name",
   label: "Name",
   align: "left"
@@ -12,13 +8,24 @@ export const tableHeading = [{
   id: "image",
   label: "Image",
   align: "left"
-}, {
+},
+{
+  id: "slug",
+  label: "Slug",
+  align: "left"
+},  {
   id: "level",
   label: "Level",
   align: "left"
-}, {
-  id: "featured",
-  label: "Featured",
+},
+{
+  id: "highlight",
+  label: "Type",
+  align: "left"
+},
+{
+  id: "enabled",
+  label: "Enabled",
   align: "left"
 }, {
   id: "action",

@@ -26,13 +26,15 @@ export const navigation = [{
  {
   name: "Categories",
   icon: duotone.Accounts,
-  children: [{
-    name: "Category List",
+  // children: [{
+    // name: "Category List",
     path: "/admin/categories"
-  }, {
-    name: "Create Category",
-    path: "/admin/categories/create"
-  }]
+  // }, 
+  // {
+  //   name: "Create Category",
+  //   path: "/admin/categories/create"
+  // }
+// ]
 },
 //  {
 //   name: "Brands",

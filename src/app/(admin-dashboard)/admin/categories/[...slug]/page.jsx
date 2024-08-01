@@ -9,5 +9,7 @@ export const metadata = {
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
 export default function EditCategory() {
+  //same name as name of your file, can be [slug].js; [specialId].js - any name you want
+
   return <EditCategoryPageView />;
 }

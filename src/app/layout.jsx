@@ -21,24 +21,27 @@ import ProgressBar from "components/progress";
 import "i18n";
 import { auth } from "auth";
 import Loading from "./loading";
+import AppProvider from "contexts/AppContext";
 export default async function RootLayout({
   children
 }) {
   const session = await auth();
   return <html lang="en" suppressHydrationWarning>
-      <body className={openSans.className}>
-              <SettingsProvider>
-                <ThemeProvider>
-                  <Loading/>
-          <SessionProvider session={session}>
-            <CartProvider>
-                  <ProgressBar />
-                  <RTL>{children}</RTL>
-            </CartProvider>
-            {/* <GoogleAnalytics gaId="G-XKPD36JXY0" /> */}
-          </SessionProvider>
-                </ThemeProvider>
-              </SettingsProvider>
-      </body>
-    </html>;
+    <body className={openSans.className}>
+      <SettingsProvider>
+        <AppProvider>
+          <ThemeProvider>
+            <Loading />
+            <SessionProvider session={session}>
+              <CartProvider>
+                <ProgressBar />
+                <RTL>{children}</RTL>
+              </CartProvider>
+              {/* <GoogleAnalytics gaId="G-XKPD36JXY0" /> */}
+            </SessionProvider>
+          </ThemeProvider>
+        </AppProvider>
+      </SettingsProvider>
+    </body>
+  </html>;
 }

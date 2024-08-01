@@ -2,20 +2,50 @@
 
 import prisma from 'db';
 
-export const createCategory = async(name, file) => {
-  
-   
+export const createCategory = async(value, file) => {
     let category = await prisma.category.create({
       data: {
-        name,
+            ...value,
             image: file
+        },
+        include:{
+          _count: {
+            select:{
+              categories: true
+            }
+          }
         }
+
     });
     return category
 }
 
+export const updateCategory = async(value, id) => {
+  let category = await prisma.category.update({
+    where: {
+      id
+    },
+    include:{
+      _count: {
+        select:{
+          categories: true
+        }
+      }
+    },
+    data: value});
+  return category
+}
+
 export async function getCategories(){
-    const categories = await prisma.Category.findMany();
+    const categories = await prisma.Category.findMany({
+      include:{
+        _count: {
+          select:{
+            categories: true
+          }
+        }
+      }
+    });
     return {categories}
 }
 

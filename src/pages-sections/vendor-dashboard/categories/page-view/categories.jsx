@@ -21,31 +21,21 @@ import PageWrapper from "../../page-wrapper";
 
 // TABLE HEAD COLUMN DATA
 import { tableHeading } from "../table-heading";
-import { useEffect, useState } from "react";
-import { getCategories } from "actions/categories";
+import useApp from "hooks/useApp";
+import { useState } from "react";
 // =============================================================================
 
 // =============================================================================
 const CategoriesPageView = ({}) => {
-  const [categories, setCategories] = useState([]);
+  
+   const {content }= useApp();
+   const {categories}= content || {categories:[]};
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = () => {
-    getCategories().then((val) => setCategories(val.categories));
-  };
+   const [search, setSearch] = useState("");
+   
 
   // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
-  const filteredCategories = categories.map((item) => ({
-    id: item.id,
-    name: item.name,
-    slug: item.slug,
-    image: item.image,
-    featured: item.featured,
-    level: Math.ceil(Math.random() * 1),
-  }));
+  const filteredCategories = categories.filter( x => x.name.includes(search) || x.slug.includes(search));
   const {
     order,
     orderBy,
@@ -56,11 +46,12 @@ const CategoriesPageView = ({}) => {
     handleRequestSort,
   } = useMuiTable({
     listData: filteredCategories,
+    rowsPerPage:5
   });
   return (
     <PageWrapper title="Product Categories">
       <SearchArea
-        handleSearch={() => {}}
+        handleSearch={(val) => setSearch(val.target.value)}
         buttonText="Add Category"
         url="/admin/categories/create"
         searchPlaceholder="Search Category..."
@@ -87,7 +78,6 @@ const CategoriesPageView = ({}) => {
               <TableBody>
                 {filteredList.map((category) => (
                   <CategoryRow
-                    getCategories={fetchCategories}
                     key={category.id}
                     category={category}
                     selected={selected}
