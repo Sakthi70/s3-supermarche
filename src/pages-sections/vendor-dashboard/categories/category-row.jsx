@@ -18,6 +18,7 @@ import {
   StyledIconButton,
 } from "../styles";
 import { deleteCategory } from "actions/categories";
+import { deleteUpload } from "utils/cloudinary";
 // ========================================================================
 
 // ========================================================================
@@ -29,6 +30,9 @@ export default function CategoryRow({ category, getCategories, selected }) {
 
   const handleNavigate = () => router.push(`/admin/categories/${slug}`);
   const onDelete = async() => {
+    if(image !=''){
+      await deleteUpload(image, 'Category')
+    }
     await deleteCategory(id).then(() => router.push(`/admin/categories`) )
   };
 

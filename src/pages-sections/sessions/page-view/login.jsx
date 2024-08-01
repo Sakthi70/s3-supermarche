@@ -47,10 +47,20 @@ const LoginPageView = ({
     initialValues,
     validationSchema,
     onSubmit: async(values) => {
-      await loginWithCredentials(values);
-      // closeDialog?.();
-    }
-  });
+      try{
+      const response = await loginWithCredentials(values);
+
+            if (!!response.error) {
+                console.error(response.error);
+                // setError(response.error.message);
+            } else {
+              closeDialog?.();
+            }
+        } catch (e) {
+            console.error(e);
+            // setError("Check your Credentials");
+        }
+  }});
   return <form onSubmit={handleSubmit}>
       <BazaarTextField mb={1.5} fullWidth name="email" size="small" type="email" variant="outlined" onBlur={handleBlur} value={values.email} onChange={handleChange} label="Email or Phone Number" placeholder="exmple@mail.com" helperText={touched.email && errors.email} error={Boolean(touched.email && errors.email)} />
 

@@ -1,3 +1,4 @@
+
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -14,7 +15,8 @@ const toBase64 = file => new Promise((resolve, reject) => {
 });
 
 export async function imageUpload(imageFile, folder) {
-    cloudinary.config({
+    try{
+     cloudinary.config({
         cloud_name: process.env.CLOUD_NAME,
         api_key: process.env.API_KEY,
         api_secret: process.env.API_SECRET,
@@ -22,11 +24,15 @@ export async function imageUpload(imageFile, folder) {
     let resultUrl = "";
     // await blobToBase64(imageFile).then(base64 => {imageunstripped = base64});
     const imageunstripped = await toBase64(imageFile);
-
     await cloudinary.uploader.upload(imageunstripped, { folder: folder }, function (error, result) {
         resultUrl = result.secure_url;
     });
     return resultUrl;
+}
+catch(error){
+    console.log(error);
+    return ''
+}
 }
 
 export async function deleteUpload(url, folder) {
@@ -40,7 +46,6 @@ export async function deleteUpload(url, folder) {
     await cloudinary.uploader.destroy(
         `${folder ? `${folder}/` : ""}${filename}`,
         function (result) {
-            console.log(result);
         }
     );
 }

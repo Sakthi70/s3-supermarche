@@ -16,20 +16,14 @@ export const loginWithCredentials =async(formData)=>{
   const rawFormData = {
     email: formData.email,
     password : formData.password,
-    redirectTo: '/'
+    redirect: false
   };
+
   try {
-    await signIn("credentials", rawFormData);
-  } catch(error){
-    if(error){
-        switch(error.type){
-            case 'CredentialsSignin':
-                return {error: 'Invalid Credentails!'};
-            default:
-                return {error:'Something went wrong!'};
-        }
-    }
-  throw error; 
+    const response =  await signIn("credentials", rawFormData);
+    return response
+  } catch (error) {
+    throw error;
   }
-  revalidatePath('/');
+
 }

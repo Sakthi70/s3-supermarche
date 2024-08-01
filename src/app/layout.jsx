@@ -20,23 +20,25 @@ import ProgressBar from "components/progress";
 // IMPORT i18n SUPPORT FILE
 import "i18n";
 import { auth } from "auth";
+import Loading from "./loading";
 export default async function RootLayout({
   children
 }) {
   const session = await auth();
   return <html lang="en" suppressHydrationWarning>
       <body className={openSans.className}>
-          <SessionProvider session={session}>
-            <CartProvider>
               <SettingsProvider>
                 <ThemeProvider>
+                  <Loading/>
+          <SessionProvider session={session}>
+            <CartProvider>
                   <ProgressBar />
                   <RTL>{children}</RTL>
-                </ThemeProvider>
-              </SettingsProvider>
             </CartProvider>
             {/* <GoogleAnalytics gaId="G-XKPD36JXY0" /> */}
           </SessionProvider>
+                </ThemeProvider>
+              </SettingsProvider>
       </body>
     </html>;
 }

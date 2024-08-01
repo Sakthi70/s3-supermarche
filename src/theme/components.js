@@ -174,6 +174,21 @@ export const components = {
       }
     }
   },
+  MuiBackdrop: {
+    styleOverrides: {
+      root: {
+        background: [
+          `rgb(22,28,36)`,
+          `-moz-linear-gradient(75deg, rgba(22, 28, 36, 0.48) 0%, rgba(22, 28, 36, 1) 100%)`,
+          `-webkit-linear-gradient(75deg, rgba(22, 28, 36, 0.48) 0%, rgba(22, 28, 36, 1) 100%)`,
+          `linear-gradient(75deg, rgba(22, 28, 36, 0.48) 0%, rgba(22, 28, 36, 1) 100%)`,
+        ],
+        "&.MuiBackdrop-invisible": {
+          background: "transparent",
+        },
+      },
+    },
+  },
   MuiContainer: {
     defaultProps: {
       maxWidth: "xl"

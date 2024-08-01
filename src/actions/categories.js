@@ -1,17 +1,14 @@
 "use server";
 
-import {imageUpload} from 'utils/cloudinary'
 import prisma from 'db';
 
 export const createCategory = async(name, file) => {
-  let result = "";
-    if(file){
-         result = await imageUpload(file, 'Category');
-  }
+  
+   
     let category = await prisma.category.create({
       data: {
         name,
-            image: result
+            image: file
         }
     });
     return category

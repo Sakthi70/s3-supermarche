@@ -10,7 +10,8 @@ import { createContext, useEffect, useState } from "react";
 
 // THEN GOTO BROWSER CONSOLE AND RUN localStorage.clear() TO CLEAR LOCAL STORAGE
 const initialSettings = {
-  direction: "ltr"
+  direction: "ltr",
+  loading: false
 };
 export const SettingsContext = createContext({
   settings: initialSettings,
@@ -22,7 +23,7 @@ export default function SettingsProvider({
   const [settings, setSettings] = useState(initialSettings);
 
   const updateSettings = updatedSetting => {
-    setSettings(updatedSetting);
+    setSettings({...settings,...updatedSetting});
     window.localStorage.setItem("settings", JSON.stringify(updatedSetting));
   };
 

@@ -1,15 +1,14 @@
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import NextAuth from "next-auth"
+import NextAuth, { CredentialsSignin } from "next-auth"
 import db from './db';
-import {saltAndHashPassword} from './utils/helper';
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcryptjs';
- 
+
 export const { handlers: {GET, POST}, signIn, signOut, auth } = NextAuth({
     adapter:PrismaAdapter(db),
     session: {strategy:'jwt'},
   providers: [
-    Credentials({
+    CredentialsProvider({
     id: "credentials",
     name: 'credentials',
       credentials: {
@@ -27,28 +26,27 @@ export const { handlers: {GET, POST}, signIn, signOut, auth } = NextAuth({
         if(!credentials || !credentials.email || !credentials.password){
              return null;
         }
-        const email = credentials.email;
-        const hash = saltAndHashPassword(credentials.password);
-        let user =  await db.user.findUnique({
-            where: {
-                email,
-            }
-        })
-
-        if(!user){
-            user = await db.user.create({
-                data: {
-                     email,
-                    hashedPassword: hash
+        try {
+            const email = credentials.email;
+            let user =  await db.user.findUnique({
+                where: {
+                    email,
                 }
             })
-        }else{
-            const isMatch = bcrypt.compareSync(credentials.password, user.hashedPassword);
-            if(!isMatch){
-                throw new Error('Incorrect password.');
+            if(user){
+                const isMatch = bcrypt.compareSync(credentials.password, user.hashedPassword);
+
+                if (isMatch) {
+                    return user;
+                } else {
+                    throw new Error("Email or Password is not correct");
+                }
+            } else {
+                throw new Error("User not found");
             }
-        }
-        return user;
-      }
-  })] ,
+        } catch (error) {
+            throw new Error(error);
+        }  
+  }
+})] ,
 })
