@@ -100,3 +100,15 @@ model Category {
   updatedAt DateTime @updatedAt
   categories Category[] @relation("parentId")
 }
+
+model Banner {
+  id             String          @id @default(cuid())
+  title          String
+  description    String
+  type           Int
+  expires        DateTime?
+  image          String?
+  enabled        Boolean @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

@@ -44,9 +44,9 @@ export default function Section1({
                 {item.description}
               </H6>
 
-              <H5 fontSize={18} fontWeight={700} mb={2.5}>
+              {/* <H5 fontSize={18} fontWeight={700} mb={2.5}>
                 Try our mobile app!
-              </H5>
+              </H5> */}
 
               {/* <AppStore /> */}
             </GridItemOne>

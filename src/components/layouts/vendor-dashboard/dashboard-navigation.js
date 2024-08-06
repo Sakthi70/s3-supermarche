@@ -2,11 +2,25 @@ import duotone from "icons/duotone";
 export const navigation = [{
   type: "label",
   label: "Admin"
-}, {
+},
+ {
   name: "Dashboard",
   icon: duotone.Dashboard,
   path: "/vendor/dashboard"
 }, 
+{
+  name: "Banners",
+  icon: duotone.ProjectChart,
+  // children: [{
+    // name: "Category List",
+    path: "/admin/banners"
+  // }, 
+  // {
+  //   name: "Create Category",
+  //   path: "/admin/categories/create"
+  // }
+// ]
+},
 {
   name: "Products",
   icon: duotone.Products,
