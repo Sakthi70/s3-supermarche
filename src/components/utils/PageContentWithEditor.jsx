@@ -1,16 +1,14 @@
-import { Lock, LockOpen, TextFields } from "@mui/icons-material";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
+import { Box } from "@mui/material";
+import { useCallback } from "react";
 import {
   LinkBubbleMenu,
-  MenuButton,
   RichTextEditor,
-  RichTextReadOnly,
   TableBubbleMenu,
   insertImages,
 } from "mui-tiptap";
 import EditorMenuControls from "./ExtensionControl";
 import useExtensions from "./useExtensions";
+import { imageUpload } from "utils/cloudinary";
 
 function fileListToImageFiles(fileList){
   // You may want to use a package like attr-accept
@@ -22,13 +20,29 @@ function fileListToImageFiles(fileList){
   });
 }
 
+const toBase64 = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = reject;
+});
+
+
+export const convertToBase64 = async(selectedFile) => {
+  let result = await imageUpload(selectedFile,'Editor');
+  console.log(result)
+      return result
+  
+}
+
 export default function Editor({value,rteRef,isEditable=true}) {
   const extensions = useExtensions({
     placeholder: "Add your own content here...",
   });
 
   const handleNewImageFiles = useCallback(
-    (files, insertPosition) => {
+    async(files, insertPosition) => {
+      console.log(files)
       if (!rteRef.current?.editor) {
         return;
       }
@@ -41,11 +55,13 @@ export default function Editor({value,rteRef,isEditable=true}) {
       // into the editor content, though that can make the editor content very
       // large. You will probably want to use the same upload function here as
       // for the MenuButtonImageUpload `onUploadFiles` prop.
-      const attributesForImageFiles = files.map((file) => ({
-        src: URL.createObjectURL(file),
-        alt: file.name,
-      }));
-
+      let attributesForImageFiles = [];
+       for(let i=0; i< files.length;i++){
+        let result = await convertToBase64(files[i]);
+        attributesForImageFiles.push( {src: result,
+        alt: files[i].name,
+      })
+    };
       insertImages({
         images: attributesForImageFiles,
         editor: rteRef.current.editor,
@@ -62,7 +78,6 @@ export default function Editor({value,rteRef,isEditable=true}) {
         if (!(event instanceof DragEvent) || !event.dataTransfer) {
           return false;
         }
-
         const imageFiles = fileListToImageFiles(event.dataTransfer.files);
         if (imageFiles.length > 0) {
           const insertPosition = view.posAtCoords({

@@ -37,7 +37,7 @@ export default async function GroceryTwoPageView() {
         {
         /* TOP HERO AREA */
       }
-        <Section1 carouselData={mainCarouselData} />
+        <Section1  />
 
         {
         /* SERVICE LIST AREA */

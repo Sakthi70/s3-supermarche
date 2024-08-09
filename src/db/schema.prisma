@@ -104,7 +104,7 @@ model Category {
 model Banner {
   id             String          @id @default(cuid())
   title          String
-  description    String
+  description    String         @db.VarChar(10000)
   type           Int
   expires        DateTime?
   image          String?

@@ -49,7 +49,6 @@ export default function BannerRow({ banner, selected,refetch }) {
     loading(false);
   };
 
-  console.log(banner)
   return (
     <StyledTableRow tabIndex={-1} role="checkbox" selected={hasSelected}>
       <StyledTableCell align="left">

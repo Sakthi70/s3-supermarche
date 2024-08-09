@@ -25,8 +25,9 @@ const Carousel = forwardRef((props, ref) => {
     arrowStyles,
     dots = false,
     arrows = true,
-    slidesToShow = 4,
+    slidesToShow = 1,
     spaceBetween = 10,
+    infinite= true,
     dotStyles = {
       mt: 4
     },
@@ -37,6 +38,7 @@ const Carousel = forwardRef((props, ref) => {
     dots,
     arrows,
     slidesToShow,
+    infinite,
     rtl: theme.direction === "rtl",
     ...CarouselArrows(arrowStyles),
     ...CarouselDots({

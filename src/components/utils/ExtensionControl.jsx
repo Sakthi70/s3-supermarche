@@ -31,6 +31,7 @@ import {
   MenuSelectTextAlign,
   isTouchDevice,
 } from "mui-tiptap";
+import { convertToBase64 } from "./PageContentWithEditor";
 
 export default function EditorMenuControls() {
   const theme = useTheme();
@@ -117,13 +118,6 @@ export default function EditorMenuControls() {
       unlikely to have a keyboard that will allow for using Tab/Shift+Tab. These
       buttons probably aren't necessary for keyboard users and would add extra
       clutter. */}
-      {isTouchDevice() && (
-        <>
-          <MenuButtonIndent />
-
-          <MenuButtonUnindent />
-        </>
-      )}
 
       <MenuDivider />
 
@@ -138,19 +132,14 @@ export default function EditorMenuControls() {
       <MenuDivider />
 
       <MenuButtonImageUpload
-        onUploadFiles={(files) =>
-          // For the sake of a demo, we don't have a server to upload the files
-          // to, so we'll instead convert each one to a local "temporary" object
-          // URL. This will not persist properly in a production setting. You
-          // should instead upload the image files to your server, or perhaps
-          // convert the images to bas64 if you would like to encode the image
-          // data directly into the editor content, though that can make the
-          // editor content very large.
-          files.map((file) => ({
-            src: URL.createObjectURL(file),
-            alt: file.name,
-          }))
-        }
+        onUploadFiles={async (files) => {
+          let attributesForImageFiles = [];
+          for (let i = 0; i < files.length; i++) {
+            let result = await convertToBase64(files[i]);
+            attributesForImageFiles.push({ src: result, alt: files[i].name });
+          }
+          return attributesForImageFiles;
+        }}
       />
 
       <MenuDivider />

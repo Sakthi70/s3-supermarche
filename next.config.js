@@ -17,7 +17,8 @@ module.exports = {
     CLOUD_NAME: process.env.CLOUD_NAME },
   publicRuntimeConfig: { theme: "DEFAULT", currency: "EUR" },
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "ui-lib.com" }]
+    remotePatterns: [{ protocol: "https", hostname: "ui-lib.com" }],
+    domains: ['res.cloudinary.com'],
   },
   webpack: (config) => {
     config.resolve.fallback = { fs: false };
