@@ -1,6 +1,7 @@
-import { EditCategoryPageView } from "pages-sections/vendor-dashboard/categories/page-view";
+import EditBannerPageView from "pages-sections/vendor-dashboard/banners/page-view/banner-edit";
+
 export const metadata = {
-  title: "Edit Category - S3 Supermarche",
+  title: "Edit Banner - S3 Supermarche",
   description: `S3 Supermarche E-commerce is a friendly Online store`,
   authors: [{
     name: "RAJASEKAR",
@@ -8,8 +9,8 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
-export default function EditCategory() {
+export default function EditBanner() {
   //same name as name of your file, can be [slug].js; [specialId].js - any name you want
 
-  return <EditCategoryPageView />;
+  return <EditBannerPageView />;
 }

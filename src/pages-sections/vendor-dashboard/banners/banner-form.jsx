@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -19,13 +19,14 @@ import { useRouter } from "next/navigation";
 import { deleteUpload, imageUpload } from "utils/cloudinary";
 import useApp from "hooks/useApp";
 import Warning from "components/warning/warning";
-import { Avatar, FormControl, InputLabel, Select, Typography } from "@mui/material";
-import { stringAvatar } from "utils/util";
 import MUIRichTextEditor from "mui-rte";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { addDays } from 'date-fns'
-import { createBanner } from "actions/banner";
+import { createBanner, updateBanner } from "actions/banner";
+import PageContentWithEditor from "components/utils/PageContentWithEditor";
+import _ from "lodash";
+import { CircularProgress } from "@mui/material";
 
 // FORM FIELDS VALIDATION
 
@@ -52,13 +53,13 @@ const MenuProps = {
 export default function BannerForm({isEdit, banner = {}}) {
   const router = useRouter()
   const [files, setFiles] = useState([]);
-  const INITIAL_VALUES = isEdit ? banner : {
+  const INITIAL_VALUES = {
     title: "",
     description: "",
     expires:null,
     type:1
   };
-  
+  const rteref = useRef(null);
 
   const {loading} = useApp();
 
@@ -67,52 +68,33 @@ export default function BannerForm({isEdit, banner = {}}) {
 
   const handleFormSubmit = async(values) => {
     loading(true);
-    let isError = false;
     if(isEdit){
-  //     if(values.name.trim().toLowerCase() !== category.name.trim().toLowerCase()){
-  //       if(values.parent !== ""){
-  //         parentId = categories.find(x=> x.slug === values.parent).id;
-  //       if(categories.filter(x=>  x.parentId === parentId).some(x => x.name.trim().toLowerCase() === values.name.trim().toLowerCase())){
-  //         setError('Category name already exist under the parent');
-  //         isError = true;
-  //       }
-  //   }else{
-  //     if(categories.filter(x=> x.parentId === null).some(x => x.name.trim().toLowerCase() === values.name.trim().toLowerCase())){
-  //       setError('Category name already exist');
-  //       isError = true;
-  //     }
-  //   }
-  //     }
-  //     if(!isError){
-  //       let data = {
-  //         name: values.name.trim(),
-  //         featured: values.featured,
-  //         additional: values.additional,
-  //         best: values.best
-  //       }
-  //       let result = '';
-  //       if(category.image !== '' && values.image === ''){
-  //         await deleteUpload(category.image, 'Category');
-  //         data.image = "";
-  //       }
-  //       if(files.length > 0){
-  //            result = await imageUpload(files[0], 'Category');
-  //            data.image = result
-  //     }
+      let data = {
+        title: values.title.trim(),
+        description: rteref.current?.editor?.getHTML(),
+        expires: values.expires,
+      }
+        let result = '';
+        if(banner.image !== '' && values.image === ''){
+          await deleteUpload(banner.image, 'Banner');
+          data.image = "";
+        }
+        if(files.length > 0){
+             result = await imageUpload(files[0], 'Banner');
+             data.image = result
+      }
           
-  //      await updateCategory( data,category.id).then(value => {
-  //       catCrud.updateCategory(value);
-  //       router.push('/admin/categories'); 
-  //      });
-  //     }
+       await updateBanner( data,banner.id).then(value => {
+        router.push('/admin/banners'); 
+       });
+      
     }
     else{
-  
       let result = '';
       if(files.length > 0){
            result = await imageUpload(files[0], 'Banner');
     }
-      await createBanner( values,result).then(values => {
+      await createBanner( {...values,description:rteref.current?.editor?.getHTML()},result).then(values => {
         router.push('/admin/banners'); 
       });
     
@@ -136,10 +118,14 @@ export default function BannerForm({isEdit, banner = {}}) {
     setFiles(files => files.filter(item => item.name !== file.name));
   };
 
+  if( isEdit && _.isEmpty(banner) ){
+    return <Box height={400} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}><CircularProgress/></Box>
+  }
+
 
   return <Card className="p-3">
     <Warning content={error} title={'Error'} open={error !=''} handleClose={() =>{setError('')}}/>
-      <Formik onSubmit={handleFormSubmit} initialValues={INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA}>
+      <Formik onSubmit={handleFormSubmit} enableReinitialize={true} initialValues={isEdit ? {...banner}: INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA}>
         {({
         values,
         errors,
@@ -158,13 +144,7 @@ export default function BannerForm({isEdit, banner = {}}) {
                 <DatePicker disablePast format="dd/MM/yyyy" onChange={(value) => setFieldValue('expires', value)} defaultValue={values.expires} minDate={addDays(new Date(), 1)} disableHighlightToday slotProps={{textField:{fullWidth:true,size:'medium', color:'info'}}}  label="Expires on" />
               </Grid>
               <Grid item xs={12}>
-                <Card sx={{height:200,padding:2}}>
-              <MUIRichTextEditor
-                    label="Type description here..."
-                    defaultValue={values.description}
-                    onSave={(value) => setFieldValue('description', value)}
-                    />
-                </Card>
+                  <PageContentWithEditor value={values.description} rteRef={rteref}/>
               </Grid>
 
               {!values.image && <Grid item xs={12}>

@@ -4,28 +4,43 @@ import prisma from "db";
 
 export async function getBanners(type) {
   const banners = await prisma.banner.findMany({
-    where: {
-      OR: [
-        {
-          expires: null,
-        },
-        {
-          expires: {
-            lte: new Date(),
-          },
-        },
-      ],
-    },
+    
   });
   return { banners };
 }
 
 export const createBanner = async(value, file) => {
-  let category = await prisma.banner.create({
+  let banner = await prisma.banner.create({
     data: {
           ...value,
           image: file
       }
   });
-  return category
+  return banner
+}
+
+export async function deleteBanner(id){
+  const deleteBanner = await prisma.banner.delete({
+  where: {
+    id: id,
+  },
+    })
+}
+
+export const getBannerById = async(id) => {
+  let banner = await prisma.banner.findUnique({
+    where: {
+      id: id
+    },
+  })
+  return banner
+}
+
+export const updateBanner = async(value, id) => {
+  let banner = await prisma.banner.update({
+    where: {
+      id
+    },
+    data: value});
+  return banner
 }

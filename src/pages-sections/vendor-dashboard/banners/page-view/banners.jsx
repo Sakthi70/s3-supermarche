@@ -90,6 +90,7 @@ const BannersPageView = ({}) => {
                     key={banner.id}
                     banner={banner}
                     selected={selected}
+                    refetch={getBannerList}
                   />
                 ))}
               </TableBody>
