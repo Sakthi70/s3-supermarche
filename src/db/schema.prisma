@@ -2,29 +2,29 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
- 
+
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  username      String?         @unique
-  email         String?         @unique
-  hashedPassword String? 
-  emailVerified DateTime?
-  image         String?
-  isAdmin       Boolean         @default(false)
-  Session       Session[]
-  Account       Account?
+  id             String          @id @default(cuid())
+  name           String?
+  username       String?         @unique
+  email          String?         @unique
+  hashedPassword String?
+  emailVerified  DateTime?
+  image          String?
+  isAdmin        Boolean         @default(false)
+  Session        Session[]
+  Account        Account?
   // Optional for WebAuthn support
-  Authenticator Authenticator[]
- 
+  Authenticator  Authenticator[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   id                       String  @id @default(cuid())
   userId                   String  @unique
@@ -40,35 +40,35 @@ model Account {
   session_state            String?
   refresh_token_expires_in Int?
   user                     User?   @relation(fields: [userId], references: [id])
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   @@unique([provider, providerAccountId])
   @@index([userId])
 }
- 
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id])
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   @@index([userId])
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@unique([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -79,36 +79,74 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
 }
 
 model Category {
-  id            String          @id @default(cuid())
-  name          String
-  parent     Category? @relation("parentId", fields: [parentId],references: [id])
-  parentId    String?
-  image       String?
-  featured   Boolean @default(false)
-  best       Boolean @default(false)
-  additional Boolean @default(false)
-  enabled    Boolean @default(true)
-  slug        String @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String     @id @default(cuid())
+  name       String
+  parent     Category?  @relation("parentId", fields: [parentId], references: [id])
+  parentId   String?
+  image      String?
+  featured   Boolean    @default(false)
+  best       Boolean    @default(false)
+  additional Boolean    @default(false)
+  enabled    Boolean    @default(true)
+  slug       String     @unique
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
   categories Category[] @relation("parentId")
+  products   Product[]
 }
 
 model Banner {
-  id             String          @id @default(cuid())
+  id          String    @id @default(cuid())
+  title       String
+  description String    @db.Text
+  type        Int
+  expires     DateTime?
+  image       String?
+  enabled     Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id             String           @id @default(cuid())
   title          String
-  description    String         @db.VarChar(10000)
-  type           Int
-  expires        DateTime?
+  description    String           @db.Text
+  category       Category         @relation(fields: [categoryId], references: [id])
+  categoryId     String
+  tag            String?
   image          String?
-  enabled        Boolean @default(true)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  brandName      String?
+  brandImage     String?
+  price          Float
+  offerPrice     Float?
+  isSame         Boolean          @default(true)
+  productVariant ProductVariant[]
+  enabled        Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model ProductVariant {
+  id         String   @id @default(cuid())
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String
+  type       String
+  value      String
+  subType    String?
+  subValue   String?
+  isMultiple Boolean 
+  isSubMultiple Boolean?
+  price      Float?
+  offerPrice Float?
+  image      String?
+  enabled    Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

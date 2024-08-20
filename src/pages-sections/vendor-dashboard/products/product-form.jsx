@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -16,6 +16,14 @@ import { FlexBox } from "components/flex-box";
 // STYLED COMPONENTS
 
 import { UploadImageBox, StyledClear } from "../styles"; 
+import useApp from "hooks/useApp";
+import { Avatar, InputAdornment, Select, Typography } from "@mui/material";
+import { stringAvatar } from "utils/util";
+import PageContentWithEditor from "components/utils/PageContentWithEditor";
+
+const Amount =  {
+  startAdornment: <InputAdornment position="start">€</InputAdornment>,
+};
 // FORM FIELDS VALIDATION SCHEMA
 
 const VALIDATION_SCHEMA = yup.object().shape({
@@ -31,13 +39,28 @@ const VALIDATION_SCHEMA = yup.object().shape({
 
 
 // ================================================================
-export default function ProductForm(props) {
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+export default function ProductForm({isEdit=false}) {
+  const {loading,content} = useApp();
+  const rteref = useRef(null);
+
+  const {categories} = content || {categories:[]};
   const INITIAL_VALUES = {
     name: "",
     tags: "",
     stock: "",
     price: "",
-    category: [],
+    category: "",
     sale_price: "",
     description: ""
   };
@@ -53,7 +76,7 @@ export default function ProductForm(props) {
     files.forEach(file => Object.assign(file, {
       preview: URL.createObjectURL(file)
     }));
-    setFiles(files);
+    setFiles((prev) => {return [...prev,...files]});
   }; 
 // HANDLE DELETE UPLOAD IMAGE
 
@@ -78,16 +101,22 @@ export default function ProductForm(props) {
               </Grid>
 
               <Grid item sm={6} xs={12}>
-                <TextField select fullWidth color="info" size="medium" name="category" onBlur={handleBlur} placeholder="Category" onChange={handleChange} value={values.category} label="Select Category" SelectProps={{
-              multiple: true
-            }} error={Boolean(touched.category && errors.category)} helperText={touched.category && errors.category}>
-                  <MenuItem value="electronics">Electronics</MenuItem>
-                  <MenuItem value="fashion">Fashion</MenuItem>
-                </TextField>
+                <Select disabled={isEdit}  MenuProps={MenuProps}  fullWidth color="info" size="medium" name="category" onBlur={handleBlur} value={values.category} onChange={handleChange} placeholder="Category" >
+               { categories && categories.map(data => <MenuItem key={data.id} value={data.slug}> <Box display={'flex'} alignItems={'center'} gap={2}> <Avatar 
+               
+               {...(data.image === '' ? stringAvatar(data.name, {
+                borderRadius: 2,
+                mr:2
+              }) : {alt: data.name, src:data.image, sx: {borderRadius: 2,
+                mr:2}})}
+          
+          
+        /> <Typography variant="subtitle2"> {data.slug}</Typography> </Box></MenuItem>)
+          }
+                </Select>
               </Grid>
-
               <Grid item xs={12}>
-                <DropZone onChange={files => handleChangeDropZone(files)} />
+                <DropZone multiple={true} onChange={files => handleChangeDropZone(files)} />
 
                 <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
                   {files.map((file, index) => {
@@ -100,7 +129,7 @@ export default function ProductForm(props) {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField rows={6} multiline fullWidth color="info" size="medium" name="description" label="Description" onBlur={handleBlur} onChange={handleChange} placeholder="Description" value={values.description} helperText={touched.description && errors.description} error={Boolean(touched.description && errors.description)} />
+                  <PageContentWithEditor value={values.description} rteRef={rteref}/>
               </Grid>
 
               <Grid item sm={6} xs={12}>
@@ -112,11 +141,44 @@ export default function ProductForm(props) {
               </Grid>
 
               <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="price" color="info" size="medium" type="number" onBlur={handleBlur} value={values.price} label="Regular Price" onChange={handleChange} placeholder="Regular Price" helperText={touched.price && errors.price} error={Boolean(touched.price && errors.price)} />
+                <TextField   InputProps={{...Amount}} fullWidth name="price" color="info" size="medium" type="number" onBlur={handleBlur} value={values.price} label="Regular Price" onChange={handleChange} placeholder="Regular Price" helperText={touched.price && errors.price} error={Boolean(touched.price && errors.price)} />
               </Grid>
 
               <Grid item sm={6} xs={12}>
+                <TextField  InputProps={{...Amount}} fullWidth color="info" size="medium" type="number" name="sale_price" label="Sale Price" onBlur={handleBlur} onChange={handleChange} placeholder="Sale Price" value={values.sale_price} helperText={touched.sale_price && errors.sale_price} error={Boolean(touched.sale_price && errors.sale_price)} />
+              </Grid>
+
+              <Grid item sm={6} xs={12}>
+                <Card elevation={3} sx={{padding:2}}>
+                <Grid container spacing={3}>
+                <Grid item xs={12} >
+                <Select disabled={isEdit}  MenuProps={MenuProps}  fullWidth color="info" size="medium" name="category" onBlur={handleBlur} value={values.category} onChange={handleChange} placeholder="Category" >
+               { categories && categories.map(data => <MenuItem key={data.id} value={data.slug}>  
+       <Typography variant="subtitle2"> {data.slug}</Typography></MenuItem>)
+          }
+                </Select>
+              </Grid>
+                  <Grid item xs={12}>
+                  <DropZone multiple={true} onChange={files => handleChangeDropZone(files)} />
+
+                  <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
+                    {files.map((file, index) => {
+                  return <UploadImageBox key={index}>
+                          <Box component="img" src={file.preview} width="100%" />
+                          <StyledClear onClick={handleFileDelete(file)} />
+                        </UploadImageBox>;
+                })}
+                  </FlexBox>
+                </Grid>
+                <Grid item  xs={12}>
+                <TextField  fullWidth name="price" color="info" size="medium" type="number" onBlur={handleBlur} value={values.price} label="Regular Price" onChange={handleChange} placeholder="Regular Price" helperText={touched.price && errors.price} error={Boolean(touched.price && errors.price)} />
+              </Grid>
+
+              <Grid item xs={12}>
                 <TextField fullWidth color="info" size="medium" type="number" name="sale_price" label="Sale Price" onBlur={handleBlur} onChange={handleChange} placeholder="Sale Price" value={values.sale_price} helperText={touched.sale_price && errors.sale_price} error={Boolean(touched.sale_price && errors.sale_price)} />
+              </Grid>
+                </Grid>
+                </Card>
               </Grid>
 
               <Grid item sm={6} xs={12}>
@@ -129,3 +191,4 @@ export default function ProductForm(props) {
       </Formik>
     </Card>;
 }
+

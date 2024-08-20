@@ -24,18 +24,18 @@ export const navigation = [{
 {
   name: "Products",
   icon: duotone.Products,
-  children: [{
-    name: "Product List",
+  // children: [{
+  //   name: "Product List",
     path: "/admin/products"
-  }, {
-    name: "Create Product",
-    path: "/admin/products/create"
-  }, 
+  // }, {
+  //   name: "Create Product",
+  //   path: "/admin/products/create"
+  // }, 
   // {
   //   name: "Product Reviews",
   //   path: "/admin/products/reviews"
   // }
-]
+// ]
 },
  {
   name: "Categories",
