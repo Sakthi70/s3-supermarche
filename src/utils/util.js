@@ -27,3 +27,23 @@ function stringToColor(string) {
       children: `${name.split(' ')[0][0]}`,
     };
   }
+
+  export function hexToDecimal(hex) {
+    hex = hex.replace(/^#/, '');
+
+    let decimal = parseInt(hex, 16);
+
+    return decimal;
+}
+
+export function decimalToHexColor(decimalValue) {
+  if (decimalValue < 0 || decimalValue > 16777215) {
+      throw new Error("Decimal value must be between 0 and 16777215.");
+  }
+
+  let hex = decimalValue.toString(16).toUpperCase();
+
+  hex = hex.padStart(6, '0');
+
+  return `#${hex}`;
+}

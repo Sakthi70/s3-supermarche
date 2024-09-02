@@ -8,3 +8,12 @@ export async function getProducts(){
   });
   return {products}
 }
+
+export async function createProduct(product){
+  const products = await prisma.product.create({
+    data:{
+      ...product
+    }
+  });
+  return {products}
+}

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useCallback } from "react";
 import {
   LinkBubbleMenu,
@@ -35,7 +35,7 @@ export const convertToBase64 = async(selectedFile) => {
   
 }
 
-export default function Editor({value,rteRef,isEditable=true}) {
+export default function Editor({value,rteRef,isEditable=true,error = false,helperText=''}) {
   const extensions = useExtensions({
     placeholder: "Add your own content here...",
   });
@@ -129,6 +129,7 @@ export default function Editor({value,rteRef,isEditable=true}) {
   return (
     <>
       <Box
+        
         sx={{
           // An example of how editor styles can be overridden. In this case,
           // setting where the scroll anchors to when jumping to headings. The
@@ -139,7 +140,11 @@ export default function Editor({value,rteRef,isEditable=true}) {
             "& h1, & h2, & h3, & h4, & h5, & h6": {
               scrollMarginTop:  50,
             },
+            
           },
+          border: error? 1: 0,
+          borderColor: '#E94560',
+          borderRadius: 1
         }}
       >
         <RichTextEditor
@@ -147,6 +152,7 @@ export default function Editor({value,rteRef,isEditable=true}) {
           extensions={extensions}
           content={value}
           editable={isEditable}
+          
           editorProps={{
             handleDrop: handleDrop,
             handlePaste: handlePaste,
@@ -157,6 +163,7 @@ export default function Editor({value,rteRef,isEditable=true}) {
             // example), but can be changed to "standard" to remove the outlined
             // field border from the editor
             variant: "outlined",
+          
             MenuBarProps: {
               hide: false,
             },
@@ -174,6 +181,7 @@ export default function Editor({value,rteRef,isEditable=true}) {
           )}
         </RichTextEditor>
       </Box>
+      {error && <Typography variant="subtitle2" color={'#E94560'}>{helperText}</Typography>}
     </>
   );
 }

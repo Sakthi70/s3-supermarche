@@ -18,7 +18,10 @@ export default function DropZone({
   onChange,
   imageSize = "Upload 280*280 image",
   title = "Drag & drop product image here",
-  multiple = false
+  multiple = false,
+  accept = {
+    "image/*": [".png", ".gif", ".jpeg", ".jpg"]
+  }
 }) {
   const onDrop = useCallback(acceptedFiles => onChange(acceptedFiles), [onChange]);
   const {
@@ -29,9 +32,7 @@ export default function DropZone({
     onDrop,
     maxFiles: 10,
     multiple: multiple,
-    accept: {
-      "image/*": [".png", ".gif", ".jpeg", ".jpg"]
-    }
+    accept: accept
   });
   return <Box py={4} px={{
     md: 10,

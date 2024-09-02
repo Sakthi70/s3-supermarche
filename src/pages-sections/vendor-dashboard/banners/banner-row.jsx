@@ -56,12 +56,7 @@ export default function BannerRow({ banner, selected,refetch }) {
       </StyledTableCell>
       <StyledTableCell align="left"> <div dangerouslySetInnerHTML={{__html: description}} /></StyledTableCell>
       <StyledTableCell align="left">
-       {image ? <Avatar src={image} alt={title} sx={{borderRadius:0}}/> : <Avatar
-          {...stringAvatar(title, {
-                borderRadius: 2,
-              })}
-           
-        /> }
+       {image && <Avatar src={image} alt={title} sx={{borderRadius:0}}/>  }
       </StyledTableCell>
       <StyledTableCell align="left">{expires !=null ? formatDate(expires,'dd-MM-yyyy'):''}</StyledTableCell>
 

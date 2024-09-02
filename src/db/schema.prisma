@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -116,17 +116,19 @@ model Banner {
 
 model Product {
   id             String           @id @default(cuid())
-  title          String
+  name          String
   description    String           @db.Text
   category       Category         @relation(fields: [categoryId], references: [id])
   categoryId     String
-  tag            String?
-  image          String?
+  tags            String[]
+  image          String[]
   brandName      String?
   brandImage     String?
   price          Float
   offerPrice     Float?
-  isSame         Boolean          @default(true)
+  stock          Int
+  isBrand         Boolean          @default(false)
+  isMulti         Boolean          @default(false)
   productVariant ProductVariant[]
   enabled        Boolean          @default(true)
   createdAt      DateTime         @default(now())
@@ -140,12 +142,12 @@ model ProductVariant {
   type       String
   value      String
   subType    String?
-  subValue   String?
-  isMultiple Boolean 
-  isSubMultiple Boolean?
+  subValue   String[]
+  isSubCategory Boolean 
   price      Float?
   offerPrice Float?
-  image      String?
+  stock      Int?
+  image      String[]
   enabled    Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

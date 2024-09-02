@@ -85,7 +85,7 @@ export default function BannerForm({isEdit, banner = {}}) {
       }
           
        await updateBanner( data,banner.id).then(value => {
-        router.push('/admin/banners'); 
+        router.replace('/admin/banners'); 
        });
       
     }
@@ -95,7 +95,7 @@ export default function BannerForm({isEdit, banner = {}}) {
            result = await imageUpload(files[0], 'Banner');
     }
       await createBanner( {...values,description:rteref.current?.editor?.getHTML()},result).then(values => {
-        router.push('/admin/banners'); 
+        router.replace('/admin/banners'); 
       });
     
   }
@@ -179,7 +179,11 @@ export default function BannerForm({isEdit, banner = {}}) {
                 <FormControlLabel disabled={isAdditional || (values.best || values.featured)}  label="Additional Category" control={<Checkbox color="info" name="additional" onBlur={handleBlur} onChange={handleChange} value={values.additional} checked={values.additional}/>} />
                 </Grid> */}
 
-              <Grid item xs={12}>
+              <Grid item xs={12}  display={'flex'} justifyContent={'end'} gap={2}>
+            
+              <Button variant="outlined" color="info" onClick={() =>   router.replace('/admin/banners')}>
+                  Cancel
+                </Button>
                 <Button variant="contained" color="info" type="submit">
                   Save Banner
                 </Button>

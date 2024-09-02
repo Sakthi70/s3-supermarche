@@ -23,6 +23,7 @@ import PageWrapper from "../../page-wrapper";
 import { tableHeading } from "../table-heading";
 import useApp from "hooks/useApp";
 import { useState } from "react";
+import BulkUploadCategory from "../bulk-upload-cateory";
 // =============================================================================
 
 // =============================================================================
@@ -33,6 +34,7 @@ const CategoriesPageView = ({}) => {
 
    const [search, setSearch] = useState("");
    
+   const [open, setopen] = useState(false)
 
   // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
   const filteredCategories = categories.filter( x => x.name.includes(search) || x.slug.includes(search));
@@ -55,8 +57,11 @@ const CategoriesPageView = ({}) => {
         buttonText="Add Category"
         url="/admin/categories/create"
         searchPlaceholder="Search Category..."
+        isBulk={true}
+        bulkText="Bulk Upload"
+        handleBulk={() => setopen(true)}
       />
-
+      <BulkUploadCategory open={open} handleClose={() => setopen(false)}/>
       <Card>
         <Scrollbar>
           <TableContainer

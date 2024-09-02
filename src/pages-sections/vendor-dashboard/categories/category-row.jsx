@@ -60,13 +60,10 @@ export default function CategoryRow({ category,  selected }) {
       </StyledTableCell>
 
       <StyledTableCell align="left">
+        {image && 
         <Avatar
-
-{...(image === '' ? stringAvatar(name, {
-  borderRadius: 2,
-}) : {alt: name, src:image, sx: {borderRadius: 2,
-}})}
-        />
+alt={name} src={image} sx={ {borderRadius: 2}}
+        />}
       </StyledTableCell>
       <StyledTableCell align="left">{slug}</StyledTableCell>
 

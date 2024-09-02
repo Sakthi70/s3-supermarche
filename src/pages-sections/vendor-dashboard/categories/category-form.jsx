@@ -102,7 +102,7 @@ export default function CategoryForm({isEdit, category = {}}) {
           
        await updateCategory( data,category.id).then(value => {
         catCrud.updateCategory(value);
-        router.push('/admin/categories'); 
+        router.replace('/admin/categories'); 
        });
       }
     }
@@ -128,7 +128,7 @@ export default function CategoryForm({isEdit, category = {}}) {
         const {parent, ...data} = values;
       await createCategory( {...data,parentId, slug: values.parent+'/' + values.name.trim(), name: values.name.trim()},result).then(values => {
         catCrud.createCategory(values);
-        router.push('/admin/categories'); 
+        router.replace('/admin/categories'); 
       });
     
     }
@@ -177,23 +177,9 @@ export default function CategoryForm({isEdit, category = {}}) {
 
               <Grid item sm={6} xs={12}>
                 <Select disabled={isEdit}  MenuProps={MenuProps}  fullWidth color="info" size="medium" name="parent" onBlur={handleBlur} value={values.parent} onChange={handleChange} placeholder="Parent Category" >
-              <MenuItem value={""}> <Box display={'flex'} alignItems={'center'} gap={2}>  <Avatar
-          {...stringAvatar("E", {
-            borderRadius: 2,
-            mr:2
-          })}
-        /> <Typography variant="subtitle2"> {''}</Typography> </Box></MenuItem>
+              <MenuItem value={""}> <Box display={'flex'} alignItems={'center'} gap={2}>  {''} </Box></MenuItem>
               
-               { categories && categories.map(data => <MenuItem key={data.id} value={data.slug}> <Box display={'flex'} alignItems={'center'} gap={2}> <Avatar 
-               
-               {...(data.image === '' ? stringAvatar(data.name, {
-                borderRadius: 2,
-                mr:2
-              }) : {alt: data.name, src:data.image, sx: {borderRadius: 2,
-                mr:2}})}
-          
-          
-        /> <Typography variant="subtitle2"> {data.slug}</Typography> </Box></MenuItem>)
+               { categories && categories.map(data => <MenuItem key={data.id} value={data.slug}> <Box display={'flex'} alignItems={'center'} gap={2}>  {data.slug} </Box></MenuItem>)
           }
                 </Select>
               </Grid>
@@ -230,7 +216,10 @@ export default function CategoryForm({isEdit, category = {}}) {
                 <FormControlLabel disabled={isAdditional || (values.best || values.featured)}  label="Additional Category" control={<Checkbox color="info" name="additional" onBlur={handleBlur} onChange={handleChange} value={values.additional} checked={values.additional}/>} />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} display={'flex'} justifyContent={'end'} gap={2}>
+              <Button variant="outlined" color="info" onClick={() =>router.replace('/admin/categories')}>
+                  Cancel
+                </Button>
                 <Button variant="contained" color="info" type="submit">
                   Save category
                 </Button>
