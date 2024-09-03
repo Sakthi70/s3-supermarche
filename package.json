@@ -74,7 +74,6 @@
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.3.0",
     "clsx": "^2.1.0",
-    "color-thief": "^2.2.5",
     "cross-env": "^7.0.3",
     "currency.js": "^2.0.4",
     "date-fns": "^3.6.0",

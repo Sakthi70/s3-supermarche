@@ -9,7 +9,6 @@ import LazyImage from "components/LazyImage";
 import { H3, H5 } from "components/Typography";
 import { Carousel } from "components/carousel"; 
 // STYLED COMPONENT
-import ColorThief from 'color-thief';
 import { StyledGrid } from "./styles"; 
 import { useEffect, useState } from "react";
 import { getBanners } from "actions/banner";
@@ -42,22 +41,21 @@ const extractColors = async (url) => {
 
       img.onload = () => {
           try {
-              const colorThief = new ColorThief();
               const canvas = document.createElement('canvas');
               const ctx = canvas.getContext('2d');
               canvas.width = img.width;
               canvas.height = img.height;
               ctx.drawImage(img, 0, 0);
-              const rgbPalette = colorThief.getPalette(canvas, 6); // Get a palette of 6 colors
 
-              if (rgbPalette.length > 0) {
-                  // Convert the first RGB color to HEX
-                  const [r, g, b] = rgbPalette[0];
-                  const hexColor = rgbaToHex(r, g, b,0.2);
-                  resolve(hexColor); // Return the HEX color through the promise
-              } else {
-                  reject('No colors found');
-              }
+      // Get the pixel data of the top-left corner (position: 0,0)
+      const pixelData = ctx.getImageData(0, 0, 1, 1).data;
+
+      // Extract RGB values from the pixel data
+      const [red, green, blue] = pixelData;
+
+      // Convert RGB values to hex code
+      const hexCode = rgbaToHex(red, green, blue,0.2);
+                  resolve(hexCode); 
           } catch (error) {
               reject(error);
           }
@@ -70,7 +68,6 @@ const extractColors = async (url) => {
 };
 
 
-// ============================================================
 export default function Section4() {
   const [banners, setBanners] = useState([]);
 
@@ -79,6 +76,7 @@ export default function Section4() {
     
    let bans = await getBanners(0).then(({banners}) => banners);
    for(let i =0;i< bans.length ;i++){
+
     let bgColor = await extractColors(bans[i].image);
     bans[i]['bgColor'] = bgColor;
    }
