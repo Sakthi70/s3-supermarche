@@ -34,7 +34,7 @@ const BannersPageView = ({}) => {
    const [search, setSearch] = useState("");
 
    const getBannerList =async() => {
-    await getBanners(1).then(({banners}) => setBanners(banners));
+    await getBanners(null).then(({banners}) => setBanners(banners));
    } 
 
    useEffect(() => {

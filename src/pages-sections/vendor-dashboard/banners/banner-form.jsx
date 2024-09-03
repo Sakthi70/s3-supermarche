@@ -26,7 +26,8 @@ import { addDays } from 'date-fns'
 import { createBanner, updateBanner } from "actions/banner";
 import PageContentWithEditor from "components/utils/PageContentWithEditor";
 import _ from "lodash";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, FormControlLabel } from "@mui/material";
+import IOSSwitch from "components/Utils/IOSSwitch";
 
 // FORM FIELDS VALIDATION
 
@@ -73,6 +74,7 @@ export default function BannerForm({isEdit, banner = {}}) {
         title: values.title.trim(),
         description: rteref.current?.editor?.getHTML(),
         expires: values.expires,
+        type: values.type
       }
         let result = '';
         if(banner.image !== '' && values.image === ''){
@@ -137,6 +139,20 @@ export default function BannerForm({isEdit, banner = {}}) {
       }) => <form onSubmit={handleSubmit}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Grid container spacing={3}>
+              <Grid xs={12} textAlign={'end'}>
+              <FormControlLabel
+                  control={
+                    <IOSSwitch
+                      sx={{ m: 1 }}
+                      checked={values.type === 0}
+                      onChange={(event) =>
+                        setFieldValue("type", event.target.checked ? 0: 1)
+                      }
+                    />
+                  }
+                  label="Sub Banner"
+                />
+              </Grid>
               <Grid item xs={12} sm={6} md={8}>
                 <TextField fullWidth name="title" label="Title" color="info" size="medium" placeholder="Title" value={values.title} onBlur={handleBlur} onChange={handleChange} helperText={touched.title && errors.title} error={Boolean(touched.title && errors.title)} />
               </Grid>

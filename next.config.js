@@ -21,6 +21,7 @@ module.exports = {
     domains: ['res.cloudinary.com'],
   },
   webpack: (config) => {
+    config.resolve.alias.canvas = false;
     config.resolve.fallback = { fs: false };
 
     return config;

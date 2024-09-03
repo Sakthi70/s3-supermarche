@@ -2,9 +2,9 @@
 
 import prisma from "db";
 
-export async function getBanners(type) {
+export async function getBanners(type= null) {
   const banners = await prisma.banner.findMany({
-    
+    where : type ===null ?{}: {type}
   });
   return { banners };
 }

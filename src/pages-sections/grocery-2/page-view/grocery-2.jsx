@@ -62,7 +62,7 @@ export default async function GroceryTwoPageView() {
         {
         /* DISCOUNT BANNER AREA */
       }
-        <Section4 cardList={discountBanners} />
+        <Section4  />
 
         {
         /* BEST OF HOME ESSENTIALS PRODUCTS AREA  */
