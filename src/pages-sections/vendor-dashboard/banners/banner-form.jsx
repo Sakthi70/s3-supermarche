@@ -27,7 +27,7 @@ import { createBanner, updateBanner } from "actions/banner";
 import PageContentWithEditor from "components/utils/PageContentWithEditor";
 import _ from "lodash";
 import { CircularProgress, FormControlLabel } from "@mui/material";
-import IOSSwitch from "../../../components/Utils/IOSSwitch";
+import IOSSwitch from "../../../components/utils/IOSSwitch";
 
 // FORM FIELDS VALIDATION
 

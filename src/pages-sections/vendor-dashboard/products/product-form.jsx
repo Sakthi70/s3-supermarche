@@ -26,9 +26,9 @@ import {
   Typography,
 } from "@mui/material";
 import PageContentWithEditor from "components/utils/PageContentWithEditor";
-import MultiField from "../../../components/Utils/MultiField";
-import ProductType from "../../../components/Utils/ProductType";
-import IOSSwitch from "../../../components/Utils/IOSSwitch";
+import MultiField from "../../../components/utils/MultiField";
+import ProductType from "../../../components/utils/ProductType";
+import IOSSwitch from "../../../components/utils/IOSSwitch";
 import { Add, Delete } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { createProduct } from "actions/products";
