@@ -19,6 +19,7 @@ import ProductRow from "../product-row";
 import SearchArea from "../../search-box";
 import PageWrapper from "../../page-wrapper"; 
 import { getProducts } from "actions/products";
+import { t } from "utils/util";
 // CUSTOM DATA MODEL
 
 
@@ -90,8 +91,8 @@ export default function ProductsPageView() {
   } = useMuiTable({
     listData: filteredProducts
   });
-  return <PageWrapper title="Product List">
-      <SearchArea handleSearch={() => {}} buttonText="Add Product" url="/admin/products/create" searchPlaceholder="Search Product..." />
+  return <PageWrapper title={t("Product List")}>
+      <SearchArea handleSearch={() => {}} buttonText={t("Add Product")} url="/admin/products/create" searchPlaceholder={`${t("Search Product")}...`} />
 
       <Card>
         <Scrollbar autoHide={false}>

@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import { Fragment } from "react"; 
 // CUSTOM ICON COMPONENTS
@@ -10,6 +11,7 @@ import { useLayout } from "../dashboard-layout-context";
 // STYLED COMPONENTS
 
 import { CustomButton, ToggleWrapper } from "./styles";
+import { t } from "utils/util";
 export default function LeftContent() {
   const {
     handleOpenMobileSidebar
@@ -22,7 +24,7 @@ export default function LeftContent() {
       <CustomButton LinkComponent={Link} href="/" startIcon={<Globe sx={{
       color: "grey.900"
     }} />}>
-        Browse Website
+       {t("Browse Website")}
       </CustomButton>
     </Fragment>;
 }

@@ -9,6 +9,7 @@ import {
 import EditorMenuControls from "./ExtensionControl";
 import useExtensions from "./useExtensions";
 import { imageUpload } from "utils/cloudinary";
+import { t } from "utils/util";
 
 function fileListToImageFiles(fileList){
   // You may want to use a package like attr-accept
@@ -37,7 +38,7 @@ export const convertToBase64 = async(selectedFile) => {
 
 export default function Editor({value,rteRef,isEditable=true,error = false,helperText=''}) {
   const extensions = useExtensions({
-    placeholder: "Add your own content here...",
+    placeholder: `${t("Add your own content here")}...`,
   });
 
   const handleNewImageFiles = useCallback(

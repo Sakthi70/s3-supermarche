@@ -90,6 +90,7 @@ model Category {
   name       String
   parent     Category?  @relation("parentId", fields: [parentId], references: [id])
   parentId   String?
+  tag        String?
   image      String?
   featured   Boolean    @default(false)
   best       Boolean    @default(false)
@@ -119,6 +120,7 @@ model Banner {
 model Product {
   id             String           @id @default(cuid())
   name          String
+  shortDescription String           @db.Text
   description    String           @db.Text
   category       Category         @relation(fields: [categoryId], references: [id])
   categoryId     String
@@ -130,27 +132,9 @@ model Product {
   offerPrice     Float?
   stock          Int
   isBrand         Boolean          @default(false)
-  isMulti         Boolean          @default(false)
-  productVariant ProductVariant[]
+  type            String
+  value           String
   enabled        Boolean          @default(true)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
-}
-
-model ProductVariant {
-  id         String   @id @default(cuid())
-  product    Product  @relation(fields: [productId], references: [id])
-  productId  String
-  type       String
-  value      String
-  subType    String?
-  subValue   String[]
-  isSubCategory Boolean 
-  price      Float?
-  offerPrice Float?
-  stock      Int?
-  image      String[]
-  enabled    Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
 }

@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import useApp from "hooks/useApp";
 import { useEffect, useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
+import { t } from "utils/util";
 export default function EditCategoryPageView() {
   const params = useParams();
   const [selectedCategory, setSelectedCategory] = useState();
@@ -27,7 +28,7 @@ export default function EditCategoryPageView() {
   }, [categories])
   
 
-  return <PageWrapper title="Edit Category">
+  return <PageWrapper title={t("Edit Category")}>
     {selectedCategory ?
       <CategoryForm  isEdit={true} category={selectedCategory} /> : <Box height={500} display={'flex'} alignItems={'center'} justifyContent={'center'}><CircularProgress /></Box>}
     </PageWrapper>;

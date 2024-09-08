@@ -23,18 +23,19 @@ import { tableHeading } from "../table-heading";
 import { useEffect, useState } from "react";
 import { getBanners } from "actions/banner";
 import BannerRow from "../banner-row";
+import { useTranslation } from "react-i18next";
 // =============================================================================
 
 // =============================================================================
 const BannersPageView = ({}) => {
   
-
+  const { t } = useTranslation();
    const [banners, setBanners] = useState([]);
 
    const [search, setSearch] = useState("");
 
    const getBannerList =async() => {
-    await getBanners(null).then(({banners}) => setBanners(banners));
+    await getBanners(null,false).then(({banners}) => setBanners(banners));
    } 
 
    useEffect(() => {
@@ -58,12 +59,12 @@ const BannersPageView = ({}) => {
     rowsPerPage:5
   });
   return (
-    <PageWrapper title="Banners">
+    <PageWrapper title={t("Banners")}>
       <SearchArea
         handleSearch={(val) => setSearch(val.target.value)}
-        buttonText="Add Banner"
+        buttonText={t("Add Banner")}
         url="/admin/banners/create"
-        searchPlaceholder="Search Banner..."
+        searchPlaceholder={`${t("Search Banner")}...`}
       />
 
       <Card>

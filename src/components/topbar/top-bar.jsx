@@ -34,7 +34,7 @@ const languageOptions = {
     title: "EN",
     value: "en",
   },
-  es: {
+  fr: {
     title: "FR",
     value: "fr",
   },
@@ -65,6 +65,7 @@ export default function Topbar({ bgColor }) {
 
   const handleChangeLanguage = (language) => {
     i18n.changeLanguage(language);
+    localStorage.setItem('selectedLanguage', language);
   };
 
   const selectedLanguage = languageOptions[i18n.language];

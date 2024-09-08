@@ -24,6 +24,7 @@ import { tableHeading } from "../table-heading";
 import useApp from "hooks/useApp";
 import { useState } from "react";
 import BulkUploadCategory from "../bulk-upload-cateory";
+import { t } from "utils/util";
 // =============================================================================
 
 // =============================================================================
@@ -51,14 +52,14 @@ const CategoriesPageView = ({}) => {
     rowsPerPage:5
   });
   return (
-    <PageWrapper title="Product Categories">
+    <PageWrapper title={t("Product Categories")}>
       <SearchArea
         handleSearch={(val) => setSearch(val.target.value)}
-        buttonText="Add Category"
+        buttonText={t("Add Category")}
         url="/admin/categories/create"
-        searchPlaceholder="Search Category..."
+        searchPlaceholder={`${t("Search Category")}...`}
         isBulk={true}
-        bulkText="Bulk Upload"
+        bulkText={t("Bulk Upload")}
         handleBulk={() => setopen(true)}
       />
       <BulkUploadCategory open={open} handleClose={() => setopen(false)}/>

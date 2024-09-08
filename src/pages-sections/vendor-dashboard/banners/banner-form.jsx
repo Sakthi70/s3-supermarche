@@ -19,7 +19,6 @@ import { useRouter } from "next/navigation";
 import { deleteUpload, imageUpload } from "utils/cloudinary";
 import useApp from "hooks/useApp";
 import Warning from "components/warning/warning";
-import MUIRichTextEditor from "mui-rte";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { addDays } from 'date-fns'
@@ -28,11 +27,12 @@ import PageContentWithEditor from "components/utils/PageContentWithEditor";
 import _ from "lodash";
 import { CircularProgress, FormControlLabel } from "@mui/material";
 import IOSSwitch from "../../../components/utils/IOSSwitch";
+import { t } from "utils/util";
 
 // FORM FIELDS VALIDATION
 
 const VALIDATION_SCHEMA = yup.object().shape({
-  title: yup.string().required("Title required")
+  title: yup.string().required(t("Title required"))
 }); 
 // ================================================================
 
@@ -152,14 +152,14 @@ export default function BannerForm({isEdit, banner = {}}) {
                       }
                     />
                   }
-                  label="Sub Banner"
+                  label={t("Sub Banner")}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={8}>
-                <TextField fullWidth name="title" label="Title" color="info" size="medium" placeholder="Title" value={values.title} onBlur={handleBlur} onChange={handleChange} helperText={touched.title && errors.title} error={Boolean(touched.title && errors.title)} />
+                <TextField fullWidth name="title" label={t("Title")} color="info" size="medium" placeholder={t("Title")} value={values.title} onBlur={handleBlur} onChange={handleChange} helperText={touched.title && errors.title} error={Boolean(touched.title && errors.title)} />
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
-                <DatePicker disablePast format="dd/MM/yyyy" onChange={(value) => setFieldValue('expires', value)} defaultValue={values.expires} minDate={addDays(new Date(), 1)} disableHighlightToday slotProps={{textField:{fullWidth:true,size:'medium', color:'info'}}}  label="Expires on" />
+                <DatePicker disablePast format="dd/MM/yyyy" onChange={(value) => setFieldValue('expires', value)} defaultValue={values.expires} minDate={addDays(new Date(), 1)} disableHighlightToday slotProps={{textField:{fullWidth:true,size:'medium', color:'info'}}}  label={t("Expires on")} />
               </Grid>
               <Grid item xs={12}>
                   <PageContentWithEditor value={values.description} rteRef={rteref}/>
@@ -167,12 +167,12 @@ export default function BannerForm({isEdit, banner = {}}) {
 
               {!values.image && <Grid item xs={12}>
                 {files.length < 1 && 
-                  <DropZone multiple={false} title="Drop & drag category image" onChange={files => handleChangeDropZone(files)} />
+                  <DropZone multiple={false} title={t("Drop & drag category image")} onChange={files => handleChangeDropZone(files)} />
                 }
                 <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
                   {files.map((file, index) => {
                     return <UploadImageBox key={index}>
-                        <Box component="img" alt="product" src={file.preview} width="100%" />
+                        <Box component="img" alt={t("Product")} src={file.preview} width="100%" />
                         <StyledClear onClick={handleFileDelete(file)} />
                       </UploadImageBox>;
               })}
@@ -182,22 +182,22 @@ export default function BannerForm({isEdit, banner = {}}) {
               {values.image && <Grid item xs={12}>
                 
                  <UploadImageBox >
-                        <Box component="img" alt="product" src={values.image} width="100%" />
+                        <Box component="img" alt={t("Product" )}src={values.image} width="100%" />
                         <StyledClear onClick={() => setFieldValue('image','')} />
                       </UploadImageBox>
               </Grid>}
 
               <Grid item xs={12} >
-                <TextField fullWidth name="slug" label="Slug" color="info" size="medium" placeholder="Slug" value={values.slug} onBlur={handleBlur} onChange={handleChange} />
+                <TextField fullWidth name="slug" label={t("Slug")} color="info" size="medium" placeholder={t("Slug")} value={values.slug} onBlur={handleBlur} onChange={handleChange} />
               </Grid>
 
               <Grid item xs={12}  display={'flex'} justifyContent={'end'} gap={2}>
             
               <Button variant="outlined" color="info" onClick={() =>   router.replace('/admin/banners')}>
-                  Cancel
+                  {t("Cancel")}
                 </Button>
                 <Button variant="contained" color="info" type="submit">
-                  Save Banner
+                  {t("Save Banner")}
                 </Button>
               </Grid>
             </Grid>

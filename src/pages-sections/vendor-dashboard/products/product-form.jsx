@@ -19,59 +19,40 @@ import { UploadImageBox, StyledClear } from "../styles";
 import useApp from "hooks/useApp";
 import {
   Avatar,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
   IconButton,
   InputAdornment,
+  InputLabel,
   Select,
   Typography,
 } from "@mui/material";
 import PageContentWithEditor from "components/utils/PageContentWithEditor";
 import MultiField from "../../../components/utils/MultiField";
-import ProductType from "../../../components/utils/ProductType";
 import IOSSwitch from "../../../components/utils/IOSSwitch";
-import { Add, Delete } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { createProduct } from "actions/products";
 import { imageUpload } from "utils/cloudinary";
-
+import { ColorPicker } from "mui-color";
+import { t } from "utils/util";
 const Amount = {
   startAdornment: <InputAdornment position="start">€</InputAdornment>,
 };
 // FORM FIELDS VALIDATION SCHEMA
 
 const VALIDATION_SCHEMA = yup.object().shape({
-  name: yup.string().required("Name is required!"),
+  name: yup.string().required(t("Name is required!")),
   description: yup.string(),
   category: yup.string()
-    // .min(1, "Category must have at least 1 items")
-    .required("Category is required!"),
+    .required(t("Category is required!")),
+    shortDescription:yup.string()
+    .required(t("Short Description is required!")),
   tags: yup.array().optional(),
   brandName: yup.string(),
-  price: yup.number().required("Price is required!"),
-  salePrice: yup.number().nullable().lessThan(yup.ref('price'),(less) => `Sale price must be less than €${less.less}`),
-  stock: yup.number().required("Stock is required!"),
-  isMultiPrice: yup.boolean().required(),
-  variants: yup.array().of(
-    yup.object().shape({
-      type: yup.string().required("Type is required!"),
-      option: 
-   
-      yup.string().required("Option is required!"),
-      isSubCategory: yup.boolean().required(),
-      subType: yup.string().optional(),
-      subOption: yup.array().optional(),
-      price: yup.number().when("$isMultiPrice", {
-        is: (val) => {
-          //this will output undefined
-          return val === true;
-        },
-        then: (s) => s.required('Price is Required'),
-        otherwise: (s) => s,
-      }),
-      salePrice: yup.number().nullable().lessThan(yup.ref('price'),(less) => `Sale price must be less than €${less.less}`),
-      stock: yup.number().required('Stock is Required'),
-    })
-  ),
+  price: yup.number().required(t("Price is required!")),
+  salePrice: yup.number().nullable().lessThan(yup.ref('price'),(less) => `${t("Sale price must be less than")} €${less.less}`),
+  stock: yup.number().required(t("Stock is required!")),
 });
 // ================================================================
 
@@ -94,6 +75,9 @@ export default function ProductForm({ isEdit = false }) {
   const router = useRouter();
 
   const { categories } = content || { categories: [] };
+
+  const parentIds = categories.map(x=> x.parentId);
+
   const INITIAL_VALUES = {
     name: "",
     tags: [],
@@ -103,11 +87,12 @@ export default function ProductForm({ isEdit = false }) {
     brandName: "",
     brandImage: [],
     images: [],
+    shortDescription:"",
     salePrice: "",
     description: "",
-    isMultiPrice: false,
     isBrand: false,
-    variants: [],
+    type: 'Other',
+    value: "",
   };
 
 
@@ -124,6 +109,8 @@ export default function ProductForm({ isEdit = false }) {
       offerPrice: values.salePrice === "" ? null : values.salePrice,
       stock: values.stock,
       isMulti: values.isMultiPrice,
+      type: values.type,
+      value: values.value,
     }
     if(values.images.length > 0){
         
@@ -137,32 +124,6 @@ export default function ProductForm({ isEdit = false }) {
     if(values.isBrand && values.brandImage.length > 0){
         let image =  await imageUpload(values.brandImage[0], 'Brand');
       data.brandImage= image;
-    }
-    let variants = [];
-    if(values.variants.length > 0){
-      for(let j =0; j< values.variants.length; j++){
-        let val = values.variants[j];
-        let result = [];
-        if(val.images.length > 0){
-          for(let i= 0; i<val.images.length; i++){
-            let image =  await imageUpload(val.images[i], 'Variant');
-            result.push(image);
-          }
-      }
-      let variantData =  {
-        type : val.type,
-        value: val.option.toString(),
-        subType: val.subType,
-        isSubCategory: val.isSubCategory,
-        subValue: val.isSubCategory ? val.subOption.map(x=> x.toString()):[],
-        stock: val.stock,
-        price: values.isMultiPrice ? val.price : null,
-        image: result,
-        offerPrice:values.isMultiPrice ? val.offerPrice === "" ? null:val.offerPrice : null,
-      }
-      variants.push(variantData);
-      }
-    data['productVariant'] = {create: variants}
     }
     await createProduct( data).then(values => {
       router.push('/admin/products'); 
@@ -200,7 +161,11 @@ export default function ProductForm({ isEdit = false }) {
             setFieldValue(name, values[name].filter((item) => item.name !== file.name))
           };
 
-          console.log(errors)
+          const typeChange = (event) => {
+              setFieldValue(`type`, event.target.value);
+              setFieldValue(`value`, "");
+          };
+
           return <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12} display={'flex'} spacing={2} justifyContent={"end"}>
@@ -214,29 +179,17 @@ export default function ProductForm({ isEdit = false }) {
                       }
                     />
                   }
-                  label="Add Brand"
-                />
-                <FormControlLabel
-                  control={
-                    <IOSSwitch
-                      sx={{ m: 1 }}
-                      checked={values.isMultiPrice}
-                      onChange={(event) =>
-                        setFieldValue("isMultiPrice", event.target.checked)
-                      }
-                    />
-                  }
-                  label="Multi Price"
+                  label={t("Add Brand")}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
                   fullWidth
                   name="name"
-                  label="Name"
+                  label={t("Name")}
                   color="info"
                   size="medium"
-                  placeholder="Name"
+                  placeholder={t("Name")}
                   value={values.name}
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -246,6 +199,10 @@ export default function ProductForm({ isEdit = false }) {
               </Grid>
 
               <Grid item sm={6} xs={12}>
+              <FormControl fullWidth error={Boolean(touched.category && errors.category)}>
+                  <InputLabel>
+                  {t("Category")}
+                  </InputLabel>
                 <Select
                   disabled={isEdit}
                   MenuProps={MenuProps}
@@ -253,22 +210,25 @@ export default function ProductForm({ isEdit = false }) {
                   color="info"
                   size="medium"
                   name="category"
+                  label={t('Category')}
                   onBlur={handleBlur}
                   value={values.category}
                   onChange={handleChange}
-                  placeholder="Category"
+                  placeholder={t("Category")}
                   error={Boolean(touched.category && errors.category)}
                 >
                   {categories &&
-                    categories.map((data) => (
+                    categories.filter( x=> categories.filter(x => !parentIds.includes(x.id)).includes()).map((data) => (
                       <MenuItem key={data.id} value={data.id}>
                         {" "}
                         <Box display={"flex"} alignItems={"center"} gap={2}>
-                          {data.slug}
+                          {data.name}
                         </Box>
                       </MenuItem>
                     ))}
                 </Select>
+                {Boolean(touched.category && errors.category) && <FormHelperText>{touched.category && errors.category}</FormHelperText>}
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={values.isBrand ? 6: 12}>
                 <DropZone
@@ -292,16 +252,16 @@ export default function ProductForm({ isEdit = false }) {
               <TextField
                   fullWidth
                   name="brandName"
-                  label="Brand Name"
+                  label={t("Brand Name")}
                   color="info"
                   size="medium"
-                  placeholder="Brand Name"
+                  placeholder={t("Brand Name")}
                   value={values.brandName}
                   onBlur={handleBlur}
                   onChange={handleChange}
                 />
                 <DropZone
-                title="Drag & drop brand image here"
+                title={t("Drag & drop brand image here")}
                   multiple={false}
                   onChange={(files) => handleChangeDropZone(files, 'brandImage')}
                 />
@@ -317,7 +277,21 @@ export default function ProductForm({ isEdit = false }) {
                   })}
                 </FlexBox>
               </Grid>}
-
+              <Grid item  xs={12}>
+                <TextField
+                  fullWidth
+                  name="shortDescription"
+                  label={t("Short Description")}
+                  color="info"
+                  size="medium"
+                  placeholder={t("Short Description")}
+                  value={values.shortDescription}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  helperText={touched.shortDescription && errors.shortDescription}
+                  error={Boolean(touched.shortDescription && errors.shortDescription)}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <PageContentWithEditor
                   value={values.description}
@@ -329,7 +303,7 @@ export default function ProductForm({ isEdit = false }) {
 
               <Grid item sm={6} xs={12}>
                 <MultiField
-                  label={"Tags"}
+                  label={t("Tags")}
                   name={"tags"}
                   values={values.tags}
                   setFieldValue={setFieldValue}
@@ -342,8 +316,8 @@ export default function ProductForm({ isEdit = false }) {
                   type="number"
                   color="info"
                   size="medium"
-                  label="Stock"
-                  placeholder="Stock"
+                  label={t("Stock")}
+                  placeholder={t("Stock")}
                   onBlur={handleBlur}
                   value={values.stock}
                   onChange={handleChange}
@@ -361,9 +335,9 @@ export default function ProductForm({ isEdit = false }) {
                   type="number"
                   onBlur={handleBlur}
                   value={values.price}
-                  label="Regular Price"
+                  label={t("Regular Price")}
                   onChange={handleChange}
-                  placeholder="Regular Price"
+                  placeholder={t("Regular Price")}
                   helperText={touched.price && errors.price}
                   error={Boolean(touched.price && errors.price)}
                 />
@@ -377,35 +351,64 @@ export default function ProductForm({ isEdit = false }) {
                   size="medium"
                   type="number"
                   name="salePrice"
-                  label="Sale Price"
+                  label={t("Sale Price")}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  placeholder="Sale Price"
+                  placeholder={t("Sale Price")}
                   value={values.salePrice}
                   helperText={touched.salePrice && errors.salePrice}
                   error={Boolean(touched.salePrice && errors.salePrice)}
                 />
               </Grid>
-            
-
-              <ProductVariant
-                variants={values.variants}
-                errors={errors}
-                touched={touched}
-                handleBlur={handleBlur}
-                handleChange={handleChange}
-                isMultiPrice={values.isMultiPrice}
-                setFieldValue={setFieldValue}
+            <Grid item sm={6} xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>
+                    {t("Variant Type")}
+                  </InputLabel>
+                  <Select
+                    value={values.type}
+                    label={t("Variant Type")}
+                    onChange={typeChange}
+                  >
+                    <MenuItem value={'Other'}>{t("Other")}</MenuItem>
+                    <MenuItem value={'Colour'}>{t("Colour")}</MenuItem>
+                  </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+            {values.type === 'Other' ? (
+              <TextField
+                fullWidth
+                name={'value'}
+                label={t("Variant")}
+                color="info"
+                size="medium"
+                placeholder={t("Variant")}
+                value={values.value}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                helperText={touched.value && errors.value}
+                error={Boolean(touched.value && errors.value)}
               />
-
-           
+            ) : (
+              <ColorPicker
+                hideTextfield
+                disableAlpha
+                value={values.value}
+                defaultValue="transparent"
+                onChange={(color) =>
+                  setFieldValue(`value`, color.value)
+                }
+              />
+            )}
+            </Grid>
             </Grid>
             <Box p={2} display={'flex'} gap={2} justifyContent={'end'}>
             <Button variant="outlined" color="info" onClick={() => router.replace('/admin/products')}>
-                  Cancel
+                  {t("Cancel")}
                 </Button>
             <Button variant="contained" color="info" type="submit">
-                  Save product
+                  {t("Save product")}
                 </Button>
             </Box>
           </form>
@@ -414,216 +417,3 @@ export default function ProductForm({ isEdit = false }) {
     </Card>
   );
 }
-
-export const ProductVariant = ({
-  variants,
-  setFieldValue,
-  isMultiPrice,
-  touched,
-  errors,
-  handleBlur,
-  handleChange,
-}) => {
-  const INITIAL_VARIANT_VALUES = {
-    type: 'Other',
-    option: "",
-    subType: 'Other',
-    subOption: [],
-    isSubCategory: false,
-    price: "",
-    salePrice: "",
-    stock: "",
-    images: []
-  };
-
-  // HANDLE UPDATE NEW IMAGE VIA DROP ZONE
-
-  const handleChangeDropZone = (files, index) => {
-    files.forEach((file) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      })
-    );
-    setFieldValue(`variants[${index}].images`,[...variants[index].images,...files]);
-   
-  };
-  // HANDLE DELETE UPLOAD IMAGE
-
-  const handleFileDelete = (file, index) => {
-    setFieldValue(`variants[${index}].images`,variants[index].images.filter((item) => item.name !== file.name));
-  };
-  return (
-    <>
-      {variants.map((variant, index) => (
-        <Grid key={index} item sm={6} xs={12}>
-          <Card elevation={3} sx={{ padding: 2 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} textAlign={"end"}>
-
-                <FormControlLabel
-                  control={
-                    <IOSSwitch
-                      sx={{ m: 1 }}
-                      checked={variant.isSubCategory}
-                      onChange={(event) =>
-                        setFieldValue(
-                          `variants[${index}].isSubCategory`,
-                          event.target.checked
-                        )
-                      }
-                    />
-                  }
-                  label="Sub Category"
-                />
-                <IconButton size="large" color="error" onClick={() => setFieldValue('variants', variants.filter((v,i) => i !== index))}><Delete/></IconButton>
-              </Grid>
-              <Grid item xs={12}>
-                <ProductType
-                  index={index}
-                  value={variant}
-                  setFieldValue={setFieldValue}
-                  handleBlur={handleBlur}
-                  handleChange={handleChange}
-                  errors={errors}
-                  touched={touched}
-                />
-              </Grid>
-              {variant.isSubCategory && (
-                <Grid item xs={12}>
-                  <ProductType
-                    isMulti={true}
-                    index={index}
-                    value={variant}
-                    setFieldValue={setFieldValue}
-                    handleBlur={handleBlur}
-                    handleChange={handleChange}
-                    errors={errors}
-                    touched={touched}
-                  />
-                </Grid>
-              )}
-              <Grid item xs={12}>
-                <DropZone
-                  multiple={true}
-                  onChange={(files) => handleChangeDropZone(files,index)}
-                />
-
-                <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
-                  {variant.images.map((file, ind) => {
-                    return (
-                      <UploadImageBox key={ind}>
-                        <Box component="img" src={file.preview} width="100%" />
-                        <StyledClear onClick={() =>handleFileDelete(file,index)} />
-                      </UploadImageBox>
-                    );
-                  })}
-                </FlexBox>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name={`variants[${index}].stock`}
-                  type="number"
-                  color="info"
-                  size="medium"
-                  label="Stock"
-                  placeholder="Stock"
-                  onBlur={handleBlur}
-                  value={variants.stock}
-                  onChange={handleChange}
-                  helperText={
-                    touched.variants && errors.variants &&  touched.variants[index] &&  errors.variants[index] &&
-                    touched.variants[index].stock &&
-                    errors.variants[index].stock
-                  }
-                  error={Boolean(
-                    touched.variants && errors.variants &&  touched.variants[index] &&  errors.variants[index] &&
-                      touched.variants[index].stock &&
-                      errors.variants[index].stock
-                  )}
-                />
-              </Grid>
-              {isMultiPrice && (
-                <>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      name={`variants[${index}].price`}
-                      color="info"
-                      size="medium"
-                      type="number"
-                      onBlur={handleBlur}
-                      value={variant.price}
-                      label="Regular Price"
-                      onChange={handleChange}
-                      placeholder="Regular Price"
-                      helperText={
-                        touched.variants && errors.variants &&  touched.variants[index] &&  errors.variants[index] &&
-                        touched.variants[index].price &&
-                        errors.variants[index].price
-                      }
-                      error={Boolean(
-                        touched.variants && errors.variants &&  touched.variants[index] &&  errors.variants[index] &&
-                          touched.variants[index].price &&
-                          errors.variants[index].price
-                      )}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      color="info"
-                      size="medium"
-                      type="number"
-                      name={`variants[${index}].salePrice`}
-                      label="Sale Price"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      placeholder="Sale Price"
-                      value={variant.salePrice}
-                      helperText={
-                        touched.variants && errors.variants &&  touched.variants[index] &&  errors.variants[index] &&
-                        touched.variants[index].salePrice &&
-                        errors.variants[index].salePrice
-                      }
-                      error={Boolean(
-                        touched.variants && errors.variants &&  touched.variants[index] &&  errors.variants[index] &&
-                          touched.variants[index].salePrice &&
-                          errors.variants[index].salePrice
-                      )}
-                      
-                    />
-                  </Grid>
-                </>
-              )}
-             
-            </Grid>
-          </Card>
-        </Grid>
-      ))}{" "}
-      <Grid item sm={6} xs={12}>
-        <Card>
-          <Box
-            display={"flex"}
-            minHeight={400}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            <IconButton
-              sx={{ width: 200, height: 200 }}
-              onClick={() =>
-                setFieldValue("variants", [...variants, INITIAL_VARIANT_VALUES])
-              }
-            >
-              <Box display={"block"}>
-                <Add sx={{ fontSize: 100 }} />{" "}
-                <Typography variant="h6">Add New Variant</Typography>
-              </Box>
-            </IconButton>
-          </Box>
-        </Card>
-      </Grid>{" "}
-    </>
-  );
-};

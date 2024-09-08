@@ -2,9 +2,27 @@
 
 import prisma from "db";
 
-export async function getBanners(type= null) {
+export async function getBanners(type= null, expiry= true) {
+  let where = {};
+  const currentDate = new Date();
+  if(expiry){
+    where={ OR: [
+      {
+        expires: {
+          gte: currentDate,  
+        },
+      },
+      {
+        expires: null,
+      },
+    ],
+  }
+  if(type){
+    where['type']=type;
+  }
+  }
   const banners = await prisma.banner.findMany({
-    where : type ===null ?{}: {type}
+    where : where
   });
   return { banners };
 }

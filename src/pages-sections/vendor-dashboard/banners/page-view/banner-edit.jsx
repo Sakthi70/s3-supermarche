@@ -8,11 +8,13 @@ import { Box, CircularProgress } from "@mui/material";
 import { getBannerById } from "actions/banner";
 import useApp from "hooks/useApp";
 import BannerForm from "../banner-form";
+import { useTranslation } from "react-i18next";
+
 export default function EditBannerPageView() {
   const params = useParams();
 const [banner, setBanner] = useState({});
 const {loading} = useApp();
-
+const {t} = useTranslation();
 const getBanner =async(id)=> {
   
     await getBannerById(id).then((banner) => {
@@ -29,7 +31,7 @@ const getBanner =async(id)=> {
   }, [params.slug])
   
 
-  return <PageWrapper title="Edit Banner">
+  return <PageWrapper title={t("Edit Banner")}>
     {banner ?
       <BannerForm isEdit={true} banner={banner}/> : <Box height={500} display={'flex'} alignItems={'center'} justifyContent={'center'}><CircularProgress /></Box>}
     </PageWrapper>;

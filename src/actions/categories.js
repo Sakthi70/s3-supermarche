@@ -11,7 +11,8 @@ export const createCategory = async(value, file) => {
         include:{
           _count: {
             select:{
-              categories: true
+              categories: true,
+              products: true
             }
           }
         }
@@ -28,7 +29,8 @@ export const updateCategory = async(value, id) => {
     include:{
       _count: {
         select:{
-          categories: true
+          categories: true,
+          products: true
         }
       }
     },
@@ -41,7 +43,8 @@ export async function getCategories(){
       include:{
         _count: {
           select:{
-            categories: true
+            categories: true,
+            products: true
           }
         }
       }

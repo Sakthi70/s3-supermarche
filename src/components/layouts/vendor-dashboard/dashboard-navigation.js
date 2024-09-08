@@ -1,15 +1,16 @@
 import duotone from "icons/duotone";
+import { t } from "utils/util";
 export const navigation = [{
   type: "label",
-  label: "Admin"
+  label: t("Admin")
 },
  {
-  name: "Dashboard",
+  name: t("Dashboard"),
   icon: duotone.Dashboard,
   path: "/vendor/dashboard"
 }, 
 {
-  name: "Banners",
+  name: t("Banners"),
   icon: duotone.ProjectChart,
   // children: [{
     // name: "Category List",
@@ -21,34 +22,16 @@ export const navigation = [{
   // }
 // ]
 },
-{
-  name: "Products",
-  icon: duotone.Products,
-  // children: [{
-  //   name: "Product List",
-    path: "/admin/products"
-  // }, {
-  //   name: "Create Product",
-  //   path: "/admin/products/create"
-  // }, 
-  // {
-  //   name: "Product Reviews",
-  //   path: "/admin/products/reviews"
-  // }
-// ]
-},
  {
-  name: "Categories",
+  name: t("Categories"),
   icon: duotone.Accounts,
-  // children: [{
-    // name: "Category List",
     path: "/admin/categories"
-  // }, 
-  // {
-  //   name: "Create Category",
-  //   path: "/admin/categories/create"
-  // }
-// ]
+ 
+},
+{
+  name: t("Products"),
+  icon: duotone.Products,
+    path: "/admin/products"
 },
 //  {
 //   name: "Brands",

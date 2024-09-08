@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react"; 
 // MUI
 
@@ -11,6 +13,7 @@ import IconButton from "@mui/material/IconButton";
 
 import { H6, Small } from "components/Typography"; 
 import { logout } from "actions/auth";
+import { t } from "utils/util";
 // STYLED COMPONENT
 
 const Divider = styled("div")(({
@@ -32,7 +35,7 @@ export default function AccountPopover() {
       <IconButton sx={{
       padding: 0
     }} aria-haspopup="true" onClick={e => setAnchorEl(e.currentTarget)} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
-        <Avatar alt="Remy Sharp" src="/assets/images/avatars/001-man.svg" />
+        <Avatar alt={t("Admin")} src="/assets/images/avatars/001-man.svg" />
       </IconButton>
 
       <Menu open={open} id="account-menu" anchorEl={anchorEl} onClose={handleClose} onClick={handleClose} transformOrigin={{
@@ -74,15 +77,15 @@ export default function AccountPopover() {
       }
     }}>
         <Box px={2} pt={1}>
-          <H6>User</H6>
-          <Small color="grey.500">Admin</Small>
+          <H6>{t("User")}</H6>
+          <Small color="grey.500">{t("Admin")}</Small>
         </Box>
 
         <Divider />
-        <MenuItem>Profile</MenuItem>
+        <MenuItem>{t("Profile")}</MenuItem>
         {/* <MenuItem>Settings</MenuItem> */}
         <Divider />
-        <MenuItem onClick={signOut}>Logout</MenuItem>
+        <MenuItem onClick={signOut}>{t("Logout")}</MenuItem>
       </Menu>
     </div>;
 }

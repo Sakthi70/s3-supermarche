@@ -10,14 +10,15 @@ import { useDropzone } from "react-dropzone";
 // LOCAL CUSTOM COMPONENT
 
 import { H5, Small } from "./Typography"; 
+import { t } from "utils/util";
 // ========================================================
 
 
 // ========================================================
 export default function DropZone({
   onChange,
-  imageSize = "Upload 280*280 image",
-  title = "Drag & drop product image here",
+  imageSize = t("Upload 280*280 image"),
+  title = t("Drag & drop product image here"),
   multiple = false,
   accept = {
     "image/*": [".png", ".gif", ".jpeg", ".jpg"]
@@ -62,7 +63,7 @@ export default function DropZone({
       px: 4,
       my: 4
     }}>
-        Select files
+        {t("Select files")}
       </Button>
 
       <Small color="grey.600">{imageSize}</Small>

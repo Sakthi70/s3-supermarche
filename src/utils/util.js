@@ -1,3 +1,4 @@
+import i18next from '../i18n'
 function stringToColor(string) {
     let hash = 5;
     let i;
@@ -125,4 +126,8 @@ export function calculateDiscountPercentage(originalPrice, discountedPrice) {
   const discountPercentage = (discountAmount / originalPrice) * 100;
 
   return discountPercentage;
+}
+
+export function t(key) {
+  return i18next.t(key, { key });
 }

@@ -1,34 +1,35 @@
+import { t } from "utils/util";
 
 // TABLE HEADING DATA LIST
 export const tableHeading = [{
   id: "name",
-  label: "Name",
+  label: t("Name"),
   align: "left"
 }, {
   id: "image",
-  label: "Image",
+  label: t("Image"),
   align: "left"
 },
 {
   id: "slug",
-  label: "Slug",
+  label: t("Slug"),
   align: "left"
 },  {
   id: "level",
-  label: "Level",
+  label: t("Level"),
   align: "left"
 },
 {
   id: "highlight",
-  label: "Type",
+  label: t("Type"),
   align: "left"
 },
 {
   id: "enabled",
-  label: "Enabled",
+  label: t("Enabled"),
   align: "left"
 }, {
   id: "action",
-  label: "Action",
+  label: t("Action"),
   align: "center"
 }];

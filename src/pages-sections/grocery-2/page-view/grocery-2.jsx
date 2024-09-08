@@ -18,7 +18,6 @@ import Section5 from "../section-5";
 import ProductCarousel from "../product-carousel"; 
 // API FUNCTIONS
 
-import api from "utils/__api__/grocery-2";
 import { useEffect, useState } from "react";
 import useApp from "hooks/useApp";
 import { getAllCategoriesByOption, shuffleArray } from "utils/util";
@@ -26,23 +25,12 @@ import { getRandomProducts } from "actions/products";
 import { SERVICE_LIST } from "utils/constants";
 import _ from "lodash";
 export default  function GroceryTwoPageView() {
-  // const services =  api.getServices();
-  // // const categories = await api.getCategories();
-  // const testimonials =  api.getTestimonials();
-  // const dairyProducts =  api.getDairyProducts();
-  // const navigationList =  api.getNavigationList();
-  // const mainCarouselData =  api.getMainCarousel();
-  // const featuredProducts =  api.getFeaturedProducts();
-  // const bestHomeProducts =  api.getBestHomeProducts();
-  // const bestSellProducts =  api.getBestSellProducts();
-  // const discountBanners =  api.getDiscountBannerList(); 
-
   const [featureProducts, setfeatureProducts] = useState([]);
   const [bestProducts, setbestProducts] = useState([]);
   const [additionalProducts, setadditionalProducts] = useState([]);
   const [bestName, setbestName] = useState("S3 Supermarche");
   const [addName, setaddName] = useState("Best Products");
-  const [load, setloading] = useState(true)
+  const [load, setloading] = useState(false)
   const [shopList, setshopList] = useState([]);
 
   const {content,loading }= useApp();
@@ -50,6 +38,7 @@ export default  function GroceryTwoPageView() {
 
   useEffect(() => {
     if(categories && categories.length > 0 && load){
+      setloading(true)
       getData();
          }
          loading(load);
@@ -61,7 +50,7 @@ const getData =async() => {
   if(onlyShopList.length>=6){
     setshopList(onlyShopList.slice(0,6));
   }else{
-    let shuffleCategory = shuffleArray(categories.filter(x=> x.enabled));
+    let shuffleCategory = shuffleArray(categories.filter(x=> x.enabled && !x.shopList));
     setshopList([...onlyShopList, ...shuffleCategory.slice(0,6-onlyShopList.length)]);
   }
   const featured = categories.find(x => x.featured === true && x.enabled);
