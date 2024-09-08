@@ -1,3 +1,4 @@
+import { getProductById } from "actions/products";
 import { notFound } from "next/navigation"; 
 // PAGE VIEW COMPONENT
 
@@ -19,7 +20,7 @@ export default async function ProductDetails({
   params
 }) {
   try {
-    const product = await api.getProduct(params.slug);
+    const product = await getProductById(params.slug);
     const relatedProducts = await getRelatedProducts();
     const frequentlyBought = await getFrequentlyBought();
     return <ProductDetailsPageView product={product} relatedProducts={relatedProducts} frequentlyBought={frequentlyBought} />;

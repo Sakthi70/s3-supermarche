@@ -21,8 +21,8 @@ export default function HoverActions({
         <RemoveRedEye color="disabled" fontSize="small" />
       </IconButton>
 
-      <IconButton onClick={toggleFavorite}>
+      {/* <IconButton onClick={toggleFavorite}>
         {isFavorite ? <Favorite color="primary" fontSize="small" /> : <FavoriteBorder fontSize="small" color="disabled" />}
-      </IconButton>
+      </IconButton> */}
     </HoverIconWrapper>;
 }

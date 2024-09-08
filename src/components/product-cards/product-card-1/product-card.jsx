@@ -21,6 +21,8 @@ import QuantityButtons from "./components/quantity-buttons";
 // STYLED COMPONENTS
 
 import { ImageWrapper, ContentWrapper, StyledBazaarCard } from "./styles"; 
+import { getRandomItem } from "utils/util";
+import { NO_IMAGE_FOR_PRODUCT } from "utils/constants";
 // ========================================================
 
 
@@ -35,7 +37,9 @@ export default function ProductCard1({
   hideRating,
   hoverEffect,
   discount = 5,
-  showProductSize
+  showProductSize,
+  productData,
+  isPreview = false
 }) {
   const {
     isFavorite,
@@ -69,7 +73,6 @@ export default function ProductCard1({
     };
     handleCartAmountChange(product, "remove");
   };
-
   return <StyledBazaarCard hoverEffect={hoverEffect}>
       <ImageWrapper>
         {
@@ -85,45 +88,22 @@ export default function ProductCard1({
         {
         /* PRODUCT IMAGE / THUMBNAIL */
       }
-        <Link href={`/products/${slug}`}>
-          <LazyImage priority src={imgUrl} width={500} height={500} alt={title} />
+        <Link href={`/products/${id}`}>
+          <LazyImage priority src={getRandomItem(imgUrl, NO_IMAGE_FOR_PRODUCT)} sx={{height:230}} width={500} height={500} alt={title} />
         </Link>
       </ImageWrapper>
 
       {
       /* PRODUCT VIEW DIALOG BOX */
     }
-      <ProductViewDialog openDialog={openModal} handleCloseDialog={toggleDialog} product={{
-      title,
-      price,
-      id,
-      slug,
-      imgGroup: [imgUrl, imgUrl]
-    }} />
+      <ProductViewDialog openDialog={openModal} handleCloseDialog={toggleDialog} product={productData} />
 
       <ContentWrapper>
         <Box flex="1 1 0" minWidth="0px" mr={1}>
-          {
-          /* PRODUCT NAME / TITLE */
-        }
+        
           <ProductTitle title={title} slug={slug} />
 
-          {
-          /* PRODUCT RATINGS IF AVAILABLE */
-        }
-          {!hideRating ? <Rating size="small" value={rating} color="warn" readOnly /> : null}
-
-          {
-          /* PRODUCT SIZE IF AVAILABLE */
-        }
-          {showProductSize ? <Span color="grey.600" mb={1} display="block">
-              Liter
-            </Span> : null}
-
-          {
-          /* PRODUCT PRICE WITH DISCOUNT */
-        }
-          <ProductPrice discount={discount} price={price} />
+          <ProductPrice discount={productData.offerPrice} price={price} />
         </Box>
 
         {

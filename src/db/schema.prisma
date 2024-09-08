@@ -94,6 +94,7 @@ model Category {
   featured   Boolean    @default(false)
   best       Boolean    @default(false)
   additional Boolean    @default(false)
+  shopList   Boolean    @default(false)
   enabled    Boolean    @default(true)
   slug       String     @unique
   createdAt  DateTime   @default(now())
@@ -109,6 +110,7 @@ model Banner {
   type        Int
   expires     DateTime?
   image       String?
+  slug       String?
   enabled     Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

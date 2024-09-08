@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import LinkItem from "./link-item"; 
+import { iteratee } from "lodash";
 // ==============================================================
 
 
@@ -9,14 +10,15 @@ export const renderChild = (childList, type = "parent") => {
 // NESTED LIST
   if (type === "parent") {
     return childList.map(({
-      href,
-      title,
-      child
-    }) => <Fragment key={title}>
-        <LinkItem href={href} title={title} ml={4} />
-        {child ? renderChild(child, "child") : null}
+      slug,
+      name,
+      child,
+      image
+    }) => <Fragment key={name}>
+        <LinkItem href={slug} title={name} icon={image}  ml={4} />
+        {child.length >0 ? renderChild(child, "child") : null}
       </Fragment>);
   }
 
-  return childList.map((item, ind) => <LinkItem key={ind} href={item.href} title={item.title} ml={6} />);
+  return childList.map((item, ind) => <LinkItem key={ind} href={item.slug} title={item.name} icon={item.image} ml={6} />);
 };

@@ -55,7 +55,8 @@ export default function CategoryForm({isEdit, category = {}}) {
     parent: "",
     featured: false,
     best: false,
-    additional: false
+    additional: false,
+    shopList: false
   };
   
 
@@ -214,6 +215,9 @@ export default function CategoryForm({isEdit, category = {}}) {
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel disabled={isAdditional || (values.best || values.featured)}  label="Additional Category" control={<Checkbox color="info" name="additional" onBlur={handleBlur} onChange={handleChange} value={values.additional} checked={values.additional}/>} />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel  label="List in Shopping List" control={<Checkbox color="info" name="shopList" onBlur={handleBlur} onChange={handleChange} value={values.shopList} checked={values.shopList}/>} />
               </Grid>
 
               <Grid item xs={12} display={'flex'} justifyContent={'end'} gap={2}>

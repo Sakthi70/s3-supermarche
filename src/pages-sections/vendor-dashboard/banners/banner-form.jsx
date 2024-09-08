@@ -58,7 +58,8 @@ export default function BannerForm({isEdit, banner = {}}) {
     title: "",
     description: "",
     expires:null,
-    type:1
+    type:1,
+    slug:""
   };
   const rteref = useRef(null);
 
@@ -74,7 +75,8 @@ export default function BannerForm({isEdit, banner = {}}) {
         title: values.title.trim(),
         description: rteref.current?.editor?.getHTML(),
         expires: values.expires,
-        type: values.type
+        type: values.type,
+        slug:values.slug
       }
         let result = '';
         if(banner.image !== '' && values.image === ''){
@@ -185,15 +187,9 @@ export default function BannerForm({isEdit, banner = {}}) {
                       </UploadImageBox>
               </Grid>}
 
-              {/* <Grid item  xs={12}>
-                <FormControlLabel disabled={isFeatured || (values.best || values.additional)} label="Featured Category" control={<Checkbox color="info" name="featured" onBlur={handleBlur} onChange={handleChange} value={values.featured} checked={values.featured}/>} />
-                </Grid>
-                <Grid item xs={12}>
-                <FormControlLabel disabled={isBest || (values.featured || values.additional)}  label="Best Category" control={<Checkbox color="info" name="best" onBlur={handleBlur} onChange={handleChange} value={values.best} checked={values.best} />} />
-                </Grid>
-                <Grid item xs={12}>
-                <FormControlLabel disabled={isAdditional || (values.best || values.featured)}  label="Additional Category" control={<Checkbox color="info" name="additional" onBlur={handleBlur} onChange={handleChange} value={values.additional} checked={values.additional}/>} />
-                </Grid> */}
+              <Grid item xs={12} >
+                <TextField fullWidth name="slug" label="Slug" color="info" size="medium" placeholder="Slug" value={values.slug} onBlur={handleBlur} onChange={handleChange} />
+              </Grid>
 
               <Grid item xs={12}  display={'flex'} justifyContent={'end'} gap={2}>
             

@@ -47,3 +47,82 @@ export function decimalToHexColor(decimalValue) {
 
   return `#${hex}`;
 }
+
+
+
+export function getAllCategoriesByOption(array, parentId = null) {
+  let allArr = buildTree(array, parentId);
+  // Filter items that have the given parentId
+ return [parentId,...optionsFromArray(allArr)]
+}
+
+export function optionsFromArray(array) {
+  // Filter items that have the given parentId
+  let arr = [];
+   array
+      .filter(item =>item.enabled)
+      .forEach(item => {
+          arr.push(item.id);
+          if(item.child.length>0){
+            arr = [...arr, ...optionsFromArray(item.child)]
+          }  // Recursive call to build children
+      });
+      return arr;
+}
+
+export function buildTree(array, parentId = null,enable=false) {
+  // Filter items that have the given parentId
+  return array
+      .filter(item => item.parentId === parentId && (enable || item.enabled))
+      .map(item => ({
+          ...item,
+          child: buildTree(array, item.id)  // Recursive call to build children
+      }));
+}
+
+export function buildBulkTree(array, parentId = null) {
+  // Filter items that have the given parentId
+  array.forEach(element => {
+       
+  });
+  return array
+      .filter(item => item.parentId === `/${parentId}`)
+      .map(item => ({
+          ...item,
+          child: buildTree(array, item.name)  // Recursive call to build children
+      }));
+}
+
+export function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+export function getRandomItem(array, alt = "") {
+  if (array.length === 0) {
+    return alt
+  }
+
+  // Generate a random index between 0 and array.length - 1
+  const randomIndex = Math.floor(Math.random() * array.length);
+
+  // Return the item at the random index
+  return array[randomIndex];
+}
+
+export function calculateDiscountPercentage(originalPrice, discountedPrice) {
+  if (originalPrice <= 0 || !discountedPrice || discountedPrice <=0 ) {
+    return 0;
+  }
+
+  // Calculate the discount amount
+  const discountAmount = originalPrice - discountedPrice;
+
+  // Calculate the discount percentage
+  const discountPercentage = (discountAmount / originalPrice) * 100;
+
+  return discountPercentage;
+}

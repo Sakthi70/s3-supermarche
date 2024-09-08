@@ -111,9 +111,9 @@ export default function Section4() {
                   {item.title}
                 </H3>
 
-                {/* <Button variant="contained" color="primary" LinkComponent={Link} href={item.shopUrl}>
+               {(item.slug && item.slug!=="") && <Button variant="contained" color="primary" LinkComponent={Link} href={item.slug}>
                   Shop Now
-                </Button> */}
+                </Button>}
               </Grid>
 
               <Grid item lg={5} xs={12} className="grid-2">

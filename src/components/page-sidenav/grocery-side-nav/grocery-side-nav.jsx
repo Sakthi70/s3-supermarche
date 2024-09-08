@@ -1,4 +1,4 @@
-
+"use client";
 // GLOBAL CUSTOM COMPONENTS
 import Scrollbar from "components/scrollbar";
 import { NavLink } from "components/nav-link"; 
@@ -9,6 +9,8 @@ import NavAccordion from "./components/nav-accordion";
 // STYLED COMPONENTS
 
 import { StyledCard } from "./styles"; 
+import useApp from "hooks/useApp";
+import { buildTree } from "utils/util";
 // CUSTOM DATA MODEL
 
 
@@ -16,12 +18,19 @@ import { StyledCard } from "./styles";
 export default function GrocerySideNav({
   navigation
 }) {
+  
+  const {content }= useApp();
+  const {categories}= content || {categories:[]};
+
+ let categoryList = buildTree(categories ?? []);
+
+
   return <Scrollbar>
       <StyledCard elevation={3}>
-        {navigation.map((item, ind) => {
-        if (item.child) return <NavAccordion item={item} key={ind} />;
-        return <NavLink key={ind} href={item.href} color="grey.700">
-              <ListItem title={item.title} icon={item.icon} />
+        {categoryList.map((item, ind) => {
+        if (item.child.length > 0) return <NavAccordion item={item} key={ind} />;
+        return <NavLink key={ind} href={`/products/search${item.slug}`} color="grey.700">
+              <ListItem title={item.name} icon={item.image} />
             </NavLink>;
       })}
       </StyledCard>

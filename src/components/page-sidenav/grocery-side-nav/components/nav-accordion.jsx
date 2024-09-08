@@ -17,8 +17,8 @@ export default function NavAccordion({
   item
 }) {
   const {
-    icon,
-    title,
+    image,
+    name,
     child
   } = item;
   const [open, setOpen] = useState(true);
@@ -27,7 +27,7 @@ export default function NavAccordion({
       padding: 0,
       cursor: "pointer"
     }}>
-        <ListItem icon={icon} title={title} />
+        <ListItem icon={image} title={name} />
       </AccordionHeader>
 
       {

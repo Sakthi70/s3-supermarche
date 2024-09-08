@@ -1,3 +1,4 @@
+"use client";
 
 // GLOBAL CUSTOM COMPONENTS
 import Setting from "components/settings";
@@ -18,20 +19,71 @@ import ProductCarousel from "../product-carousel";
 // API FUNCTIONS
 
 import api from "utils/__api__/grocery-2";
-export default async function GroceryTwoPageView() {
-  const services = await api.getServices();
-  const categories = await api.getCategories();
-  const testimonials = await api.getTestimonials();
-  const dairyProducts = await api.getDairyProducts();
-  const navigationList = await api.getNavigationList();
-  const mainCarouselData = await api.getMainCarousel();
-  const featuredProducts = await api.getFeaturedProducts();
-  const bestHomeProducts = await api.getBestHomeProducts();
-  const bestSellProducts = await api.getBestSellProducts();
-  const discountBanners = await api.getDiscountBannerList(); 
+import { useEffect, useState } from "react";
+import useApp from "hooks/useApp";
+import { getAllCategoriesByOption, shuffleArray } from "utils/util";
+import { getRandomProducts } from "actions/products";
+import { SERVICE_LIST } from "utils/constants";
+import _ from "lodash";
+export default  function GroceryTwoPageView() {
+  // const services =  api.getServices();
+  // // const categories = await api.getCategories();
+  // const testimonials =  api.getTestimonials();
+  // const dairyProducts =  api.getDairyProducts();
+  // const navigationList =  api.getNavigationList();
+  // const mainCarouselData =  api.getMainCarousel();
+  // const featuredProducts =  api.getFeaturedProducts();
+  // const bestHomeProducts =  api.getBestHomeProducts();
+  // const bestSellProducts =  api.getBestSellProducts();
+  // const discountBanners =  api.getDiscountBannerList(); 
+
+  const [featureProducts, setfeatureProducts] = useState([]);
+  const [bestProducts, setbestProducts] = useState([]);
+  const [additionalProducts, setadditionalProducts] = useState([]);
+  const [bestName, setbestName] = useState("S3 Supermarche");
+  const [addName, setaddName] = useState("Best Products");
+  const [load, setloading] = useState(true)
+  const [shopList, setshopList] = useState([]);
+
+  const {content,loading }= useApp();
+   const {categories}= content || {categories:[]};
+
+  useEffect(() => {
+    if(categories && categories.length > 0 && load){
+      getData();
+         }
+         loading(load);
+    
+  }, [categories,load])
+  
+const getData =async() => {
+  const onlyShopList = categories.filter(x => x.shopList === true && x.enabled);
+  if(onlyShopList.length>=6){
+    setshopList(onlyShopList.slice(0,6));
+  }else{
+    let shuffleCategory = shuffleArray(categories.filter(x=> x.enabled));
+    setshopList([...onlyShopList, ...shuffleCategory.slice(0,6-onlyShopList.length)]);
+  }
+  const featured = categories.find(x => x.featured === true && x.enabled);
+  const featuredCategories = getAllCategoriesByOption(categories, featured ? featured.id : null);
+  await getRandomProducts(_.compact(featuredCategories)).then((featuredProds) => setfeatureProducts(featuredProds));
+  const best = categories.find(x => x.best === true && x.enabled);
+  setbestName( best ? best.name : "S3 Supermarche");
+  const bestCategories = getAllCategoriesByOption(categories, best ? best.id : null);
+  await getRandomProducts(_.compact(bestCategories)).then((bestProds) => setbestProducts(bestProds));
+  const additional = categories.find(x => x.additional === true && x.enabled);
+  setbestName( best ? best.name : "S3 Supermarche");
+  let additionalCategories = getAllCategoriesByOption(categories, additional ? additional.id : null);
+  additionalCategories = _.compact(additionalCategories);
+  setaddName(additionalCategories.length > 1 ? additionalCategories.slice(0,2).map(x => categories.find(y => y.id === x).name).join(', ') : categories.find(x => x.id === additionalCategories[0]).name);
+  await getRandomProducts(additionalCategories).then((addProds) => setadditionalProducts(addProds));
+  setloading(false)
+}
+
+
 // SIDE NAVBAR COMPONENT
 
-  const SideNav = <GrocerySideNav navigation={navigationList} />;
+  const SideNav = <GrocerySideNav navigation={[]} />;
   return <div className="mt-1">
       <StickyWrapper SideNav={SideNav}>
         {
@@ -42,17 +94,17 @@ export default async function GroceryTwoPageView() {
         {
         /* SERVICE LIST AREA */
       }
-        <Section2 services={services} />
+        <Section2 services={SERVICE_LIST} />
 
         {
         /* SHOP BY CATEGORY LIST AREA */
       }
-        <Section3 categories={categories} />
+        <Section3 categories={shopList} />
 
         {
         /* FEATURED ITEMS AREA */
       }
-        <ProductCarousel title="Featured Items" products={featuredProducts} />
+        <ProductCarousel title="Featured Items" products={featureProducts} />
 
         {
         /* BEST SELLER IN YOUR AREA */
@@ -67,12 +119,12 @@ export default async function GroceryTwoPageView() {
         {
         /* BEST OF HOME ESSENTIALS PRODUCTS AREA  */
       }
-        <ProductCarousel title="Best of Home Essentials" products={bestHomeProducts} />
+        <ProductCarousel title={`Best of ${bestName}`} products={bestProducts} />
 
         {
         /* SNACKS-DRINKS-DAIRY PRODUCTS AREA */
       }
-        <ProductCarousel title="Snacks, Drinks, Dairy & More" products={dairyProducts} />
+        <ProductCarousel title={`${addName} & More`} products={additionalProducts} />
 
         {
         /* CLIENT TESTIMONIALS AREA */

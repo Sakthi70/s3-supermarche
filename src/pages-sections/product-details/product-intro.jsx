@@ -26,11 +26,12 @@ import { currency } from "lib";
 // DUMMY DATA
 
 import productVariants from "data/product-variants";
+import { NO_IMAGE_FOR_PRODUCT } from "utils/constants";
 // CUSTOM DATA MODEL
 
 // ================================================================
 export default function ProductIntro({ product }) {
-  const { id, price, title, images, slug, thumbnail } = product || {};
+  const { id, price, name, image, slug, thumbnail } = product || {};
   const { state, dispatch } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectVariants, setSelectVariants] = useState({
@@ -72,26 +73,10 @@ export default function ProductIntro({ product }) {
       <Grid container spacing={3} justifyContent="space-around">
         {/* IMAGE GALLERY AREA */}
         <Grid item md={6} xs={12} alignItems="center">
-          <FlexBox
-            borderRadius={3}
-            overflow="hidden"
-            justifyContent="center"
-            mb={6}
-          >
-            <LazyImage
-              alt={title}
-              width={300}
-              height={300}
-              loading="eager"
-              src={product.images[selectedImage]}
-              sx={{
-                objectFit: "contain",
-              }}
-            />
-          </FlexBox>
-
-          <FlexBox overflow="auto">
-            {images.map((url, ind) => (
+          <Grid container>
+          <Grid item sm={2} xs={12} order={{xs:1,sm:0}} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+          <FlexBox overflow="auto" sx={{flexDirection:{sx:'row',sm:'column'}}}>
+            {image.length >0 ? image.map((url, ind) => (
               <FlexRowCenter
                 key={ind}
                 width={64}
@@ -100,12 +85,12 @@ export default function ProductIntro({ product }) {
                 bgcolor="white"
                 border="1px solid"
                 borderRadius="10px"
-                ml={ind === 0 ? "auto" : 0}
+                m={ 1}
                 style={{
                   cursor: "pointer",
                 }}
                 onClick={handleImageClick(ind)}
-                mr={ind === images.length - 1 ? "auto" : "10px"}
+                mr={ind === image.length - 1 ? "auto" : "10px"}
                 borderColor={
                   selectedImage === ind ? "primary.main" : "grey.400"
                 }
@@ -119,14 +104,50 @@ export default function ProductIntro({ product }) {
                   }}
                 />
               </FlexRowCenter>
-            ))}
+            )): <FlexRowCenter
+            width={64}
+            height={64}
+            minWidth={64}
+            bgcolor="white"
+            border="1px solid"
+            borderRadius="10px"
+            ml={ "auto" }
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={handleImageClick(0)}
+            mr={ "auto" }
+            borderColor={"primary.main" 
+            }
+          >
+            <Avatar
+              alt="product"
+              src={NO_IMAGE_FOR_PRODUCT}
+              variant="square"
+              sx={{
+                height: 40,
+              }}
+            />
+          </FlexRowCenter>}
           </FlexBox>
+          </Grid>
+          <Grid item sm={10} xs={12} p={1} order={{xs:0,sm:1}} >
+          <LazyImage
+              alt={name}
+              width={300}
+              height={300}
+              loading="eager"
+              src={product.image.length > 0 ?  product.image[selectedImage]: NO_IMAGE_FOR_PRODUCT}
+              sx={{
+                objectFit: "contain",
+              }}
+            />
+          </Grid>
+          </Grid>
         </Grid>
 
-        {/* PRODUCT INFO AREA */}
         <Grid item md={6} xs={12} alignItems="center">
-          {/* PRODUCT NAME */}
-          <H1 mb={1}>{title}</H1>
+          <H1 mb={1}>{name}</H1>
 
           {/* PRODUCT BRAND */}
           {/* <FlexBox alignItems="center" mb={1}>
@@ -134,13 +155,7 @@ export default function ProductIntro({ product }) {
             <H6>Xiaomi</H6>
           </FlexBox> */}
 
-          {/* PRODUCT RATING */}
-          <FlexBox alignItems="center" gap={1} mb={2}>
-            <Box lineHeight="1">Rated:</Box>
-            <Rating color="warn" value={4} readOnly />
-            <H6 lineHeight="1">(50)</H6>
-          </FlexBox>
-
+         
           {/* PRODUCT VARIANTS */}
           {productVariants.map((variant) => (
             <Box key={variant.id} mb={2}>
@@ -229,6 +244,9 @@ export default function ProductIntro({ product }) {
           </FlexBox> */}
         </Grid>
       </Grid>
+      <Box my={2}>
+              <div dangerouslySetInnerHTML={{ __html: product.description }} />
+              </Box>
     </Box>
   );
 }

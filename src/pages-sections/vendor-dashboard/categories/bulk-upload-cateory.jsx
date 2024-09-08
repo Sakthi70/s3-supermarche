@@ -4,6 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typ
 import DropZone from 'components/DropZone';
 import React, { useState } from 'react'
 import Papa from 'papaparse';
+import { buildBulkTree } from 'utils/util';
 
 
 const BulkUploadCategory = ({open = true, handleClose}) => {
@@ -14,7 +15,8 @@ const BulkUploadCategory = ({open = true, handleClose}) => {
             header: true,
             complete: function(results) {
                 let arr = results.data
-              console.log("Finished:", arr);
+                let rs = buildBulkTree(arr,'');
+              console.log("Finished:", arr,rs);
             }}
           )
         }

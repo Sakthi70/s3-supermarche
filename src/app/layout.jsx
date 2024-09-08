@@ -23,6 +23,7 @@ import "i18n";
 import { auth } from "auth";
 import Loading from "./loading";
 import AppProvider from "contexts/AppContext";
+import './style.css';
 export default async function RootLayout({
   children
 }) {

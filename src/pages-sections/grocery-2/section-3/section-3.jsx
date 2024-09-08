@@ -1,3 +1,5 @@
+"use client"; 
+
 import Link from "next/link";
 import Image from "next/image";
 import Grid from "@mui/material/Grid"; 
@@ -9,13 +11,13 @@ import { H3, H5, Tiny } from "components/Typography";
 
 // STYLED COMPONENT
 import { StyledCard } from "./styles"; 
+import useApp from "hooks/useApp";
+import { Box } from "@mui/material";
 // ===========================================================
 
 
 // ===========================================================
-export default function Section3({
-  categories = []
-}) {
+export default function Section3({categories}) {
   return <div className="mb-3">
       <H3 fontSize={25} mb={3}>
         Shop By Category
@@ -31,7 +33,7 @@ export default function Section3({
       }) => <Grid item lg={4} xs={6} key={id}>
             <Link href={`/products/search/${slug}`}>
               <StyledCard>
-                <Image width={46} height={46} alt={name} src={image} />
+                {image ? <Image width={46} height={46} alt={name} src={image} />: <Box width={46} height={46}></Box>}
 
                 <div>
                   <Tiny color="primary.main" display="block" mb={0.5}>

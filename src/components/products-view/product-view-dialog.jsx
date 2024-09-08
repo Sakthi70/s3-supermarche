@@ -22,6 +22,9 @@ import useCart from "hooks/useCart";
 // CUSTOM UTILS LIBRARY FUNCTION
 
 import { currency } from "lib"; 
+import { NO_IMAGE_FOR_PRODUCT } from "utils/constants";
+import { Box } from "@mui/material";
+import ProductPrice from "components/product-cards/product-price";
 // =====================================================
 
 
@@ -59,12 +62,12 @@ export default function ProductViewDialog(props) {
         <div>
           <Grid container spacing={3}>
             <Grid item md={6} xs={12}>
-              <Carousel slidesToShow={1} arrowStyles={{
+              {product.image.length > 0 ? <Carousel slidesToShow={1} arrowStyles={{
               boxShadow: 0,
               color: "primary.main",
               backgroundColor: "transparent"
             }}>
-                {product.imgGroup.map((item, index) => <BazaarImage key={index} src={item} alt="product" sx={{
+                {product.image.map((item, index) => <BazaarImage key={index} src={item} alt="product" sx={{
                 mx: "auto",
                 width: "100%",
                 objectFit: "contain",
@@ -73,27 +76,34 @@ export default function ProductViewDialog(props) {
                   xs: 250
                 }
               }} />)}
-              </Carousel>
+              </Carousel> : <BazaarImage  src={NO_IMAGE_FOR_PRODUCT} alt="product" sx={{
+                mx: "auto",
+                width: "100%",
+                objectFit: "contain",
+                height: {
+                  sm: 400,
+                  xs: 250
+                }
+              }} />}
             </Grid>
 
             <Grid item md={6} xs={12} alignSelf="center">
-              <H2>{product.title}</H2>
+              <H2>{product.name}</H2>
 
               <Paragraph py={1} color="grey.500" fontWeight={600} fontSize={13}>
-                CATEGORY: Cosmetic
+                {`CATEGORY: ${product.category ? product.category.name :''}`}
               </Paragraph>
 
-              <H1 color="primary.main">{currency(product.price)}</H1>
+<ProductPrice discount={product.offerPrice} price={product.price} isHigh={true} />
 
-              <FlexBox alignItems="center" gap={1} mt={1}>
+              {/* <FlexBox alignItems="center" gap={1} mt={1}>
                 <Rating color="warn" value={4} readOnly />
                 <H6 lineHeight="1">(50)</H6>
-              </FlexBox>
+              </FlexBox> */}
 
-              <Paragraph my={2}>
-                Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus
-                libero eu augue. Morbi purus liberpuro ate vol faucibus adipiscing.
-              </Paragraph>
+              <Box my={2}>
+              <div className="truncated-text" dangerouslySetInnerHTML={{ __html: product.description }} />
+              </Box>
 
               <Divider sx={{
               mb: 2

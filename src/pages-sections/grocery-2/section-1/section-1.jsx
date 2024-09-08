@@ -13,6 +13,8 @@ import { H1, H5, H6 } from "components/Typography";
 import { GridItemOne, GridItemTwo, StyledRoot, StyledGrid } from "./styles"; 
 import { useEffect, useState } from "react";
 import { getBanners } from "actions/banner";
+import { Button } from "@mui/material";
+import Link from "next/link";
 // ========================================================================
 
 
@@ -60,6 +62,9 @@ export default function Section1() {
               </H5> */}
 
               {/* <AppStore /> */}
+              {(item.slug && item.slug!=="") && <Button variant="contained" sx={{color:'#D23F57', backgroundColor:'#fff'}} LinkComponent={Link} href={item.slug}>
+                  Shop Now
+                </Button>}
             </GridItemOne>
 
             <GridItemTwo item md={5} sm={5} xs={12}>

@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import { H3 } from "components/Typography";
 import { Carousel } from "components/carousel";
 import ProductCard1 from "components/product-cards/product-card-1"; 
+import { calculateDiscountPercentage } from "utils/util";
 // CUSTOM DATA MODEL
 
 
@@ -35,7 +36,7 @@ export default function ProductCarousel({
 
       <Carousel slidesToShow={4} responsive={responsive}>
         {products.map(item => <Box py={0.5} key={item.id}>
-            <ProductCard1 hideRating id={item.id} slug={item.slug} price={item.price} title={item.title} rating={item.rating} imgUrl={item.thumbnail} discount={item.discount} />
+            <ProductCard1 hideRating id={item.id} slug={item.slug} price={item.price} title={item.name} rating={item.rating} imgUrl={item.image} discount={calculateDiscountPercentage(item.price,item.offerPrice)} productData={item} />
           </Box>)}
       </Carousel>
     </div>;
