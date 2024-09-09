@@ -2,12 +2,12 @@
 
 // GLOBAL CUSTOM COMPONENTS
 import Setting from "components/settings";
-import { Footer2 } from "components/footer";
+import { Footer1, Footer2 } from "components/footer";
 import Scrollbar from "components/scrollbar";
 import Newsletter from "components/newsletter";
 import StickyWrapper from "components/sticky-wrapper";
 import GrocerySideNav from "components/page-sidenav/grocery-side-nav";
-import { MobileNavigationBar2 } from "components/mobile-navigation"; 
+import { MobileNavigationBar, MobileNavigationBar2 } from "components/mobile-navigation"; 
 // LOCAL CUSTOM COMPONENTS
 
 import Section1 from "../section-1";
@@ -24,6 +24,7 @@ import { getAllCategoriesByOption, shuffleArray } from "utils/util";
 import { getRandomProducts } from "actions/products";
 import { SERVICE_LIST } from "utils/constants";
 import _ from "lodash";
+import { Box } from "@mui/material";
 export default  function GroceryTwoPageView() {
   const [featureProducts, setfeatureProducts] = useState([]);
   const [bestProducts, setbestProducts] = useState([]);
@@ -72,12 +73,13 @@ const getData =async() => {
 
 // SIDE NAVBAR COMPONENT
 
-  const SideNav = <GrocerySideNav navigation={[]} />;
+const SideNav = <GrocerySideNav navigation={[]} />;
   return <div className="mt-1">
-      <StickyWrapper SideNav={SideNav}>
+      {/* <StickyWrapper SideNav={SideNav}> */}
         {
         /* TOP HERO AREA */
       }
+      <Box p={2}>
         <Section1  />
 
         {
@@ -115,30 +117,11 @@ const getData =async() => {
       }
         <ProductCarousel title={`${addName} & More`} products={additionalProducts} />
 
-        {
-        /* CLIENT TESTIMONIALS AREA */
-      }
-        {/* <Section5 testimonials={testimonials} /> */}
-
-        {
-        /* FOOTER AREA */
-      }
         <Footer2 />
-      </StickyWrapper>
-
-      {
-      /* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */
-    }
-      {/* <Setting /> */}
-
-      {
-      /* POPUP NEWSLETTER FORM */
-    }
+      </Box>
+      {/* <MobileNavigationBar /> */}
+     
       <Newsletter image="/assets/images/newsletter/bg-2.png" />
-
-      {
-      /* SMALL DEVICE BOTTOM NAVIGATION */
-    }
       <MobileNavigationBar2>
         <Scrollbar>{SideNav}</Scrollbar>
       </MobileNavigationBar2>

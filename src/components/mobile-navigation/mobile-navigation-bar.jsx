@@ -14,11 +14,13 @@ import useCart from "hooks/useCart";
 // STYLED COMPONENTS
 
 import { iconStyle, StyledNavLink, Wrapper } from "./styles";
+import { useTheme } from "@mui/styles";
 export default function MobileNavigationBar() {
   const {
     state
   } = useCart();
-  const DOWN_900 = useMediaQuery(theme => theme.breakpoints.down(900));
+  const theme = useTheme();
+  const DOWN_900 = useMediaQuery(theme.breakpoints.down(1150));
 
   if (DOWN_900) {
     return <Wrapper>

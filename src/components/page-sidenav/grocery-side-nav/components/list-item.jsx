@@ -20,7 +20,7 @@ export default function ListItem({
   // const Icon = appIcons[icon];
   return <FlexBox py={1} gap={1.5} alignItems="center">
       {/* <Icon fontSize="small" /> */}
-     {icon ? <Image src={icon} width={16} height={16} alt={title}/> : <Box width={16} height={16}></Box>}
+     {icon ? <Image style={{borderRadius:'50%'}} src={icon} width={50}  height={50} alt={title}/> : <Box width={50} height={50}></Box>}
       <Span fontWeight={600}>{title}</Span>
     </FlexBox>;
 }

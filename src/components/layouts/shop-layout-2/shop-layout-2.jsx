@@ -46,6 +46,7 @@ export default function ShopLayout2({ children }) {
         <Header isFixed={isFixed} midSlot={<SearchInput />} />
       </Sticky>
 
+      <Navbar elevation={0} border={1} />
       {/* NAVIGATION BAR */}
       {NAV_BAR_CONTENT ?? <Divider />}
 

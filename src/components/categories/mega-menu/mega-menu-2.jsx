@@ -14,8 +14,8 @@ export default function MegaMenu2({
   data
 }) {
   return <StyledRoot elevation={2}>
-      {data.map(item => <CategoryMenuItem href={item.href} icon={item.icon} key={item.title} title={item.title} caret={!!item.children} render={item.children?.length ? <ColumnList minWidth={550} list={item.children}>
-                <OfferBanner />
+      {data.map(item => <CategoryMenuItem href={`/products/search${item.slug}`} icon={item.image} key={item.name} title={item.name} caret={!!item.child} render={item.child?.length ? <ColumnList minWidth={550} list={item.child}>
+                {/* <OfferBanner /> */}
               </ColumnList> : null} />)}
     </StyledRoot>;
 }

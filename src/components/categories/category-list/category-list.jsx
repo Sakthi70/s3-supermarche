@@ -9,24 +9,28 @@ import { categoryMenus } from "data/navigations";
 // STYLED COMPONENT
 
 import { StyledRoot } from "./styles"; 
+import useApp from "hooks/useApp";
+import { buildTree } from "utils/util";
 // PROPS TYPE
 
 export default function CategoryList({
   open,
   position = "absolute"
 }) {
+  const {content }= useApp();
+  const {categories}= content || {categories:[]};
+
+ let categoryList = buildTree(categories ?? []);
   return <StyledRoot open={open} position={position}>
-      {categoryMenus.map(item => {
+      {categoryList && categoryList.map(item => {
       const {
-        href,
-        title,
-        children,
-        component,
-        icon,
-        offer
+        slug,
+        name,
+        child,
+        image,
       } = item;
-      const MegaMenu = component === MegaMenu1.name ? MegaMenu1 : MegaMenu2;
-      return <CategoryListItem key={title} href={href} icon={icon} title={title} caret={!!children} render={component ? <MegaMenu data={children} banner={offer} /> : null} />;
+      const MegaMenu =  MegaMenu1;
+      return <CategoryListItem key={name} href={`/products/search${slug}`} icon={image} title={name} caret={child.length >0} render={child.length >0 ? <MegaMenu data={child} banner={null} /> : null} />;
     })}
     </StyledRoot>;
 }

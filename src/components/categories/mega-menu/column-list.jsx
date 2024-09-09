@@ -11,6 +11,8 @@ import { NavLink } from "components/nav-link";
 // STYLED COMPONENTS
 
 import { StyledRoot } from "./styles"; 
+import Image from "next/image";
+import { Span } from "components/Typography";
 // DATA TYPES
 
 
@@ -27,21 +29,29 @@ export default function ColumnList({
       <FlexBox px={2.5}>
         <Box flex="1 1 0">
           <Grid container spacing={4}>
-            {list.map((item, ind) => <Grid item md={3} key={ind}>
-                <div className="title-link">{item.title}</div>
+            {list.map((item, ind) => <Grid item md={4} key={ind}>
 
-                {item.children?.map((sub, ind) => <NavLink className="child-link" href={sub.href} key={ind}>
-                    {sub.title}
-                  </NavLink>)}
+            <FlexBox py={1} gap={1.5} alignItems="center">
+     {item.image ? <Image style={{borderRadius:'50%'}} src={item.image} width={40}  height={40} alt={item.name}/> : <Box width={40} height={40}></Box>}
+     <NavLink className="child-link" href={`/products/search${item.slug}`} key={ind}><Span fontWeight={600}>{item.name}</Span></NavLink>
+    </FlexBox>
+                {/* <div className="title-link">{item.name}</div> */}
+
+                {item.child?.map((sub, ind) =>
+                <FlexBox py={1} gap={1.5} alignItems="center">
+                {sub.image ? <Image style={{borderRadius:'50%'}} src={sub.image} width={30}  height={30} alt={sub.name}/> : <Box width={30} height={30}></Box>}
+                <NavLink className="child-link" href={`/products/search${sub.slug}`} key={ind}>{sub.name}</NavLink>
+               </FlexBox>
+                )}
               </Grid>)}
           </Grid>
         </Box>
 
-        {banner?.position === "right" ? <Box mt={1.5}>
+        {/* {banner?.position === "right" ? <Box mt={1.5}>
             <Link href={banner.href}>
               <LazyImage src={banner.url} width={137} height={318} alt="banner" />
             </Link>
-          </Box> : null}
+          </Box> : null} */}
       </FlexBox>
 
       {children}
