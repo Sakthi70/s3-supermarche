@@ -118,6 +118,7 @@ export default function CategoryForm({ isEdit, category = {} }) {
           featured: values.featured,
           additional: values.additional,
           best: values.best,
+          shopList:values.shopList,
           tag: values.tag
         };
         let result = "";
@@ -260,7 +261,7 @@ export default function CategoryForm({ isEdit, category = {} }) {
                 >
                   <InputLabel>{t("Parent Category")}</InputLabel>
                   <Select
-                    disabled={isEdit}
+                    // disabled={isEdit}
                     MenuProps={MenuProps}
                     fullWidth
                     color="info"

@@ -38,17 +38,16 @@ export default  function GroceryTwoPageView() {
    const {categories}= content || {categories:[]};
 
   useEffect(() => {
-    if(categories && categories.length > 0 && load){
-      setloading(true)
+    if(categories ){
       getData();
          }
-         loading(load);
+        //  loading(load);
     
-  }, [categories,load])
+  }, [categories])
   
 const getData =async() => {
-  const onlyShopList = categories.filter(x => x.shopList === true && x.enabled);
-  if(onlyShopList.length>=6){
+  const onlyShopList = categories.filter(x => x.shopList && x.enabled);
+  if(onlyShopList.length >= 6){
     setshopList(onlyShopList.slice(0,6));
   }else{
     let shuffleCategory = shuffleArray(categories.filter(x=> x.enabled && !x.shopList));

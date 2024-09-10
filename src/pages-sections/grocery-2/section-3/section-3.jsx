@@ -28,16 +28,16 @@ export default function Section3({categories}) {
         id,
         name,
         image,
-        description,
+        tag,
         slug
-      }) => <Grid item lg={4} xs={6} key={id}>
+      }) => <Grid item lg={3} md={4} xs={6} key={id}>
             <Link href={`/products/search/${slug}`}>
               <StyledCard>
                 {image ? <Image width={46} height={46} alt={name} src={image} />: <Box width={46} height={46}></Box>}
 
                 <div>
-                  <Tiny color="primary.main" display="block" mb={0.5}>
-                    {description}
+                  <Tiny color="primary.main" display="block" mb={0.5} sx={{fontWeight:'bold', fontSize:12}}>
+                    {tag}
                   </Tiny>
                   <H5>{name}</H5>
                 </div>

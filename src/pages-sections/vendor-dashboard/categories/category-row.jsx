@@ -32,7 +32,7 @@ export default function CategoryRow({ category,  selected }) {
   // const [featuredCategory, setFeaturedCategory] = useState(featured);
   const hasSelected = selected.indexOf(name) !== -1;
 
-  const handleNavigate = () => router.push(`/admin/categories/${slug}`);
+  const handleNavigate = () => router.push(`/admin/categories/${id}`);
   const onDelete = async() => {
     loading(true);
     if(image !=''){

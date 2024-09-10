@@ -17,7 +17,7 @@ export default function EditCategoryPageView() {
 
   useEffect(() => {
     if(categories.length > 0){
-      let category = categories.find(x => x.slug === `/${params.slug.join('/').replaceAll('%20', ' ')}`);
+      let category = categories.find(x => x.id === params.slug);
       
       let parent = "";
       if(category && category.parentId !== null){
