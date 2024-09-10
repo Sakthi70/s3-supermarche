@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const ShoppingBagOutlined = createSvgIcon(<svg fill="currentColor" viewBox="0 0 24 24">
     <g>

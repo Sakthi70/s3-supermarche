@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const HealthBeauty = createSvgIcon(<svg viewBox="0 0 18 18" fill="none">
     <g clipPath="url(#clip0_6820_26169)">

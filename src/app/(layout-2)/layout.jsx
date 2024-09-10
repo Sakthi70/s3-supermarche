@@ -1,6 +1,16 @@
 import ShopLayout2 from "components/layouts/shop-layout-2";
-export default function Layout({
+import { Navbar, NavigationList } from "components/navbar";
+import { LAYOUT_DATA } from "utils/constants";
+// API FUNCTIONS
+
+export default async function Layout({
   children
 }) {
-  return <ShopLayout2>{children}</ShopLayout2>;
+  const data = LAYOUT_DATA; 
+// NAVIGATION MENU LIST
+
+  const NAVIGATION = <Navbar elevation={0} navigation={<NavigationList navigation={data.header.navigation} />} categories={null} />;
+  return <ShopLayout2 data={data} navbar={NAVIGATION}>
+      {children}
+    </ShopLayout2>;
 }

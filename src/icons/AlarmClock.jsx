@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const AlarmClock = createSvgIcon(<svg fill="currentColor" viewBox="0 0 42 41">
     <g>

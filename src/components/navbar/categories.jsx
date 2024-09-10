@@ -11,13 +11,16 @@ import Category from "icons/Category";
 
 import { CategoryMenuButton } from "./styles";
 import { t } from "utils/util";
+import { IconButton, useMediaQuery } from "@mui/material";
 export default function Categories() {
-  return <CategoryMenu render={handler => <CategoryMenuButton variant="text" onClick={e => handler(e)}>
+  const DOWN_1150 = useMediaQuery(theme => theme.breakpoints.down(1150));
+  return <CategoryMenu render={handler => <>
+  {!DOWN_1150 ? <CategoryMenuButton variant="text" onClick={e => handler(e)}>
           <div className="prefix">
             <Category fontSize="small" />
             <Paragraph fontWeight={600}>{t("Categories")}</Paragraph>
           </div>
 
           <ChevronRight className="dropdown-icon" fontSize="small" />
-        </CategoryMenuButton>} />;
+        </CategoryMenuButton> :   <IconButton disableFocusRipple onClick={e => handler(e)}> <Category fontSize="small" /></IconButton>}</>} />;
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const PremiumPackageIcon = createSvgIcon(<svg fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0 8C0 3.58172 3.58172 0 8 0H92C96.4183 0 100 3.58172 100 8V92C100 96.4183 96.4183 100 92 100H8C3.58172 100 0 96.4183 0 92V8Z" fill="#DBF0FE" />

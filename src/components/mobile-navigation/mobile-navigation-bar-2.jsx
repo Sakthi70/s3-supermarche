@@ -29,7 +29,7 @@ export default function MobileNavigationBar2({
     state
   } = useCart();
   const [open, setOpen] = useState(false);
-  const DOWN_900 = useMediaQuery(theme => theme.breakpoints.down(1150));
+  const DOWN_900 = useMediaQuery(theme => theme.breakpoints.down(786));
 
   const handleDrawerClose = () => setOpen(false);
 

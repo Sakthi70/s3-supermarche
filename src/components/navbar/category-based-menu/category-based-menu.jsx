@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"; 
 // GLOBAL CUSTOM COMPONENT

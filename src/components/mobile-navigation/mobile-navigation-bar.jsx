@@ -19,8 +19,7 @@ export default function MobileNavigationBar() {
   const {
     state
   } = useCart();
-  const theme = useTheme();
-  const DOWN_900 = useMediaQuery(theme.breakpoints.down(1150));
+  const DOWN_900 = useMediaQuery(theme => theme.breakpoints.down(1150));
 
   if (DOWN_900) {
     return <Wrapper>

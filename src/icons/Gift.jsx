@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const Gift = createSvgIcon(<svg fill="currentColor" viewBox="0 0 22 22">
     <g clipPath="url(#clip0)">

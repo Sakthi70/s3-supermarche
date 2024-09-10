@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const CustomerService = createSvgIcon(<svg viewBox="0 0 64 64" fill="currentColor">
     <g>

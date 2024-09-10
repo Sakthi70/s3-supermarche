@@ -1,9 +1,10 @@
-import Box from "@mui/material/Box";
+"use client";
+
 import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import styled from "@mui/material/styles/styled";
 import { layoutConstant } from "utils/constants";
-export const StyledRoot = styled(Box, {
+export const StyledRoot = styled("div", {
   shouldForwardProp: prop => prop !== "bgColor" && prop !== "expand"
 })(({
   theme,
@@ -33,6 +34,10 @@ export const StyledRoot = styled(Box, {
     marginLeft: "0.5rem",
     fontWeight: 600
   },
+  "& .topbarRight": {
+    display: "flex",
+    alignItems: "center"
+  },
   [theme.breakpoints.down("sm")]: {
     height: expand ? 80 : layoutConstant.topbarHeight,
     "& .MuiSvgIcon-root": {
@@ -40,6 +45,7 @@ export const StyledRoot = styled(Box, {
     },
     "& .topbarRight": {
       paddingBottom: 5,
+      alignItems: "center",
       display: expand ? "flex" : "none"
     },
     "& .expand": {
@@ -68,5 +74,16 @@ export const StyledChip = styled(Chip)(({
   backgroundColor: theme.palette.primary.main,
   "& .MuiChip-label": {
     paddingInline: ".8rem"
+  }
+}));
+export const LeftContent = styled("div")(() => ({
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  ".tag": {
+    gap: ".5rem",
+    display: "flex",
+    alignItems: "center"
   }
 }));

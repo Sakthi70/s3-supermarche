@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const Tshirt = createSvgIcon(<svg fill="currentColor" viewBox="0 0 28 29">
     <path d="M14.5504 10.144C15.3056 10.144 15.9579 9.66245 16.1922 8.9541C15.7451 9.07716 15.1753 9.15144 14.5504 9.15144C13.9255 9.15144 13.3557 9.07716 12.9087 8.9541C13.1429 9.66239 13.7951 10.144 14.5504 10.144Z" />

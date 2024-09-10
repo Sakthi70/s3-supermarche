@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const Dress = createSvgIcon(<svg fill="currentColor" viewBox="0 0 511.98 511.98">
     <g>

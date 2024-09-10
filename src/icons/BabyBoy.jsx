@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const BabyBoy = createSvgIcon(<svg fill="currentColor" viewBox="0 0 512 512">
     <path d="M256,416a24,24,0,1,0,24,24A24.027,24.027,0,0,0,256,416Zm0,32a8,8,0,1,1,8-8A8.009,8.009,0,0,1,256,448Z" />

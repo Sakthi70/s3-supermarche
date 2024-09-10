@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const Carrot = createSvgIcon(<svg fill="currentColor" viewBox="0 0 20 20">
     <g>

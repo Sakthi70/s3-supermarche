@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const UserProfile = createSvgIcon(<svg viewBox="0 0 16 17" fill="currentColor">
     <path d="M8 7.49999C10.0619 7.49999 11.7333 5.82852 11.7333 3.76666C11.7333 1.7048 10.0619 0.0333252 8 0.0333252C5.93813 0.0333252 4.26666 1.7048 4.26666 3.76666C4.26666 5.82852 5.93813 7.49999 8 7.49999Z" />

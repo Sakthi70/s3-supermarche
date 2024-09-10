@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const ElementHub = createSvgIcon(<svg viewBox="0 0 16 16" fill="currentColor">
     <path d="M7.12733 6.39722H14.1837C14.8726 6.39722 15.4271 6.95142 15.4271 7.63983V9.27052C15.4271 9.95893 14.8726 10.5131 14.1837 10.5131H7.12733C6.43847 10.5131 5.88391 9.95893 5.88391 9.27052V7.63983C5.88391 6.95142 6.43847 6.39722 7.12733 6.39722V6.39722Z" />

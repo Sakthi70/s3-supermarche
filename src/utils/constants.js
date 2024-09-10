@@ -1,3 +1,5 @@
+import * as db from './data';
+
 export const layoutConstant = {
   topbarHeight: 40,
   headerHeight: 80,
@@ -30,3 +32,33 @@ export const SERVICE_LIST = [{
   title: "Payment",
   description: "100% secured"
 }]; 
+
+export const LAYOUT_DATA = {
+  footer: {
+    appStoreUrl: "#",
+    playStoreUrl: "#",
+    logo: "/assets/images/S3/s3-logo.png",
+    contact: db.footerContact,
+    about: db.footerAboutLinks,
+    socials: db.footerSocialLinks,
+    description: db.footerDescription,
+    customers: db.footerCustomerCareLinks
+  },
+  mobileNavigation: {
+    version1: db.mobileNavigation,
+    version2: db.mobileNavigationTwo,
+    logo: "/assets/images/S3/s3.png"
+  },
+  topbar: {
+    label: "HOT",
+    title: "Free Express Shipping",
+    socials: db.topbarSocialLinks,
+    languageOptions: db.languageOptions
+  },
+  header: {
+    categories: db.categories,
+    categoryMenus: db.categoryMenus,
+    navigation: db.navbarNavigation,
+    logo: "/assets/images/S3/s3-logo.png"
+  }
+};

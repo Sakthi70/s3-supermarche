@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const Sofa = createSvgIcon(<svg viewBox="0 0 19 19" fill="none">
     <g clipPath="url(#clip0_6800_50489)">

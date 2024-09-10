@@ -2,6 +2,7 @@
 import { Open_Sans } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 // import { GoogleAnalytics } from '@next/third-parties/google';
+import 'overlayscrollbars/overlayscrollbars.css';
 export const openSans = Open_Sans({
   subsets: ["latin"]
 });

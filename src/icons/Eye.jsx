@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const Eye = createSvgIcon(<svg viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0.666687 8.5C0.666687 8.5 3.33335 3.16667 8.00002 3.16667C12.6667 3.16667 15.3334 8.5 15.3334 8.5C15.3334 8.5 12.6667 13.8333 8.00002 13.8333C3.33335 13.8333 0.666687 8.5 0.666687 8.5Z" stroke="#7D879C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

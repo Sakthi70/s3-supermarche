@@ -1,5 +1,3 @@
-"use client";
-
 import AlarmClock from "./AlarmClock";
 import Apple from "./Apple";
 import AppleStore from "./AppleStore";

@@ -33,7 +33,7 @@ export default function DialogDrawer(props) {
         <Wrapper>
           <LogoWithTitle />
           <LoginPageView closeDialog={toggleDialog} />
-          <SocialButtons />
+          {/* <SocialButtons /> */}
           <LoginBottom />
         </Wrapper>
       </Dialog>

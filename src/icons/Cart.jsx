@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const CartIcon = createSvgIcon(<svg fill="currentColor" viewBox="0 0 12 14">
     <path fillRule="evenodd" clipRule="evenodd" d="M9.39914 0.333008H12V1.66634H10.2531L8.75021 10.1181H8.74327V10.333H1.68701V10.1676L0.49655 3.72698L0.313336 2.99967H8.93042L9.24 1.25869L9.39914 0.333008ZM1.69414 4.33301H8.69333L7.86351 8.99968H2.55667L1.69414 4.33301Z" fill="#879AB0" />

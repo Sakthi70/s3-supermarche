@@ -1,57 +1,108 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { Fragment, useCallback, useState } from "react";
-import Divider from "@mui/material/Divider";
+import Divider from "@mui/material/Divider"; 
 // GLOBAL CUSTOM COMPONENTS
 
 import Sticky from "components/sticky";
-import Topbar from "components/topbar";
-import Header from "components/header";
-import { Navbar } from "components/navbar";
 import { SearchInput } from "components/search-box";
-/**
- *  USED IN:
- *  1. GROCERY-1, GROCERY-2, HEALTH-BEAUTY
- *  2. CHECKOUT-ALTERNATIVE
- */
+import { MobileMenu } from "components/navbar/mobile-menu";
+import { Header, HeaderCart, HeaderLogin } from "components/header";
+import { MobileHeader, HeaderSearch } from "components/header/mobile-header";
+import { Topbar, TopbarLanguageSelector, TopbarSocialLinks } from "components/topbar"; 
+import Categories from "components/navbar/categories";
+import { Box, useMediaQuery } from "@mui/material";
+import useHeader from "components/header/hooks/use-header";
+import LoginCartButtons from "components/header/components/login-cart-buttons";
+import DialogDrawer from "components/header/components/dialog-drawer";
+// CUSTOM DATA MODEL
 
-export default function ShopLayout2({ children }) {
-  const pathname = usePathname();
+
+// ==============================================================
+export default function ShopLayout2({
+  children,
+  navbar,
+  data
+}) {
+  const {
+    header,
+    topbar,
+    mobileNavigation
+  } = data;
   const [isFixed, setIsFixed] = useState(false);
-  const toggleIsFixed = useCallback((fixed) => setIsFixed(fixed), []);
-  // FOR HANDLE TOP BAR AREA
+  const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
+  const {dialogOpen,sidenavOpen, toggleDialog, toggleSidenav } = useHeader();
+  const DOWN_600 = useMediaQuery(theme => theme.breakpoints.down(786));
+  const MOBILE_VERSION_HEADER = <MobileHeader>
+      <MobileHeader.Left>
+      {DOWN_600 ? <MobileHeader.Logo logoUrl={mobileNavigation.logo} /> : <Categories />}
+      </MobileHeader.Left>
 
-  let TOP_BAR_CONTENT = null;
-  const SHOW_TOP_BAR = [
-    "/grocery-2",
-    "/health-beauty",
-    "/checkout-alternative",
-  ];
-  if (SHOW_TOP_BAR.includes(pathname)) TOP_BAR_CONTENT = <Topbar />;
-  // FOR HANDLE NAV BAR AREA
+      {!DOWN_600 && <MobileHeader.Logo logoUrl={mobileNavigation.logo} />}
 
-  let NAV_BAR_CONTENT = null;
-  const SHOW_NAV_BAR = ["/checkout-alternative"];
-  if (SHOW_NAV_BAR.includes(pathname))
-    NAV_BAR_CONTENT = <Navbar elevation={0} />;
-  return (
-    <Fragment>
-      {/* TOP BAR AREA */}
-      {/* {TOP_BAR_CONTENT} */}
-      <Topbar />
+      <MobileHeader.Right>
+        <HeaderSearch>
+          <SearchInput />
+        </HeaderSearch>
 
-      {/* HEADER */}
+        {/* {!DOWN_600  && <HeaderLogin />}
+        {!DOWN_600  && <HeaderCart /> } */}
+        {!DOWN_600 &&
+          <LoginCartButtons
+          toggleDialog={toggleDialog}
+          toggleSidenav={toggleSidenav}
+        />
+        }
+      </MobileHeader.Right>
+    </MobileHeader>;
+  return <Fragment>
+      {
+      /* TOP BAR AREA */
+    }
+      <Topbar label={topbar.label} title={topbar.title}>
+        <Topbar.Right>
+          <TopbarLanguageSelector languages={topbar.languageOptions} />
+          <TopbarSocialLinks links={topbar.socials} />
+        </Topbar.Right>
+      </Topbar>
+
+      {
+      /* HEADER */
+    }
       <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={70}>
-        <Header isFixed={isFixed} midSlot={<SearchInput />} />
+        <Header mobileHeader={MOBILE_VERSION_HEADER}>
+          <Header.Logo url={header.logo} />
+
+
+          <Header.Mid>
+          <Box pl={2}>
+             <Categories />
+            </Box>
+            <SearchInput />
+          </Header.Mid>
+
+          <Header.Right>
+          <LoginCartButtons
+          toggleDialog={toggleDialog}
+          toggleSidenav={toggleSidenav}
+        />
+          </Header.Right>
+        </Header>
       </Sticky>
+      <DialogDrawer
+        dialogOpen={dialogOpen}
+        sidenavOpen={sidenavOpen}
+        toggleDialog={toggleDialog}
+        toggleSidenav={toggleSidenav}
+      />
+      {
+      /* NAVIGATION BAR */
+    }
+      {/* {navbar ?? <Divider />} */}
 
-      <Navbar elevation={0} border={1} />
-      {/* NAVIGATION BAR */}
-      {NAV_BAR_CONTENT ?? <Divider />}
-
-      {/* BODY CONTENT */}
+      {
+      /* BODY CONTENT */
+    }
       {children}
-    </Fragment>
-  );
+    </Fragment>;
 }

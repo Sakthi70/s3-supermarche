@@ -1,69 +1,69 @@
-import Link from "next/link";
-import { Fragment } from "react";
-import useTheme from "@mui/material/styles/useTheme";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import clsx from "clsx";
-// LOCAL CUSTOM HOOKS
+"use client";
 
+import Link from "next/link";
 import useHeader from "./hooks/use-header";
+import clsx from "clsx"; 
 // GLOBAL CUSTOM COMPONENTS
 
 import LazyImage from "components/LazyImage";
-import FlexBox from "components/flex-box/flex-box";
-// LOCAL CUSTOM COMPONENTS
+import FlexBox from "components/flex-box/flex-box"; 
+// LOCAL CUSTOM COMPONENT
 
-import MobileHeader from "./components/mobile-header";
-import DialogDrawer from "./components/dialog-drawer";
-import CategoriesMenu from "./components/categories-menu";
-import LoginCartButtons from "./components/login-cart-buttons";
+import HeaderCategoryDropdown from "./header-category-dropdown"; 
 // STYLED COMPONENTS
 
-import { HeaderWrapper, StyledContainer } from "./styles";
+import { HeaderWrapper, StyledContainer } from "./styles"; 
 // ==============================================================
 
+
 // ==============================================================
-export default function Header({ isFixed, className, midSlot }) {
-  const theme = useTheme();
-  const downMd = useMediaQuery(theme.breakpoints.down(1150));
-  const { dialogOpen, sidenavOpen, toggleDialog, toggleSidenav } = useHeader();
-  const CONTENT_FOR_LARGE_DEVICE = (
-    <Fragment>
-      {/* LEFT CONTENT - LOGO AND CATEGORY */}
-      <FlexBox minWidth={100} alignItems="center">
-        <Link href="/">
-          <LazyImage
-            src={require("../../../public/assets/images/S3/s3-logo.png")}
-            alt="logo"
-          />
-        </Link>
-
-        {/* SHOW DROP DOWN CATEGORY BUTTON WHEN HEADER FIXED */}
-        {/* {isFixed ? <CategoriesMenu /> : null} */}
-      </FlexBox>
-
-      {/* SEARCH FORM | NAVIGATION */}
-      {midSlot}
-
-      {/* LOGIN AND CART BUTTON */}
-      <LoginCartButtons
-        toggleDialog={toggleDialog}
-        toggleSidenav={toggleSidenav}
-      />
-
-      {/* LOGIN FORM DIALOG AND CART SIDE BAR  */}
-      <DialogDrawer
-        dialogOpen={dialogOpen}
-        sidenavOpen={sidenavOpen}
-        toggleDialog={toggleDialog}
-        toggleSidenav={toggleSidenav}
-      />
-    </Fragment>
-  );
-  return (
-    <HeaderWrapper className={clsx(className)}>
+export default function Header({
+  className,
+  children,
+  mobileHeader
+}) {
+  return <HeaderWrapper className={clsx(className)}>
       <StyledContainer>
-        {downMd ? <MobileHeader /> : CONTENT_FOR_LARGE_DEVICE}
+        <div className="main-header">{children}</div>
+        <div className="mobile-header">{mobileHeader}</div>
       </StyledContainer>
-    </HeaderWrapper>
-  );
+    </HeaderWrapper>;
 }
+
+function HeaderLeft({
+  children
+}) {
+  return <FlexBox minWidth={100} alignItems="center">
+      {children}
+    </FlexBox>;
+}
+
+Header.Logo = ({
+  url
+}) => {
+  return <HeaderLeft>
+      <Link href="/">
+        <LazyImage src={url} alt="logo" width={150} height={50} />
+      </Link>
+    </HeaderLeft>;
+};
+
+Header.CategoryDropdown = ({
+  children
+}) => {
+  return <HeaderLeft>
+      <HeaderCategoryDropdown>{children}</HeaderCategoryDropdown>
+    </HeaderLeft>;
+};
+
+Header.Mid = ({
+  children
+}) => {
+  return children;
+};
+
+Header.Right = ({
+  children
+}) => {
+  return <div>{children}</div>;
+};

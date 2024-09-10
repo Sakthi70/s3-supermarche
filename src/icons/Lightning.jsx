@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const Lightning = createSvgIcon(<svg fill="currentColor" viewBox="0 0 64 64">
     <g>

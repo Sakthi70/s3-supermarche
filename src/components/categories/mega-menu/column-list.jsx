@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 // GLOBAL CUSTOM COMPONENTS
 
 import LazyImage from "components/LazyImage";
+import OverlayScrollbar from "components/overlay-scrollbar";
 import { FlexBox } from "components/flex-box";
 import { NavLink } from "components/nav-link"; 
 // STYLED COMPONENTS
@@ -23,13 +24,14 @@ export default function ColumnList({
   banner,
   minWidth = 760
 }) {
-  return <StyledRoot elevation={2} sx={{
-    minWidth
+  return <OverlayScrollbar className="category-list">
+  <StyledRoot elevation={2} pr={2} sx={{
+    minWidth : {sm:400, md:600,lg:minWidth, maxHeight:'90vh',overflowY:'auto'}
   }}>
       <FlexBox px={2.5}>
         <Box flex="1 1 0">
           <Grid container spacing={4}>
-            {list.map((item, ind) => <Grid item md={4} key={ind}>
+            {list.map((item, ind) => <Grid item md={6} lg={4} sm={12} key={ind}>
 
             <FlexBox py={1} gap={1.5} alignItems="center">
      {item.image ? <Image style={{borderRadius:'50%'}} src={item.image} width={40}  height={40} alt={item.name}/> : <Box width={40} height={40}></Box>}
@@ -55,5 +57,5 @@ export default function ColumnList({
       </FlexBox>
 
       {children}
-    </StyledRoot>;
+    </StyledRoot></OverlayScrollbar>;
 }

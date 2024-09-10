@@ -1,3 +1,5 @@
+"use client";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import styled from "@mui/material/styles/styled";
@@ -51,8 +53,6 @@ export const ParentNavItem = styled("div", {
   paddingLeft: 8,
   display: "none",
   position: "absolute",
-  
-// [theme.breakpoints.down(1640)]: { right: "100%", left: "auto", paddingRight: 8 }
   ...(right && {
     right: "100%",
     left: "auto",
@@ -76,16 +76,20 @@ export const NavBarWrapper = styled(BazaarCard, {
     display: "none"
   }
 }));
-export const InnerContainer = styled(Container)({
+export const InnerContainer = styled(Container, {
+  shouldForwardProp: prop => prop !== "centered"
+})(({
+  centered
+}) => ({
   height: "100%",
   display: "flex",
   alignItems: "center",
-  justifyContent: "space-between"
-});
+  justifyContent: centered ? "center" : "space-between"
+}));
 export const CategoryMenuButton = styled(Button)(({
   theme
 }) => ({
-  width: 278,
+  width: 150,
   borderRadius: 4,
   backgroundColor: theme.palette.grey[100],
   ...(theme.direction === "rtl" && {

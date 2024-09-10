@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const Review = createSvgIcon(<svg viewBox="0 0 16 16" fill="currentColor">
     <g clipPath="url(#clip0_7861_60245)">

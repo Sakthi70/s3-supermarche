@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const UpDown = createSvgIcon(<svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M8.64847 6.88354H3.35158C3.04454 6.88354 2.86173 7.2269 3.03517 7.4812L5.68362 11.3824C5.83596 11.6062 6.16526 11.6062 6.3176 11.3824L8.96605 7.4812C9.13714 7.2269 8.9555 6.88354 8.64847 6.88354Z" fill="currentColor" />

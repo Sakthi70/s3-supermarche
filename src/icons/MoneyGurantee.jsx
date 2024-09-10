@@ -1,3 +1,5 @@
+"use client";
+
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const MoneyGuarantee = createSvgIcon(<svg fill="currentColor" viewBox="0 0 42 43">
     <g>
