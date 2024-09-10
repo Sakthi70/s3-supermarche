@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import styled from "@mui/material/styles/styled";
-import CategoryList from "./category-list"; 
+import CategoryList from "./category-list/category-list"; 
 // STYLED COMPONENT
 
 const Wrapper = styled("div", {

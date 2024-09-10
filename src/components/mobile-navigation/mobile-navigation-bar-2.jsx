@@ -75,7 +75,8 @@ const list = [{
   href: "/"
 }, {
   title: "Category",
-  Icon: CategoryOutlined
+  Icon: CategoryOutlined,
+  href:'/mobile-categories'
 }, {
   title: "Cart",
   Icon: ShoppingBagOutlined,

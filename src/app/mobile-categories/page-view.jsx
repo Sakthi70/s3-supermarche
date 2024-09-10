@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; 
 // MUI
 
@@ -10,16 +10,17 @@ import Tooltip from "@mui/material/Tooltip";
 import { Paragraph } from "components/Typography";
 // import IconComponent from "components/IconComponent";
 import OverlayScrollbar from "components/overlay-scrollbar";
-import { MobileNavigationBar } from "components/mobile-navigation";
+import { MobileNavigationBar, MobileNavigationBar2 } from "components/mobile-navigation";
 import { HeaderCart, HeaderLogin } from "components/header";
 import { MobileMenu } from "components/navbar/mobile-menu";
-import {  MobileHeader } from "components/header/mobile-header";
+import {  HeaderSearch, MobileHeader } from "components/header/mobile-header";
 import renderChild from "./render-child"; 
 // STYLES
 import useApp from "hooks/useApp";
 import { buildTree } from "utils/util";
 import { CategoryListItem, StyledRoot } from "./styles"; 
 import Image from "next/image";
+import SearchInput from "components/SearchInput";
 // TYPES
 
 
@@ -35,40 +36,50 @@ export default function MobileCategoriesPageView({
   const {content }= useApp();
   const {categories}= content || {categories:[]};
 
+  const [selected, setSelected] = useState();
  let categoryList = buildTree(categories ?? []);
 
+ useEffect(() => {
+   if(categoryList.length > 0 && !selected){
+setSelected(categoryList[0]);
+   }
+ }, [categoryList])
+ 
 
-  const [selected, setSelected] = useState(categoryList[0]);
+
+  
   return <StyledRoot>
       <div className="header">
         <MobileHeader>
           <MobileHeader.Left>
-            <MobileMenu navigation={header.navigation} />
+            {/* <MobileMenu navigation={header.navigation} /> */}
+          <MobileHeader.Logo logoUrl={'/assets/images/S3/s3.png'} />
           </MobileHeader.Left>
 
-          <MobileHeader.Logo logoUrl={'/assets/images/S3/s3.png'} />
 
           <MobileHeader.Right>
-            <HeaderLogin />
-            <HeaderCart />
+          <HeaderSearch>
+          <SearchInput />
+        </HeaderSearch>
           </MobileHeader.Right>
         </MobileHeader>
       </div>
 
       <OverlayScrollbar className="category-list">
-        {categoryList.map((item, i) => <Tooltip key={i} title={item.name} placement="right" arrow>
+        {selected && categoryList && categoryList.map((item, i) => <Tooltip key={i} title={item.name} placement="right" arrow>
             <CategoryListItem isActive={selected.name === item.name} onClick={() => {
           if (item.child) setSelected(item);else router.push(`/products/search/${item.slug}`);
         }}>
               {/* <IconComponent icon={item.icon} className="icon" /> */}
-              {item.image && <Image src={item.image} width={30} height={30} />}
+              {item.image && <Image src={item.image} width={30} height={30} alt={item.name} />}
               <Paragraph className="title">{item.name}</Paragraph>
             </CategoryListItem>
           </Tooltip>)}
       </OverlayScrollbar>
 
-      <div className="container">{renderChild(selected.child)}</div>
-
-      <MobileNavigationBar navigation={mobileNavigation.version1} />
+      {selected && <div className="container">{renderChild( selected.child)}</div>
+}
+<MobileNavigationBar2/>
+      {/* <MobileNavigationBar navigation={mobileNavigation.version1} /> */}
     </StyledRoot>;
 }

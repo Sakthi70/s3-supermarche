@@ -75,8 +75,8 @@ export const CategoryListItem = styled("div", {
     fontSize: "11px",
     lineHeight: 1.5,
     display: "-webkit-box",
-    "-webkit-line-clamp": "2",
-    "-webkit-box-orient": "vertical"
+    "WebkitLineClamp": "2",
+    "WebkitBoxOrient": "vertical"
   },
   "& .icon": {
     fontSize: "24px",

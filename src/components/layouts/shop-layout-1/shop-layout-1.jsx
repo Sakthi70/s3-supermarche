@@ -1,46 +1,96 @@
 "use client";
 
 import { Fragment, useCallback, useState } from "react";
+import Divider from "@mui/material/Divider"; 
 // GLOBAL CUSTOM COMPONENTS
 
 import Sticky from "components/sticky";
-import Topbar from "components/topbar";
-import { Navbar } from "components/navbar";
-import { Footer1 } from "components/footer";
-import Header from "components/header/header";
-import { SearchInputWithCategory } from "components/search-box";
-import { MobileNavigationBar } from "components/mobile-navigation";
-/**
- *  USED IN:
- *  1. MARKET-1, MARKET-2, GADGET, FASHION-1, FASHION-2, FASHION-3, FURNITURE, GROCERY-3, GIFT
- *  2. PRODUCT DETAILS, PRODUCT-SEARCH, ORDER-CONFIRMATION
- *  5. SHOPS, SHOP-DETAILS
- */
+import { SearchInput } from "components/search-box";
+import { CategoryList } from "components/categories";
+import { MobileMenu } from "components/navbar/mobile-menu";
+import { Header, HeaderCart, HeaderLogin } from "components/header";
+import { MobileHeader, HeaderSearch } from "components/header/mobile-header";
+import { Topbar, TopbarLanguageSelector, TopbarSocialLinks } from "components/topbar"; 
+// CUSTOM DATA MODEL
 
-export default function ShopLayout1({ children }) {
+
+// ==============================================================
+export default function ShopLayout2({
+  children,
+  navbar,
+  data
+}) {
+  const {
+    header,
+    topbar,
+    mobileNavigation
+  } = data;
   const [isFixed, setIsFixed] = useState(false);
-  const toggleIsFixed = useCallback((fixed) => setIsFixed(fixed), []);
-  return (
-    <Fragment>
-      {/* TOP BAR SECTION */}
-      <Topbar />
+  const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
+  const MOBILE_VERSION_HEADER = <MobileHeader>
+      <MobileHeader.Left>
+        <MobileMenu navigation={header.navigation} />
+      </MobileHeader.Left>
 
-      {/* HEADER */}
-      <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300}>
-        <Header isFixed={isFixed} midSlot={<SearchInputWithCategory />} />
+      <MobileHeader.Logo logoUrl={mobileNavigation.logo} />
+
+      <MobileHeader.Right>
+        <HeaderSearch>
+          <SearchInput />
+        </HeaderSearch>
+
+        <HeaderLogin />
+        <HeaderCart />
+      </MobileHeader.Right>
+    </MobileHeader>;
+  return <Fragment>
+      {
+      /* TOP BAR AREA */
+    }
+      <Topbar label={topbar.label} title={topbar.title}>
+        <Topbar.Right>
+          <TopbarLanguageSelector languages={topbar.languageOptions} />
+          <TopbarSocialLinks links={topbar.socials} />
+        </Topbar.Right>
+      </Topbar>
+
+      {
+      /* HEADER */
+    }
+      <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={70}>
+        <Header mobileHeader={MOBILE_VERSION_HEADER}>
+          <Header.Logo url={header.logo} />
+
+          {isFixed ? <Header.CategoryDropdown>
+              <CategoryList categories={header.categoryMenus} />
+            </Header.CategoryDropdown> : null}
+
+          <Header.Mid>
+            <SearchInput />
+          </Header.Mid>
+
+          <Header.Right>
+            {
+            /* HEADER LOGIN BUTTON */
+          }
+            <HeaderLogin />
+
+            {
+            /* HEADER CART BUTTON */
+          }
+            <HeaderCart />
+          </Header.Right>
+        </Header>
       </Sticky>
 
-      {/* NAVIGATION BAR */}
-      {/* <Navbar elevation={0} border={1} /> */}
+      {
+      /* NAVIGATION BAR */
+    }
+      {navbar ?? <Divider />}
 
-      {/* BODY CONTENT */}
+      {
+      /* BODY CONTENT */
+    }
       {children}
-
-      {/* SMALL DEVICE BOTTOM NAVIGATION */}
-      <MobileNavigationBar />
-
-      {/* FOOTER */}
-      <Footer1 />
-    </Fragment>
-  );
+    </Fragment>;
 }

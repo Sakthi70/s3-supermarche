@@ -40,7 +40,7 @@ export default function ColumnList({
                 {/* <div className="title-link">{item.name}</div> */}
 
                 {item.child?.map((sub, ind) =>
-                <FlexBox py={1} gap={1.5} alignItems="center">
+                <FlexBox key={ind} py={1} gap={1.5} alignItems="center">
                 {sub.image ? <Image style={{borderRadius:'50%'}} src={sub.image} width={30}  height={30} alt={sub.name}/> : <Box width={30} height={30}></Box>}
                 <NavLink className="child-link" href={`/products/search${sub.slug}`} key={ind}>{sub.name}</NavLink>
                </FlexBox>

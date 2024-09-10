@@ -21,10 +21,10 @@ export default function Footer2() {
     color: "white",
     borderRadius: 2,
     bgcolor: "#141850",
-    mb: {
-      md: 2,
-      xs: 10
-    }
+    // mb: {
+    //   md: 2,
+    //   xs: 10
+    // }
   }}>
       <Grid container spacing={6}>
         <Grid item sm={6} xs={12}>

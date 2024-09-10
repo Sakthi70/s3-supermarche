@@ -15,6 +15,8 @@ import { ServiceCard } from "./styles";
 // ==========================================================
 
 
+
+
 // ==========================================================
 export default function Section2({
   services = []
@@ -28,7 +30,7 @@ export default function Section2({
         description
       }) => {
         const Icon = appIcons[icon];
-        return <Grid item lg={4} sm={6} xs={12} key={id}>
+        return <Grid item lg={3} sm={6} xs={12} key={id}>
               <ServiceCard>
                 <Icon sx={{
               fontSize: 50,

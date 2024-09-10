@@ -36,7 +36,7 @@ export default function CategoryList({
   position = "absolute"
 }) {
   return <StyledRoot position={position}>
-      {categories.map(item => {
+      {categories &&  categories.map(item => {
       const {
         href,
         title,
@@ -45,7 +45,7 @@ export default function CategoryList({
         icon,
         offer
       } = item;
-      const MegaMenu = component === "Grid" ? MegaMenu1 : MegaMenu2;
+      const MegaMenu = MegaMenu1;
       return <CategoryListItem key={title} href={href} icon={icon} title={title} caret={!!children} render={component ? <MegaMenu data={children} banner={offer} /> : null} />;
     })}
     </StyledRoot>;

@@ -20,6 +20,7 @@ export default function CategoryList({
   const {content }= useApp();
   const {categories}= content || {categories:[]};
 
+
  let categoryList = buildTree(categories ?? []);
   return <StyledRoot open={open} position={position}>
       {categoryList && categoryList.map(item => {

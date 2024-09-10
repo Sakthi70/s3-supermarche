@@ -37,6 +37,8 @@ const CategoriesPageView = ({}) => {
    
    const [open, setopen] = useState(false)
 
+   console.log(categories)
+
   // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
   const filteredCategories = categories.filter( x => x.name.includes(search) || x.slug.includes(search));
   const {

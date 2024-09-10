@@ -87,7 +87,7 @@ alt={name} src={image} sx={ {borderRadius: 2}}
 
        
 
-       {_count.categories < 1 && <StyledIconButton onClick={onDelete}>
+       {_count.categories < 1  && _count.products < 1 && <StyledIconButton onClick={onDelete}>
           <Delete />
         </StyledIconButton>}
       </StyledTableCell>
