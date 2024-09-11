@@ -25,14 +25,14 @@ import { stringAvatar } from "utils/util";
 // ========================================================================
 
 // ========================================================================
-export default function CategoryRow({ category,  selected }) {
+export default function CategoryRow({ category,  selected,slugId }) {
   const {loading, categories: catCrud} = useApp();
   const { image, name,  enabled, id, slug,featured,best, additional,_count } = category || {};
   const router = useRouter();
   // const [featuredCategory, setFeaturedCategory] = useState(featured);
   const hasSelected = selected.indexOf(name) !== -1;
 
-  const handleNavigate = () => router.push(`/admin/categories/${id}`);
+  const handleNavigate = () => router.push(slugId? `/admin/categories/${id}/${slugId}`: `/admin/categories/${id}`);
   const onDelete = async() => {
     loading(true);
     if(image !=''){
@@ -80,12 +80,14 @@ alt={name} src={image} sx={ {borderRadius: 2}}
         />
       </StyledTableCell>
 
-      <StyledTableCell align="center">
+      <StyledTableCell align="center" sx={{width:150}}>
         <StyledIconButton onClick={handleNavigate}>
           <Edit />
         </StyledIconButton>
 
-       
+        <StyledIconButton>
+          <RemoveRedEye onClick={() =>router.push(`/admin/categories/view/${id}`)}/>
+        </StyledIconButton>
 
        {_count.categories < 1  && _count.products < 1 && <StyledIconButton onClick={onDelete}>
           <Delete />

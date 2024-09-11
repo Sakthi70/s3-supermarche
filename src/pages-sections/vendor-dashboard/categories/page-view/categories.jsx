@@ -25,20 +25,24 @@ import useApp from "hooks/useApp";
 import { useState } from "react";
 import BulkUploadCategory from "../bulk-upload-cateory";
 import { t } from "utils/util";
+import { useParams } from "next/navigation";
 // =============================================================================
 
 // =============================================================================
 const CategoriesPageView = ({}) => {
   
    const {content }= useApp();
+   const params = useParams();
+   const slug = params.slug;
    const {categories}= content || {categories:[]};
 
    const [search, setSearch] = useState("");
    
    const [open, setopen] = useState(false)
 
+   const parent = categories.find( x => x.id === slug )
   // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
-  const filteredCategories = categories.filter( x => x.name.includes(search) || x.slug.includes(search));
+  const filteredCategories = categories.filter( x => (slug ? x.parentId === slug : true) && (x.name.includes(search) || x.slug.includes(search)));
   const {
     order,
     orderBy,
@@ -52,11 +56,11 @@ const CategoriesPageView = ({}) => {
     rowsPerPage:5
   });
   return (
-    <PageWrapper title={t("Product Categories")}>
+    <PageWrapper title={parent? `${t("Categories Under")} ${parent.name}` : t("Product Categories")}>
       <SearchArea
         handleSearch={(val) => setSearch(val.target.value)}
         buttonText={t("Add Category")}
-        url="/admin/categories/create"
+        url={slug ?`/admin/categories/${slug}/create` : "/admin/categories/create"}
         searchPlaceholder={`${t("Search Category")}...`}
         isBulk={true}
         bulkText={t("Bulk Upload")}
@@ -84,6 +88,7 @@ const CategoriesPageView = ({}) => {
               <TableBody>
                 {filteredList.map((category) => (
                   <CategoryRow
+                  slugId={slug}
                     key={category.id}
                     category={category}
                     selected={selected}

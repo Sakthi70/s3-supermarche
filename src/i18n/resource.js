@@ -84,7 +84,8 @@ export const resources = {
       "Browse Website":"Browse Website",
       "User":"User",
       "Profile":"Profile",
-      "Logout":"Logout"
+      "Logout":"Logout",
+      "Categories Under":"Categories Under"
     },
   },
 };

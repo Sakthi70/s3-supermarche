@@ -10,6 +10,5 @@ export const metadata = {
 };
 export default function EditCategory() {
   //same name as name of your file, can be [slug].js; [specialId].js - any name you want
-
   return <EditCategoryPageView />;
 }

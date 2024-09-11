@@ -17,11 +17,10 @@ export default function EditCategoryPageView() {
 
   useEffect(() => {
     if(categories.length > 0){
-      let category = categories.find(x => x.id === params.slug);
-      
+      let category = categories.find(x => x.id === params.slug[0]);
       let parent = "";
       if(category && category.parentId !== null){
-         parent= categories.find(x => x.id === category.parentId).slug
+        parent= categories.find(x => x.id === category.parentId).slug;
       }
       setSelectedCategory({...category, parent})
     }
@@ -30,6 +29,6 @@ export default function EditCategoryPageView() {
 
   return <PageWrapper title={t("Edit Category")}>
     {selectedCategory ?
-      <CategoryForm  isEdit={true} category={selectedCategory} /> : <Box height={500} display={'flex'} alignItems={'center'} justifyContent={'center'}><CircularProgress /></Box>}
+      <CategoryForm  isEdit={true} category={selectedCategory}  slugId={params.slug.length > 1 ? params.slug[1] : null} /> : <Box height={500} display={'flex'} alignItems={'center'} justifyContent={'center'}><CircularProgress /></Box>}
     </PageWrapper>;
 }

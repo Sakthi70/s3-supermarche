@@ -56,14 +56,14 @@ const MenuProps = {
   },
 };
 
-export default function CategoryForm({ isEdit, category = {} }) {
+export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const INITIAL_VALUES = isEdit
     ? category
     : {
         name: "",
-        parent: "",
+        parent: slug ? slug :"",
         featured: false,
         best: false,
         additional: false,
@@ -431,7 +431,7 @@ export default function CategoryForm({ isEdit, category = {} }) {
                 <Button
                   variant="outlined"
                   color="info"
-                  onClick={() => router.replace("/admin/categories")}
+                  onClick={() =>  router.replace(slugId ?  `/admin/categories/view/${slugId}` : "/admin/categories")}
                 >
                   {t("Cancel")}
                 </Button>
