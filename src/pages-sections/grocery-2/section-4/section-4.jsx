@@ -19,18 +19,19 @@ function rgbaToHex(r, g, b) {
   r = Math.round(r);
   g = Math.round(g);
   b = Math.round(b);
+  let a = Math.round(0.3* 255); 
   // a = Math.round(a * 255); // Convert alpha to 0-255 range
 
   // Convert RGB to hex
   const rHex = r.toString(16).padStart(2, '0');
   const gHex = g.toString(16).padStart(2, '0');
   const bHex = b.toString(16).padStart(2, '0');
-
+  const aHex = a.toString(16).padStart(2, '0');
   // Convert alpha to hex
   // const aHex = a.toString(16).padStart(2, '0');
 
   // Combine to form the hex code
-  return `#${rHex}${gHex}${bHex}`;
+  return `#${rHex}${gHex}${bHex}${aHex}`;
 }
 
 function getLightColorFromImageUrl(imageUrl, callback) {
