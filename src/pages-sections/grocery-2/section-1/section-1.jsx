@@ -37,8 +37,8 @@ export default function Section1() {
 
   return <StyledRoot className="mb-3">
       <Carousel dots 
-// autoplay
-    arrows={false} infinite={banners.length > 3} spaceBetween={0} slidesToShow={1}  dotColor="white" dotStyles={{
+autoplay
+    arrows={false} infinite={banners.length > 1} spaceBetween={0} slidesToShow={1}  dotColor="white" dotStyles={{
       bottom: 25,
       position: "absolute",
       ...(direction === "rtl" ? {

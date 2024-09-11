@@ -26,6 +26,11 @@ import { useState } from "react";
 import BulkUploadCategory from "../bulk-upload-cateory";
 import { t } from "utils/util";
 import { useParams } from "next/navigation";
+import { Box, Grid, IconButton } from "@mui/material";
+import Image from "next/image";
+import { Paragraph } from "components/Typography";
+import { FlexBox } from "components/flex-box";
+import CategoryGrid from "../category-grid";
 // =============================================================================
 
 // =============================================================================
@@ -37,8 +42,13 @@ const CategoriesPageView = ({}) => {
    const {categories}= content || {categories:[]};
 
    const [search, setSearch] = useState("");
+
+   const categoryListOption = localStorage.getItem('categoryListOption') || 'list';
    
    const [open, setopen] = useState(false)
+   const [view, setview] = useState(categoryListOption);
+
+   console.log(categories)
 
    const parent = categories.find( x => x.id === slug )
   // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
@@ -56,7 +66,7 @@ const CategoriesPageView = ({}) => {
     rowsPerPage:5
   });
   return (
-    <PageWrapper title={parent? `${t("Categories Under")} ${parent.name}` : t("Product Categories")}>
+    <PageWrapper isView={true} type={view} toggleView={(val) => {localStorage.setItem('categoryListOption', val);setview(val);}} title={parent? `${t("Categories Under")} ${parent.name}` : t("Product Categories")}>
       <SearchArea
         handleSearch={(val) => setSearch(val.target.value)}
         buttonText={t("Add Category")}
@@ -66,10 +76,10 @@ const CategoriesPageView = ({}) => {
         bulkText={t("Bulk Upload")}
         handleBulk={() => setopen(true)}
       />
-      <BulkUploadCategory open={open} handleClose={() => setopen(false)}/>
+      <BulkUploadCategory open={open}  handleClose={() => setopen(false)}/>
       <Card>
         <Scrollbar>
-          <TableContainer
+         {view === 'list' ? <><TableContainer
             sx={{
               minWidth: 900,
             }}
@@ -80,13 +90,13 @@ const CategoriesPageView = ({}) => {
                 hideSelectBtn
                 orderBy={orderBy}
                 heading={tableHeading}
-                rowCount={categories.length}
+                rowCount={categories.filter( x => (slug ? x.parentId === slug : true)).length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
               />
 
               <TableBody>
-                {filteredList.map((category) => (
+              {filteredList.map((category) => (
                   <CategoryRow
                   slugId={slug}
                     key={category.id}
@@ -97,14 +107,26 @@ const CategoriesPageView = ({}) => {
               </TableBody>
             </Table>
           </TableContainer>
-        </Scrollbar>
-
-        <Stack alignItems="center" my={4}>
+          
+          <Stack alignItems="center" my={4}>
           <TablePagination
             onChange={handleChangePage}
-            count={Math.ceil(categories.length / rowsPerPage)}
+            count={Math.ceil(categories.filter( x => (slug ? x.parentId === slug : true)).length / rowsPerPage)}
           />
         </Stack>
+        </>: <Grid container >
+            {categories.filter( x => (slug ? x.parentId === slug : x.parentId == null)).map((category) => 
+            <Grid item xs={6} sm={4} md={3} lg={2} p={2} >
+              <CategoryGrid  slugId={slug}
+                    key={category.id}
+                    category={category}
+                    selected={selected}/>
+                    </Grid>
+                )}
+            </Grid>}
+        </Scrollbar>
+
+       
       </Card>
     </PageWrapper>
   );

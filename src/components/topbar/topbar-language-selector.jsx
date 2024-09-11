@@ -24,6 +24,7 @@ export default function LanguageSelector({
   } = useTranslation();
 
   const handleChangeLanguage = lang => {
+    localStorage.setItem('selectedLanguage', lang);
     i18n.changeLanguage(lang);
   };
 

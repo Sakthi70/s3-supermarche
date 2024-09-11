@@ -134,7 +134,7 @@ export default function Section4() {
             <StyledGrid container sx={{
           bgcolor: item.bgColor
         }}>
-              <Grid item lg={7} sm={9} xs={12}>
+              <Grid item lg={7} md={7} sm={7} xs={12}>
                 <H5 mb={1} fontWeight={600} fontSize={{
               sm: 18,
               xs: 14
@@ -157,7 +157,7 @@ export default function Section4() {
                 </Button>}
               </Grid>
 
-              <Grid item lg={5} xs={12} className="grid-2">
+              <Grid item lg={5} md={5} sm={5} xs={12}>
                 <LazyImage width={320} height={200} alt={item.title} src={item.image} />
               </Grid>
             </StyledGrid>
