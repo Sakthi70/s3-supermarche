@@ -17,7 +17,7 @@ export async function getBanners(type= null, expiry= true) {
       },
     ],
   }
-  if(type){
+  if(type != null){
     where['type']=type;
   }
   }

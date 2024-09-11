@@ -47,11 +47,11 @@ export default  function GroceryTwoPageView() {
   
 const getData =async() => {
   const onlyShopList = categories.filter(x => x.shopList && x.enabled);
-  if(onlyShopList.length >= 6){
-    setshopList(onlyShopList.slice(0,6));
+  if(onlyShopList.length >= 8){
+    setshopList(onlyShopList.slice(0,8));
   }else{
     let shuffleCategory = shuffleArray(categories.filter(x=> x.enabled && !x.shopList));
-    setshopList([...onlyShopList, ...shuffleCategory.slice(0,6-onlyShopList.length)]);
+    setshopList([...onlyShopList, ...shuffleCategory.slice(0,8-onlyShopList.length)]);
   }
   const featured = categories.find(x => x.featured === true && x.enabled);
   const featuredCategories = getAllCategoriesByOption(categories, featured ? featured.id : null);

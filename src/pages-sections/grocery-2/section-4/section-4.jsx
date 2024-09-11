@@ -14,12 +14,12 @@ import { useEffect, useState } from "react";
 import { getBanners } from "actions/banner";
 // CUSTOM DATA MODEL
 
-function rgbaToHex(r, g, b, a) {
+function rgbaToHex(r, g, b) {
   // Ensure RGB values are in the range of 0-255
   r = Math.round(r);
   g = Math.round(g);
   b = Math.round(b);
-  a = Math.round(a * 255); // Convert alpha to 0-255 range
+  // a = Math.round(a * 255); // Convert alpha to 0-255 range
 
   // Convert RGB to hex
   const rHex = r.toString(16).padStart(2, '0');
@@ -27,45 +27,78 @@ function rgbaToHex(r, g, b, a) {
   const bHex = b.toString(16).padStart(2, '0');
 
   // Convert alpha to hex
-  const aHex = a.toString(16).padStart(2, '0');
+  // const aHex = a.toString(16).padStart(2, '0');
 
   // Combine to form the hex code
-  return `#${rHex}${gHex}${bHex}${aHex}`;
+  return `#${rHex}${gHex}${bHex}`;
 }
 
-const extractColors = async (url) => {
-  return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous'; // Enable CORS
-      img.src = url;
+function getLightColorFromImageUrl(imageUrl, callback) {
+  // Create an image element
+  const img = new Image();
+  img.crossOrigin = "Anonymous"; // Handle cross-origin images
 
-      img.onload = () => {
-          try {
-              const canvas = document.createElement('canvas');
-              const ctx = canvas.getContext('2d');
-              canvas.width = img.width;
-              canvas.height = img.height;
-              ctx.drawImage(img, 0, 0);
+  // Create a canvas to draw the image on
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
-      // Get the pixel data of the top-left corner (position: 0,0)
-      const pixelData = ctx.getImageData(0, 0, 1, 1).data;
+  img.onload = function() {
+      // Set canvas dimensions to match the image
+      canvas.width = img.width;
+      canvas.height = img.height;
+      
+      // Draw the image onto the canvas
+      ctx.drawImage(img, 0, 0);
+      
+      // Get image data from the canvas
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      
+      // Variables to store color totals and pixel count
+      let r = 0, g = 0, b = 0, count = 0;
 
-      // Extract RGB values from the pixel data
-      const [red, green, blue] = pixelData;
-
-      // Convert RGB values to hex code
-      const hexCode = rgbaToHex(red, green, blue,0.2);
-                  resolve(hexCode); 
-          } catch (error) {
-              reject(error);
+      // Loop through each pixel to accumulate color values
+      for (let i = 0; i < data.length; i += 4) {
+          // Extract RGBA values
+          const red = data[i];
+          const green = data[i + 1];
+          const blue = data[i + 2];
+          const alpha = data[i + 3];
+          
+          // Only consider non-transparent pixels
+          if (alpha > 0) {
+              r += red;
+              g += green;
+              b += blue;
+              count++;
           }
-      };
+      }
+      
+      // Compute the average color values
+      r = Math.round(r / count);
+      g = Math.round(g / count);
+      b = Math.round(b / count);
+      
+      // Return the average color as a hex string
+      const avgColor =rgbaToHex(r,g,b);
 
-      img.onerror = () => {
-          reject('Image load error');
-      };
-  });
-};
+      if (callback) {
+          callback(avgColor);
+      }
+  };
+
+  // Handle image loading errors
+  img.onerror = function() {
+      console.error('Failed to load image.');
+      if (callback) {
+          callback(null);
+      }
+  };
+
+  // Set the source of the image
+  img.src = imageUrl;
+}
+
 
 
 export default function Section4() {
@@ -77,8 +110,15 @@ export default function Section4() {
    let bans = await getBanners(0).then(({banners}) => banners);
    for(let i =0;i< bans.length ;i++){
 
-    let bgColor = await extractColors(bans[i].image);
-    bans[i]['bgColor'] = bgColor;
+    getLightColorFromImageUrl(bans[i].image, function (color) {
+       if (color) {
+        bans[i]['bgColor'] = color;
+         console.log('Dominant light color:', color);
+       } else {
+         console.log('Could not determine color.');
+       }
+     });
+    console.log(bans[i]['bgColor'])
    }
    setBanners(bans)
   } 
