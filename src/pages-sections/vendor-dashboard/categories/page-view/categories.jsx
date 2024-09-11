@@ -48,7 +48,6 @@ const CategoriesPageView = ({}) => {
    const [open, setopen] = useState(false)
    const [view, setview] = useState(categoryListOption);
 
-   console.log(categories)
 
    const parent = categories.find( x => x.id === slug )
   // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID

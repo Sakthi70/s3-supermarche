@@ -75,7 +75,6 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
 
   const { categories } = content || { categories: [] };
   const [error, setError] = useState("");
-console.log(isEdit, 'Is Edit');
   const handleFormSubmit = async (values) => {
     loading(true);
     let isError = false;
