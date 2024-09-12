@@ -78,12 +78,16 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
   const handleFormSubmit = async (values) => {
     loading(true);
     let isError = false;
+    let parentId = null;
+    if(values.parent !== ""){
+       parentId = categories.find((x) => x.slug === values.parent).id;
+    }
     if (isEdit) {
+      
       if (
         values.name.trim().toLowerCase() !== category.name.trim().toLowerCase()
       ) {
         if (values.parent !== "") {
-          parentId = categories.find((x) => x.slug === values.parent).id;
           if (
             categories
               .filter((x) => x.parentId === parentId)
@@ -114,6 +118,7 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
       if (!isError) {
         let data = {
           name: values.name.trim(),
+          parentId,
           featured: values.featured,
           additional: values.additional,
           best: values.best,
@@ -130,15 +135,17 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
           data.image = result;
         }
 
-        await updateCategory(data, category.id).then((value) => {
-          catCrud.updateCategory(value);
-          router.replace("/admin/categories");
+        await updateCategory(data, category.id).then(async(value) => {
+          await catCrud.updateCategory(value);
+          router.replace(slugId ?  `/admin/categories/view/${slugId}` : "/admin/categories")
         });
       }
     } else {
-      let parentId = null;
+      let pId = null;
       if (values.parent !== "") {
         parentId = categories.find((x) => x.slug === values.parent).id;
+        console.log(parentId)
+        pId = parentId;
         if (
           categories
             .filter((x) => x.parentId === parentId)
@@ -172,14 +179,14 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
         await createCategory(
           {
             ...data,
-            parentId,
+            parentId: pId,
             slug: values.parent + "/" + values.name.trim(),
             name: values.name.trim(),
           },
           result
-        ).then((values) => {
-          catCrud.createCategory(values);
-          router.replace("/admin/categories");
+        ).then(async(values) => {
+          await catCrud.createCategory(values);
+          router.replace(slugId ?  `/admin/categories/view/${slugId}` : "/admin/categories")
         });
       }
     }

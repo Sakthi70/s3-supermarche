@@ -115,7 +115,7 @@ const CategoriesPageView = ({}) => {
         </Stack>
         </>: <Grid container >
             {categories.filter( x => (slug ? x.parentId === slug : x.parentId == null)).map((category) => 
-            <Grid item xs={6} sm={4} md={3} lg={2} p={2} >
+            <Grid item xs={6} sm={4} md={3} lg={2} p={2}  key={category.id} >
               <CategoryGrid  slugId={slug}
                     key={category.id}
                     category={category}
