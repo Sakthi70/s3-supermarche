@@ -125,11 +125,11 @@ model Product {
   category       Category         @relation(fields: [categoryId], references: [id])
   categoryId     String
   tags            String[]
-  image          String[]
+  images          String[]
   brandName      String?
   brandImage     String?
   price          Float
-  offerPrice     Float?
+  salePrice     Float?
   stock          Int
   isBrand         Boolean          @default(false)
   type            String

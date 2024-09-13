@@ -71,7 +71,7 @@ const CategoriesPageView = ({}) => {
         buttonText={t("Add Category")}
         url={slug ?`/admin/categories/${slug}/create` : "/admin/categories/create"}
         searchPlaceholder={`${t("Search Category")}...`}
-        isBulk={true}
+        isBulk={false}
         bulkText={t("Bulk Upload")}
         handleBulk={() => setopen(true)}
       />

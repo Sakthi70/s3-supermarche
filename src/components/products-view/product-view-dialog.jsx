@@ -62,12 +62,12 @@ export default function ProductViewDialog(props) {
         <div>
           <Grid container spacing={3}>
             <Grid item md={6} xs={12}>
-              {product.image.length > 0 ? <Carousel slidesToShow={1} arrowStyles={{
+              {product.images.length > 0 ? <Carousel slidesToShow={1} arrowStyles={{
               boxShadow: 0,
               color: "primary.main",
               backgroundColor: "transparent"
             }}>
-                {product.image.map((item, index) => <BazaarImage key={index} src={item} alt="product" sx={{
+                {product.images.map((item, index) => <BazaarImage key={index} src={item} alt="product" sx={{
                 mx: "auto",
                 width: "100%",
                 objectFit: "contain",

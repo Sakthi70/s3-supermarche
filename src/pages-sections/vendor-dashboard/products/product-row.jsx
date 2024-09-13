@@ -17,29 +17,37 @@ import { currency } from "lib";
 // STYLED COMPONENTS
 
 import { StyledTableRow, CategoryWrapper, StyledTableCell, StyledIconButton } from "../styles"; 
+import { Box, Typography } from "@mui/material";
+import { NO_IMAGE } from "utils/constants";
+import ProductPrice from "components/product-cards/product-price";
 // ========================================================================
 
 
 // ========================================================================
 export default function ProductRow({
-  product
+  product,
+  categories
 }) {
   const {
-    category,
     name,
+    salePrice,
     price,
-    image,
-    brand,
+    images,
+    stock,
+    value,
+    enabled,
     id,
     published,
     slug
   } = product || {};
   const router = useRouter();
   const [productPublish, setProductPublish] = useState(published);
+  const category = categories.find(x=> x.id === product.categoryId).name ?? ""
+  
   return <StyledTableRow tabIndex={-1} role="checkbox">
       <StyledTableCell align="left">
         <FlexBox alignItems="center" gap={1.5}>
-          <Avatar alt={name} src={image} sx={{
+          <Avatar alt={name} src={images.length > 0 ? images[0]: NO_IMAGE} sx={{
           borderRadius: 2
         }} />
 
@@ -62,10 +70,12 @@ export default function ProductRow({
       }} />
       </StyledTableCell> */}
 
-      <StyledTableCell align="left">{currency(price)}</StyledTableCell>
-
+      <StyledTableCell align="left">{
+       <ProductPrice discount={salePrice} price={price} />}</StyledTableCell>
+       <StyledTableCell align="left"><ProductStock stock={stock}/></StyledTableCell>
+       <StyledTableCell align="center">{value}</StyledTableCell>
       <StyledTableCell align="left">
-        <BazaarSwitch color="info" checked={productPublish} onChange={() => setProductPublish(state => !state)} />
+        <BazaarSwitch color="info" checked={enabled} onChange={() => setProductPublish(state => !state)} />
       </StyledTableCell>
 
       <StyledTableCell align="center">
@@ -82,4 +92,16 @@ export default function ProductRow({
         </StyledIconButton>
       </StyledTableCell>
     </StyledTableRow>;
+}
+
+
+
+export const ProductStock = ({stock}) => {
+  const isStock = stock >0;
+  return (
+    <Box display={'flex'} gap={1}>
+        <Typography fontWeight={600} color={isStock ?'success':"error"}>{isStock?"In Stock":"Out of Stock"}</Typography>
+        {isStock && <Typography fontWeight={500} color="textSecondary" variant="caption">{`(${stock})`}</Typography>}
+    </Box>
+  )
 }

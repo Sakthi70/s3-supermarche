@@ -125,7 +125,7 @@ export function calculateDiscountPercentage(originalPrice, discountedPrice) {
   // Calculate the discount percentage
   const discountPercentage = (discountAmount / originalPrice) * 100;
 
-  return discountPercentage;
+  return Math.round(discountPercentage);
 }
 
 export function t(key) {

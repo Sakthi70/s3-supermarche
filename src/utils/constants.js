@@ -87,3 +87,5 @@ export const LAYOUT_DATA = {
     logo: "/assets/images/S3/s3-logo.png"
   }
 };
+
+export const NO_IMAGE = '/assets/images/noimage.png';

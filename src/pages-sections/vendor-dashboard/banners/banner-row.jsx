@@ -20,12 +20,14 @@ import useApp from "hooks/useApp";
 import { stringAvatar } from "utils/util";
 import { formatDate } from "date-fns";
 import { deleteBanner } from "actions/banner";
+import { CheckCircle } from "@mui/icons-material";
+import { Box } from "@mui/material";
 // ========================================================================
 
 // ========================================================================
 export default function BannerRow({ banner, selected,refetch }) {
   const { loading } = useApp();
-  const { id,image, title, description, expires, enabled } = banner || {};
+  const { id,image, title, description, expires, enabled,type } = banner || {};
   const router = useRouter();
   const hasSelected = selected.indexOf(title) !== -1;
 
@@ -60,9 +62,10 @@ export default function BannerRow({ banner, selected,refetch }) {
       </StyledTableCell>
       <StyledTableCell align="left">{expires !=null ? formatDate(expires,'dd-MM-yyyy'):''}</StyledTableCell>
 
-      {/* <StyledTableCell align="left">
-       {featured ? <Chip label="Featured" color="primary" /> : best ?  <Chip label="Best" color="secondary" /> : additional ? <Chip label="Additional" color="warning" /> : '' }
-      </StyledTableCell> */}
+      <StyledTableCell align="left">
+
+        {type === 0 && <Box display={'flex'} justifyContent={'center'} width={1} > <CheckCircle color={"success"}/> </Box>}
+      </StyledTableCell>
       <StyledTableCell align="left">
         <BazaarSwitch color="info" checked={enabled} onChange={onChange} />
       </StyledTableCell>

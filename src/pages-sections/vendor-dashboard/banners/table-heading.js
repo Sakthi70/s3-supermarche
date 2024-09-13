@@ -23,6 +23,11 @@ export const tableHeading = [
     align: "left",
   },
   {
+    id: "type",
+    label: t("Sub Banner"),
+    align: "center",
+  },
+  {
     id: "enabled",
     label: t("Enabled"),
     align: "left",

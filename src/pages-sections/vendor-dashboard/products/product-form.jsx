@@ -106,11 +106,11 @@ export default function ProductForm({ isEdit = false }) {
       isBrand: values.isBrand,
       brandName: values.isBrand ? values.brandName : '',
       price: values.price,
-      offerPrice: values.salePrice === "" ? null : values.salePrice,
+      salePrice: values.salePrice === "" ? null : values.salePrice,
       stock: values.stock,
-      isMulti: values.isMultiPrice,
       type: values.type,
       value: values.value,
+      shortDescription: values.shortDescription
     }
     if(values.images.length > 0){
         
@@ -119,7 +119,7 @@ export default function ProductForm({ isEdit = false }) {
           let image =  await imageUpload(values.images[i], 'Product');
           result.push(image);
         }
-        data.image= result;
+        data.images= result;
     }
     if(values.isBrand && values.brandImage.length > 0){
         let image =  await imageUpload(values.brandImage[0], 'Brand');
@@ -218,7 +218,7 @@ export default function ProductForm({ isEdit = false }) {
                   error={Boolean(touched.category && errors.category)}
                 >
                   {categories &&
-                    categories.filter( x=> categories.filter(x => !parentIds.includes(x.id)).includes()).map((data) => (
+                     categories.filter(x => !parentIds.includes(x.id)).map((data) => (
                       <MenuItem key={data.id} value={data.id}>
                         {" "}
                         <Box display={"flex"} alignItems={"center"} gap={2}>
@@ -284,6 +284,7 @@ export default function ProductForm({ isEdit = false }) {
                   label={t("Short Description")}
                   color="info"
                   size="medium"
+                  multiline
                   placeholder={t("Short Description")}
                   value={values.shortDescription}
                   onBlur={handleBlur}
