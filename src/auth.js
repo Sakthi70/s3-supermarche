@@ -6,6 +6,21 @@ import bcrypt from 'bcryptjs';
 
 export const { handlers: {GET, POST}, signIn, signOut, auth } = NextAuth({
     adapter:PrismaAdapter(db),
+    callbacks: {
+        async jwt({token, user}) {
+          if (user) {
+            token = {id:user.id, admin:user.isAdmin, name:user.name, email:user.email, image: user.image || null}; 
+          }
+          return token;
+        },
+        async session({ session, token }) {
+         
+          session.user = {
+            ...token
+          };
+          return session;
+        },
+      },
     session: {strategy:'jwt'},
   providers: [
     CredentialsProvider({
@@ -37,7 +52,7 @@ export const { handlers: {GET, POST}, signIn, signOut, auth } = NextAuth({
                 const isMatch = bcrypt.compareSync(credentials.password, user.hashedPassword);
 
                 if (isMatch) {
-                    return user;
+                   return user;
                 } else {
                     throw new Error("Email or Password is not correct");
                 }
@@ -47,6 +62,8 @@ export const { handlers: {GET, POST}, signIn, signOut, auth } = NextAuth({
         } catch (error) {
             throw new Error(error);
         }  
-  }
+  },
+
 })] ,
+
 })

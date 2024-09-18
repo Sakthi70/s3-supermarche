@@ -132,8 +132,8 @@ export default function ProductsPageView() {
         </Stack>
       </Card> : <Grid2 container >
       {filteredProducts.map(item => 
-      <Grid2 size={{lg:12, sm:6, md:4, lg:3}} p={2} key={item.id}>
-            <ProductCard1 hideRating id={item.id} slug={item.slug} price={item.price} title={item.name} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.salePrice)} productData={item} />
+      <Grid2 size={{lg:12, sm:6, md:4, lg:3}} width={1} p={2} key={item.id}>
+            <ProductCard1 isPreview={true} hideRating id={item.id} slug={item.slug} price={item.price} title={item.name} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.salePrice)} productData={item} />
           </Grid2>)}</Grid2>}
     </PageWrapper>;
 }

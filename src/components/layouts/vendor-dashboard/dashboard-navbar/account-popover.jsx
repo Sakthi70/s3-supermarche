@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import { H6, Small } from "components/Typography"; 
 import { logout } from "actions/auth";
 import { t } from "utils/util";
+import { PersonOutline } from "@mui/icons-material";
 // STYLED COMPONENT
 
 const Divider = styled("div")(({
@@ -22,7 +23,7 @@ const Divider = styled("div")(({
   margin: "0.5rem 0",
   border: `1px dashed ${theme.palette.grey[200]}`
 }));
-export default function AccountPopover() {
+export default function AccountPopover({isAdmin = true}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -32,11 +33,15 @@ export default function AccountPopover() {
 
 
   return <div>
-      <IconButton sx={{
+     {isAdmin && <IconButton sx={{
       padding: 0
     }} aria-haspopup="true" onClick={e => setAnchorEl(e.currentTarget)} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
         <Avatar alt={t("Admin")} src="/assets/images/avatars/001-man.svg" />
-      </IconButton>
+      </IconButton>}
+
+     {!isAdmin && <IconButton onClick={e => setAnchorEl(e.currentTarget)}>
+        <PersonOutline sx={{ color: "grey.600"}} />
+      </IconButton>}
 
       <Menu open={open} id="account-menu" anchorEl={anchorEl} onClose={handleClose} onClick={handleClose} transformOrigin={{
       horizontal: "right",
@@ -45,6 +50,9 @@ export default function AccountPopover() {
       horizontal: "right",
       vertical: "bottom"
     }} slotProps={{
+      root:{
+          sx:{zIndex:1700}
+      },
       paper: {
         elevation: 0,
         sx: {
@@ -76,12 +84,12 @@ export default function AccountPopover() {
         }
       }
     }}>
-        <Box px={2} pt={1}>
+        {isAdmin && <><Box px={2} pt={1}>
           <H6>{t("User")}</H6>
           <Small color="grey.500">{t("Admin")}</Small>
         </Box>
 
-        <Divider />
+        <Divider /></>}
         <MenuItem>{t("Profile")}</MenuItem>
         {/* <MenuItem>Settings</MenuItem> */}
         <Divider />

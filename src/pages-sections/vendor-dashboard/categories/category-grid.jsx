@@ -25,6 +25,8 @@ import { stringAvatar } from "utils/util";
 import Image from "next/image";
 import { Paragraph } from "components/Typography";
 import { FlexBox } from "components/flex-box";
+import HoverActions from "components/product-cards/product-card-1/components/hover-actions";
+import { ImageWrapper, StyledBazaarCard,ContentWrapper } from "components/product-cards/product-card-1/styles";
 // ========================================================================
 
 // ========================================================================
@@ -56,31 +58,14 @@ export default function CategoryGrid({ category,  selected,slugId }) {
   }
 
   return (
-    <Card elevation={2}>
-    <Box height={200} textAlign={"center"} >
-      <Box>
-      <Image src={image} alt={category.name} width={100} height={100} />
+    <StyledBazaarCard hoverEffect={{}}>
+    <ImageWrapper>
+      <Image src={image} alt={category.name} width={100} height={100} sx={{height:230, width:'100%', objectFit: 'contain'}} />
+      <HoverActions isEdit={true} isToggleView={true} isDelete={(_count.categories < 1 && _count.products < 1 )}  toggleView={() => router.push(`/admin/categories/view/${id}`)} toggleEdit={handleNavigate} toggleDelete={onDelete} />
+      </ImageWrapper>
+      <ContentWrapper>
         <Typography p={1} height={50} mb={1} className="title-2" color={'textSecondary'}>{name}</Typography>
-      </Box>
-      <Divider />
-      <Box alignItems="center" >
-        <StyledIconButton onClick={handleNavigate}>
-          <Edit />
-        </StyledIconButton>
-
-        <StyledIconButton>
-          <RemoveRedEye
-            onClick={() => router.push(`/admin/categories/view/${id}`)}
-          />
-        </StyledIconButton>
-
-        {_count.categories < 1 && _count.products < 1 && (
-          <StyledIconButton onClick={onDelete}>
-            <Delete />
-          </StyledIconButton>
-        )}
-      </Box>
-    </Box>
-    </Card>
+        </ContentWrapper>
+    </StyledBazaarCard>
   );
 }

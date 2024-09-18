@@ -18,15 +18,15 @@ export default function QuantityButtons(props) {
     handleDecrement,
     handleIncrement
   } = props || {};
-  return <FlexBox width="30px" alignItems="center" className="add-cart" flexDirection="column-reverse" justifyContent={quantity ? "space-between" : "flex-start"}>
+  return <FlexBox  alignItems="center" className="add-cart" flexDirection="row-reverse" justifyContent={quantity ? "space-between" : "flex-start"}>
       <Button color="primary" variant="outlined" onClick={handleIncrement} sx={{
       padding: "3px"
     }}>
         <Add fontSize="small" />
       </Button>
 
-      {quantity ? <Fragment>
-          <Paragraph color="text.primary" fontWeight="600">
+      {quantity ? <Fragment >
+          <Paragraph sx={{px:1}}  color="text.primary" fontWeight="600">
             {quantity}
           </Paragraph>
 

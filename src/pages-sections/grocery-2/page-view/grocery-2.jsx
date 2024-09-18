@@ -116,13 +116,9 @@ const SideNav = <GrocerySideNav navigation={[]} />;
       }
         <ProductCarousel title={`${addName} & More`} products={additionalProducts} />
 
-        <Footer2 />
+        
       </Box>
       {/* <MobileNavigationBar /> */}
      
-      <Newsletter image="/assets/images/newsletter/bg-2.png" />
-      <MobileNavigationBar2>
-        <Scrollbar>{SideNav}</Scrollbar>
-      </MobileNavigationBar2>
     </div>;
 }

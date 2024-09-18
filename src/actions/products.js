@@ -19,6 +19,23 @@ export async function createProduct(product){
   return {products}
 }
 
+
+export async function updateProductById(product, id){
+  const productData = await prisma.product.update({
+    where: {
+      id
+    },
+    include: {
+      category: {
+        select: {
+          name: true
+        },
+      },
+    },
+    data: product});
+  return productData;
+}
+
 export async function getRandomProducts(categoryIds) {
   const products = await prisma.product.findMany({
     where: {
@@ -50,7 +67,6 @@ export async function getProductById(productId) {
       },
       include: {
         category: true,           // Include the related category
-        productVariant: true,    // Include the related product variants
       },
     });
 
@@ -60,6 +76,6 @@ export async function getProductById(productId) {
 
     return product;
   } catch (error) {
-    throw error();
+    throw error;
   } 
 }

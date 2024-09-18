@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useSnackbar } from "notistack";
 import useCart from "hooks/useCart";
-export default function useProduct(slug) {
+export default function useProduct(id) {
   const {
     state,
     dispatch
@@ -11,7 +11,7 @@ export default function useProduct(slug) {
   } = useSnackbar();
   const [openModal, setOpenModal] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const cartItem = state.cart.find(item => item.slug === slug);
+  const cartItem = state.cart.find(item => item.id === id);
   const toggleFavorite = useCallback(() => setIsFavorite(fav => !fav), []);
   const toggleDialog = useCallback(() => setOpenModal(open => !open), []);
 

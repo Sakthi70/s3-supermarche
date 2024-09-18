@@ -23,6 +23,11 @@ import QuantityButtons from "./components/quantity-buttons";
 import { ImageWrapper, ContentWrapper, StyledBazaarCard } from "./styles"; 
 import { getRandomItem } from "utils/util";
 import { NO_IMAGE_FOR_PRODUCT } from "utils/constants";
+import Image from "next/image";
+import { auth } from "auth";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import DialogDrawer from "components/header/components/dialog-drawer";
 // ========================================================
 
 
@@ -39,7 +44,9 @@ export default function ProductCard1({
   discount = 5,
   showProductSize,
   productData,
-  isPreview = false
+  isPreview = false,
+  toggleDelete,
+  toggleEdit
 }) {
   const {
     isFavorite,
@@ -48,9 +55,16 @@ export default function ProductCard1({
     toggleDialog,
     toggleFavorite,
     handleCartAmountChange
-  } = useProduct(slug);
+  } = useProduct(id);
+
+  const { data: session, status } = useSession();
+
+  const [dialogOpen, setdialogOpen] = useState(false)
 
   const handleIncrementQuantity = () => {
+    if(status === 'unauthenticated'){
+      setdialogOpen(true)
+    }else{
     const product = {
       id,
       slug,
@@ -60,6 +74,7 @@ export default function ProductCard1({
       qty: (cartItem?.qty || 0) + 1
     };
     handleCartAmountChange(product);
+  }
   };
 
   const handleDecrementQuantity = () => {
@@ -83,20 +98,20 @@ export default function ProductCard1({
         {
         /* HOVER ACTION ICONS */
       }
-        <HoverActions isFavorite={isFavorite} toggleView={toggleDialog} toggleFavorite={toggleFavorite} />
+        <HoverActions  isEdit={isPreview} isToggleView={true} toggleView={toggleDialog} toggleDelete={toggleDelete} toggleEdit={toggleEdit} />
 
         {
         /* PRODUCT IMAGE / THUMBNAIL */
       }
-        <Link href={`/products/${id}`}>
-          <LazyImage priority src={getRandomItem(imgUrl, NO_IMAGE_FOR_PRODUCT)} sx={{height:230}} width={500} height={500} alt={title} />
+        <Link href={isPreview ? `/products/${id}?isPreview=true` : `/products/${id}`} >
+          <LazyImage priority src={ imgUrl && imgUrl.length > 0 ? imgUrl[0] : NO_IMAGE_FOR_PRODUCT} sx={{height:230, width:'100%', objectFit: imgUrl && imgUrl.length > 0 ? 'contain':'cover'}} width={500} height={500} alt={title} />
         </Link>
       </ImageWrapper>
 
       {
       /* PRODUCT VIEW DIALOG BOX */
     }
-      <ProductViewDialog openDialog={openModal} handleCloseDialog={toggleDialog} product={productData} />
+      <ProductViewDialog handleIncrementQuantity={handleIncrementQuantity} isPreview={isPreview} openDialog={openModal} handleCloseDialog={toggleDialog} product={productData} />
 
       <ContentWrapper>
         <Box flex="1 1 0" minWidth="0px" mr={1}>
@@ -109,7 +124,11 @@ export default function ProductCard1({
         {
         /* PRODUCT QUANTITY HANDLER BUTTONS */
       }
-        <QuantityButtons quantity={cartItem?.qty || 0} handleIncrement={handleIncrementQuantity} handleDecrement={handleDecrementQuantity} />
+       {!isPreview  && <QuantityButtons quantity={cartItem?.qty || 0} handleIncrement={handleIncrementQuantity} handleDecrement={handleDecrementQuantity} />}
       </ContentWrapper>
+      <DialogDrawer
+        dialogOpen={dialogOpen}
+        toggleDialog={() => setdialogOpen(!dialogOpen)}
+      />
     </StyledBazaarCard>;
 }

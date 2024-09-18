@@ -114,12 +114,10 @@ export default function Section4() {
     getLightColorFromImageUrl(bans[i].image, function (color) {
        if (color) {
         bans[i]['bgColor'] = color;
-         console.log('Dominant light color:', color);
        } else {
          console.log('Could not determine color.');
        }
      });
-    console.log(bans[i]['bgColor'])
    }
    setBanners(bans)
   } 

@@ -9,6 +9,9 @@ import ShoppingBagOutlined from "icons/ShoppingBagOutlined";
 // GLOBAL CUSTOM HOOK
 
 import useCart from "hooks/useCart"; 
+import { useSession } from "next-auth/react";
+import AccountPopover from "components/layouts/vendor-dashboard/dashboard-navbar/account-popover";
+import { Box } from "@mui/material";
 // ==============================================================
 
 
@@ -20,18 +23,19 @@ export default function LoginCartButtons({
   const {
     state
   } = useCart();
+  const {data:session, status} = useSession();
   const ICON_COLOR = {
     color: "grey.600"
   };
-  return <div>
-      <IconButton onClick={toggleDialog}>
+  return <Box display={'flex'} >
+      {status === 'authenticated' ? <AccountPopover isAdmin={false}/>:<IconButton onClick={toggleDialog}>
         <PersonOutline sx={ICON_COLOR} />
-      </IconButton>
+      </IconButton> }
 
       <Badge badgeContent={state.cart.length} color="primary">
         <IconButton onClick={toggleSidenav}>
           <ShoppingBagOutlined sx={ICON_COLOR} />
         </IconButton>
       </Badge>
-    </div>;
+    </Box>;
 }

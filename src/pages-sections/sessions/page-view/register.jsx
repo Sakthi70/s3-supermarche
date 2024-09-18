@@ -17,13 +17,30 @@ import usePasswordVisible from "../use-password-visible";
 import { Span } from "components/Typography";
 import { FlexBox } from "components/flex-box";
 import BazaarTextField from "components/BazaarTextField";
+import { checkEmailExists, registerUser } from "actions/auth";
+import useApp from "hooks/useApp";
+import Warning from "components/warning/warning";
+import { useState } from "react";
+import OTP from "components/utils/OTP/otp";
+import axios from "axios";
+import { generateOTP } from "utils/util";
+import { registerPlainTemplate, registerTemplate } from "utils/mailTemplate";
+import { useRouter } from "next/navigation";
 
 const RegisterPageView = () => {
   const {
     visiblePassword,
     togglePasswordVisible
   } = usePasswordVisible(); 
+
+  const {loading} =useApp();
+
+  const [error, seterror] = useState("");
+  const [otpDailog, setotpDailog] = useState(true);
 // COMMON INPUT PROPS FOR TEXT FIELD
+const [otp, setotp] = useState("");
+
+const router = useRouter();
 
   const inputProps = {
     endAdornment: <EyeToggleButton show={visiblePassword} click={togglePasswordVisible} />
@@ -44,7 +61,9 @@ const RegisterPageView = () => {
     email: yup.string().email("invalid email").required("Email is required"),
     password: yup.string().required("Password is required"),
     re_password: yup.string().oneOf([yup.ref("password"), null], "Passwords must match").required("Please re-type password"),
-    agreement: yup.bool().test("agreement", "You have to agree with our Terms and Conditions!", value => value === true).required("You have to agree with our Terms and Conditions!")
+    agreement: yup.bool()
+    // .test("agreement", "You have to agree with our Terms and Conditions!", value => value === true)
+    // .required("You have to agree with our Terms and Conditions!")
   });
   const {
     values,
@@ -56,11 +75,56 @@ const RegisterPageView = () => {
   } = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: values => {
-      console.log(values);
-    }
+    onSubmit: async(values) => {
+      if(!values.agreement){
+        seterror(`You have to agree with our Terms and Conditions!`)
+      }
+      else{
+       loading(true);
+      await checkEmailExists(values.email)
+  .then(async(exists) => {
+    if (exists) {
+      seterror(`User with email ${values.email} already exist!`)
+    } else {
+      let otpValue = generateOTP();
+      setotp(otpValue);
+      try {
+        const response = await axios.post('/api/send-email', {
+          email: values.email,
+          subject: 'S3 Supermarche Registeration',
+          message: registerPlainTemplate(values.name,otpValue),
+          html: registerTemplate(values.name,otpValue)
+        });
+        setotpDailog(true);
+    
+  } catch (error) {
+    // alert(error.response?.data?.error || 'Failed to send email');
+  }
+}
+  })
+  .catch(err => {
+    console.error(err);
+  }).finally(() => loading(false));
+}
+    }  
   });
-  return <form onSubmit={handleSubmit}>
+  
+
+  const handleRegister =async()=>{
+    loading(true);
+    try{
+          let reister = await registerUser({
+        ...values
+      }).then(() => router.replace('/')); 
+    }catch(e){
+
+    }finally{
+      loading(false);
+    }
+  }
+
+  return <> <form onSubmit={handleSubmit}>
+  
       <BazaarTextField mb={1.5} fullWidth name="name" size="small" label="Full Name" variant="outlined" onBlur={handleBlur} value={values.name} onChange={handleChange} placeholder="Ralph Awards" error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
 
       <BazaarTextField mb={1.5} fullWidth name="email" size="small" type="email" variant="outlined" onBlur={handleBlur} value={values.email} onChange={handleChange} label="Email or Phone Number" placeholder="exmple@mail.com" error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
@@ -84,7 +148,10 @@ const RegisterPageView = () => {
       <Button fullWidth type="submit" color="primary" variant="contained" size="large">
         Create Account
       </Button>
-    </form>;
+    </form>
+    <OTP otp={otp} title={'Registeration OTP'}  content={'Enter the otp recieved in the email'} open={otpDailog} handleClose={() => setotpDailog(false)} onSubmit={handleRegister} submit={'Submit'}/>
+    <Warning content={error} handleClose={() => seterror("")} open={error !==""} title={'Registeration Error'}  />
+    </>;
 };
 
 export default RegisterPageView;

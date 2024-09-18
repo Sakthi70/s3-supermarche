@@ -19,7 +19,7 @@ export default function Footer2() {
   return <StyledFooter sx={{
     padding: 5,
     color: "white",
-    borderRadius: 2,
+    // borderRadius: 2,
     bgcolor: "#141850",
     // mb: {
     //   md: 2,

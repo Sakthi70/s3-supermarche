@@ -78,8 +78,8 @@ export default function ProductRow({
         <BazaarSwitch color="info" checked={enabled} onChange={() => setProductPublish(state => !state)} />
       </StyledTableCell>
 
-      <StyledTableCell align="center">
-        <StyledIconButton onClick={() => router.push(`/admin/products/${slug}`)}>
+      <StyledTableCell align="center" sx={{minWidth:150}}>
+        <StyledIconButton onClick={() => router.push(`/admin/products/${id}`)}>
           <Edit />
         </StyledIconButton>
 

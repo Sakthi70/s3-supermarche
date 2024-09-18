@@ -33,7 +33,9 @@ export default function ProductViewDialog(props) {
   const {
     product,
     openDialog,
-    handleCloseDialog
+    handleCloseDialog,
+    isPreview,
+    handleIncrementQuantity
   } = props;
   const {
     state,
@@ -47,7 +49,7 @@ export default function ProductViewDialog(props) {
       payload: { ...product,
         qty: amount,
         name: product.title,
-        imgUrl: product.imgGroup[0]
+        imgUrl: product.images.length > 0 ? product.images[0]: NO_IMAGE_FOR_PRODUCT
       }
     });
   };
@@ -62,7 +64,9 @@ export default function ProductViewDialog(props) {
         <div>
           <Grid container spacing={3}>
             <Grid item md={6} xs={12}>
-              {product.images.length > 0 ? <Carousel slidesToShow={1} arrowStyles={{
+              {product.images.length > 0 ? 
+              
+              <>{product.images.length > 2 ? <Carousel slidesToShow={1} arrowStyles={{
               boxShadow: 0,
               color: "primary.main",
               backgroundColor: "transparent"
@@ -76,7 +80,15 @@ export default function ProductViewDialog(props) {
                   xs: 250
                 }
               }} />)}
-              </Carousel> : <BazaarImage  src={NO_IMAGE_FOR_PRODUCT} alt="product" sx={{
+              </Carousel> : <BazaarImage  src={product.images[0]} alt="product" sx={{
+                mx: "auto",
+                width: "100%",
+                objectFit: "contain",
+                height: {
+                  sm: 400,
+                  xs: 250
+                }
+              }} />}</> : <BazaarImage  src={NO_IMAGE_FOR_PRODUCT} alt="product" sx={{
                 mx: "auto",
                 width: "100%",
                 objectFit: "contain",
@@ -101,21 +113,21 @@ export default function ProductViewDialog(props) {
                 <H6 lineHeight="1">(50)</H6>
               </FlexBox> */}
 
-              <Box my={2}>
-              <div className="truncated-text" dangerouslySetInnerHTML={{ __html: product.description }} />
+              <Box my={2} className="truncated-text" color="grey.500">
+              {product.shortDescription }
               </Box>
 
               <Divider sx={{
               mb: 2
             }} />
 
-              {!cartItem?.qty ? <Button size="large" color="dark" variant="contained" onClick={handleCartAmountChange(1)} sx={{
+             {!isPreview && <> {!cartItem?.qty ? <Button size="large" color="primary" variant="contained" onClick={handleIncrementQuantity} sx={{
               height: 45,
               borderRadius: 2
             }}>
                   Add to Cart
                 </Button> : <FlexBox alignItems="center">
-                  <Button size="small" color="dark" variant="outlined" sx={{
+                  <Button size="small" color="primary" variant="outlined" sx={{
                 p: ".6rem",
                 height: 45
               }} onClick={handleCartAmountChange(cartItem?.qty - 1)}>
@@ -126,13 +138,13 @@ export default function ProductViewDialog(props) {
                     {cartItem?.qty.toString().padStart(2, "0")}
                   </H3>
 
-                  <Button size="small" color="dark" variant="outlined" sx={{
+                  <Button size="small" color="primary" variant="outlined" sx={{
                 p: ".6rem",
                 height: 45
               }} onClick={handleCartAmountChange(cartItem?.qty + 1)}>
                     <Add fontSize="small" />
                   </Button>
-                </FlexBox>}
+                </FlexBox>}</>}
             </Grid>
           </Grid>
         </div>

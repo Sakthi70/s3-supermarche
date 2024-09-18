@@ -56,7 +56,7 @@ export default function AuthLayout({
         {
         /* SOCIAL BUTTON AREA */
       }
-        <SocialButtons />
+        {/* <SocialButtons /> */}
 
         {
         /* RENDER BOTTOM CONTENT BASED ON CONDITION */

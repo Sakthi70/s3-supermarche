@@ -103,7 +103,7 @@ export function shuffleArray(array) {
 }
 
 export function getRandomItem(array, alt = "") {
-  if (array.length === 0) {
+  if (!array || array.length === 0 ) {
     return alt
   }
 
@@ -130,4 +130,10 @@ export function calculateDiscountPercentage(originalPrice, discountedPrice) {
 
 export function t(key) {
   return i18next.t(key, { key });
+}
+
+export function generateOTP(length = 6) {
+  const min = Math.pow(10, length - 1);
+  const max = Math.pow(10, length) - 1;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

@@ -27,9 +27,9 @@ export const StyledLink = styled(Link, {
 export const StyledFooter = styled("footer")(({
   theme
 }) => ({
-  [theme.breakpoints.down("md")]: {
-    marginBottom: "4rem"
-  }
+  // [theme.breakpoints.down("md")]: {
+  //   marginBottom: "4rem"
+  // }
 }));
 export const StyledRoot = styled("footer")(({
   theme

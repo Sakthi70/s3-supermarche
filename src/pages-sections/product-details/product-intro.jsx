@@ -18,7 +18,7 @@ import useCart from "hooks/useCart";
 // GLOBAL CUSTOM COMPONENTS
 
 import LazyImage from "components/LazyImage";
-import { H1, H2, H3, H6 } from "components/Typography";
+import { H1, H2, H3, H4, H5, H6,Small } from "components/Typography";
 import { FlexBox, FlexRowCenter } from "components/flex-box";
 // CUSTOM UTILS LIBRARY FUNCTION
 
@@ -27,11 +27,12 @@ import { currency } from "lib";
 
 import productVariants from "data/product-variants";
 import { NO_IMAGE_FOR_PRODUCT } from "utils/constants";
+import Image from "next/image";
 // CUSTOM DATA MODEL
 
 // ================================================================
 export default function ProductIntro({ product }) {
-  const { id, price, name, image, slug, thumbnail } = product || {};
+  const { id, price, name, images, slug } = product || {};
   const { state, dispatch } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectVariants, setSelectVariants] = useState({
@@ -60,8 +61,8 @@ export default function ProductIntro({ product }) {
       payload: {
         price,
         qty: amount,
-        name: title,
-        imgUrl: thumbnail,
+        name: name,
+        imgUrl: images.length > 0 ? images[0] : NO_IMAGE_FOR_PRODUCT ,
         id,
         slug,
       },
@@ -76,7 +77,7 @@ export default function ProductIntro({ product }) {
           <Grid container>
           <Grid item sm={2} xs={12} order={{xs:1,sm:0}} display={'flex'} alignItems={'center'} justifyContent={'center'}>
           <FlexBox overflow="auto" sx={{flexDirection:{sx:'row',sm:'column'}}}>
-            {image.length >0 ? image.map((url, ind) => (
+            {images && images.length >0 ? images.map((url, ind) => (
               <FlexRowCenter
                 key={ind}
                 width={64}
@@ -90,7 +91,7 @@ export default function ProductIntro({ product }) {
                   cursor: "pointer",
                 }}
                 onClick={handleImageClick(ind)}
-                mr={ind === image.length - 1 ? "auto" : "10px"}
+                mr={ind === images.length - 1 ? "auto" : "10px"}
                 borderColor={
                   selectedImage === ind ? "primary.main" : "grey.400"
                 }
@@ -137,7 +138,7 @@ export default function ProductIntro({ product }) {
               width={300}
               height={300}
               loading="eager"
-              src={product.image.length > 0 ?  product.image[selectedImage]: NO_IMAGE_FOR_PRODUCT}
+              src={product.images.length > 0 ?  product.images[selectedImage]: NO_IMAGE_FOR_PRODUCT}
               sx={{
                 objectFit: "contain",
               }}
@@ -150,36 +151,8 @@ export default function ProductIntro({ product }) {
           <H1 mb={1}>{name}</H1>
 
           {/* PRODUCT BRAND */}
-          {/* <FlexBox alignItems="center" mb={1}>
-            <div>Brand: </div>
-            <H6>Xiaomi</H6>
-          </FlexBox> */}
-
-         
-          {/* PRODUCT VARIANTS */}
-          {productVariants.map((variant) => (
-            <Box key={variant.id} mb={2}>
-              <H6 mb={1}>{variant.title}</H6>
-
-              {variant.values.map(({ id, value }) => (
-                <Chip
-                  key={id}
-                  label={value}
-                  onClick={handleChangeVariant(variant.title, value)}
-                  sx={{
-                    borderRadius: "4px",
-                    mr: 1,
-                    cursor: "pointer",
-                  }}
-                  color={
-                    selectVariants[variant.title.toLowerCase()] === value
-                      ? "primary"
-                      : "default"
-                  }
-                />
-              ))}
-            </Box>
-          ))}
+          
+          <Small> {product.shortDescription}</Small>
 
           {/* PRICE & STOCK */}
           <Box pt={1} mb={3}>
@@ -196,7 +169,7 @@ export default function ProductIntro({ product }) {
               variant="contained"
               onClick={handleCartAmountChange(1)}
               sx={{
-                mb: 4.5,
+                mb: 2.5,
                 px: "1.75rem",
                 height: 40,
               }}
@@ -204,7 +177,7 @@ export default function ProductIntro({ product }) {
               Add to Cart
             </Button>
           ) : (
-            <FlexBox alignItems="center" mb={4.5}>
+            <FlexBox alignItems="center" mb={2.5}>
               <Button
                 size="small"
                 sx={{
@@ -234,7 +207,12 @@ export default function ProductIntro({ product }) {
               </Button>
             </FlexBox>
           )}
-
+{product.isBrand && <><FlexBox alignItems="center" mb={1}>
+            <div>Brand: </div>
+            <H6>{product.brandName}</H6>
+          </FlexBox>
+          {product.brandImage && <Image src={product.brandImage} height={50} width={100} style={{objectFit:'contain'}} alt={name}></Image>}
+          </>}
           {/* SHOP NAME */}
           {/* <FlexBox alignItems="center" gap={1} mb={2}>
             <div>Sold By:</div>

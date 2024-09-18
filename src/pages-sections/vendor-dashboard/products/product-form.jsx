@@ -32,10 +32,11 @@ import PageContentWithEditor from "components/utils/PageContentWithEditor";
 import MultiField from "../../../components/utils/MultiField";
 import IOSSwitch from "../../../components/utils/IOSSwitch";
 import { useRouter } from "next/navigation";
-import { createProduct } from "actions/products";
+import { createProduct, updateProductById } from "actions/products";
 import { imageUpload } from "utils/cloudinary";
 import { ColorPicker } from "mui-color";
 import { t } from "utils/util";
+import _ from "lodash";
 const Amount = {
   startAdornment: <InputAdornment position="start">€</InputAdornment>,
 };
@@ -68,7 +69,25 @@ const MenuProps = {
   },
 };
 
-export default function ProductForm({ isEdit = false }) {
+const PRODUCT_VALUE =  {
+  name: "",
+  tags: [],
+  stock: "",
+  price: "",
+  category: "",
+  brandName: "",
+  brandImage: null,
+  images: [],
+  shortDescription:"",
+  salePrice: "",
+  description: "",
+  isBrand: false,
+  type: 'Other',
+  value: "",
+};
+
+export default function ProductForm({ isEdit = false, product }) {
+
   const { loading, content } = useApp();
   const rteref = useRef(null);
 
@@ -78,25 +97,47 @@ export default function ProductForm({ isEdit = false }) {
 
   const parentIds = categories.map(x=> x.parentId);
 
-  const INITIAL_VALUES = {
-    name: "",
-    tags: [],
-    stock: "",
-    price: "",
-    category: "",
-    brandName: "",
-    brandImage: [],
-    images: [],
-    shortDescription:"",
-    salePrice: "",
-    description: "",
-    isBrand: false,
-    type: 'Other',
-    value: "",
-  };
+  const INITIAL_VALUES =  !isEdit ? PRODUCT_VALUE : {...PRODUCT_VALUE,...product,category:product.categoryId};
 
 
   const handleFormSubmit = async(values) => {
+    if(isEdit){
+      loading(true);
+      let data = {
+        name: values.name,
+        categoryId: values.category,
+        description: rteref.current?.editor?.getHTML(),
+        tags: values.tags,
+        isBrand: values.isBrand,
+        brandName: values.isBrand ? values.brandName : '',
+        price: values.price,
+        salePrice: values.salePrice === "" ? null : values.salePrice,
+        stock: values.stock,
+        type: values.type,
+        value: values.value,
+        shortDescription: values.shortDescription
+      }
+
+      if(values.images.filter(x=> _.isObject(x)).length > 0){
+        
+        let result = [...values.images.filter(x=> !_.isObject(x))];
+        for(let i= 0; i<values.images.filter(x=> _.isObject(x)).length; i++){
+          let image =  await imageUpload(values.images[i], 'Product');
+          result.push(image);
+        }
+        data.images= result;
+    }
+    if(values.isBrand && _.isObject(values.brandImage)){
+        let image =  await imageUpload(values.brandImage, 'Brand');
+      data.brandImage= image;
+    }else{
+      data.brandImage = null;
+    }
+    await updateProductById(data,product.id).then(values => {
+      router.push('/admin/products'); 
+    });
+      loading(false);
+    }else{
     loading(true);
     let data = {
       name: values.name,
@@ -121,14 +162,17 @@ export default function ProductForm({ isEdit = false }) {
         }
         data.images= result;
     }
-    if(values.isBrand && values.brandImage.length > 0){
-        let image =  await imageUpload(values.brandImage[0], 'Brand');
+    if(values.isBrand && _.isObject(values.brandImage)){
+        let image =  await imageUpload(values.brandImage, 'Brand');
       data.brandImage= image;
+    }else{
+      data.brandImage= null;
     }
     await createProduct( data).then(values => {
       router.push('/admin/products'); 
     });
     loading(false);
+  }
   };
 
   return (
@@ -147,13 +191,17 @@ export default function ProductForm({ isEdit = false }) {
           handleBlur,
           handleSubmit,
         }) => {
-          const handleChangeDropZone = (files, name) => {
+          const handleChangeDropZone = (files, name, isMulti = true) => {
             files.forEach((file) =>
               Object.assign(file, {
                 preview: URL.createObjectURL(file),
               })
             );
-            setFieldValue(name, [...values[name], ...files])
+            if(isMulti){
+              setFieldValue(name, [...values[name] ?? [], ...files])
+            }else{
+              setFieldValue(name, files[0])
+            }
           };
           // HANDLE DELETE UPLOAD IMAGE
         
@@ -204,7 +252,7 @@ export default function ProductForm({ isEdit = false }) {
                   {t("Category")}
                   </InputLabel>
                 <Select
-                  disabled={isEdit}
+                  // disabled={isEdit}
                   MenuProps={MenuProps}
                   fullWidth
                   color="info"
@@ -240,7 +288,7 @@ export default function ProductForm({ isEdit = false }) {
                   {values.images.map((file, index) => {
                     return (
                       <UploadImageBox key={index}>
-                        <Box component="img" src={file.preview} width="100%" />
+                        <Box component="img" src={ _.isObject(file) ? file.preview: file} width="100%" />
                         <StyledClear onClick={() => handleFileDelete(file,'images')} />
                       </UploadImageBox>
                     );
@@ -260,21 +308,19 @@ export default function ProductForm({ isEdit = false }) {
                   onBlur={handleBlur}
                   onChange={handleChange}
                 />
-                <DropZone
+                {(!values.brandImage || !_.isObject(values.brandImage)) && <DropZone
                 title={t("Drag & drop brand image here")}
                   multiple={false}
-                  onChange={(files) => handleChangeDropZone(files, 'brandImage')}
-                />
+                  onChange={(files) => handleChangeDropZone(files, 'brandImage', false)}
+                />}
 
                 <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
-                  {values.brandImage.map((file, index) => {
-                    return (
-                      <UploadImageBox key={index}>
-                        <Box component="img" src={file.preview} width="100%" />
-                        <StyledClear onClick={() => handleFileDelete(file,'brandImage')} />
+                  {values.brandImage && values.brandImage &&
+                      <UploadImageBox >
+                        <Box component="img" src={_.isObject(values.brandImage) ? values.brandImage.preview: values.brandImage} width="100%" />
+                        <StyledClear onClick={() => handleFileDelete(values.brandImage,'brandImage')} />
                       </UploadImageBox>
-                    );
-                  })}
+                  }
                 </FlexBox>
               </Grid>}
               <Grid item  xs={12}>

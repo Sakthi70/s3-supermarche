@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { ProductDetailsPageView } from "pages-sections/product-details/page-view"; 
 // API FUNCTIONS
 
-import api from "utils/__api__/products";
 import { getFrequentlyBought, getRelatedProducts } from "utils/__api__/related-products";
 export const metadata = {
   title: "Product Details - S3 Supermarche",
@@ -19,6 +18,7 @@ export const metadata = {
 export default async function ProductDetails({
   params
 }) {
+  console.log(params)
   try {
     const product = await getProductById(params.slug);
     const relatedProducts = await getRelatedProducts();

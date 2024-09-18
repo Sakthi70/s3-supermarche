@@ -16,6 +16,7 @@ import useCart from "hooks/useCart";
 // STYLED COMPONENTS
 
 import { iconStyle, StyledBox, StyledDrawer, StyledNavLink, Wrapper } from "./styles";
+import { useSession } from "next-auth/react";
 /**
  * Difference between MobileNavigationBar and MobileNavigationBar2
  * 1. In the MobileNavigationBar we don't use conditionally render
@@ -28,6 +29,24 @@ export default function MobileNavigationBar2({
   const {
     state
   } = useCart();
+  const {status} = useSession();
+  const list = [{
+    title: "Home",
+    Icon: Home,
+    href: "/"
+  }, {
+    title: "Category",
+    Icon: CategoryOutlined,
+    href:'/mobile-categories'
+  }, {
+    title: "Cart",
+    Icon: ShoppingBagOutlined,
+    href: status ==='authenticated'? "/cart": '/login'
+  }, {
+    title: "Account",
+    Icon: User2,
+    href: status ==='authenticated'? "/profile":'/login'
+  }];
   const [open, setOpen] = useState(false);
   const DOWN_900 = useMediaQuery(theme => theme.breakpoints.down(786));
 
@@ -69,20 +88,3 @@ export default function MobileNavigationBar2({
 
   return null;
 }
-const list = [{
-  title: "Home",
-  Icon: Home,
-  href: "/"
-}, {
-  title: "Category",
-  Icon: CategoryOutlined,
-  href:'/mobile-categories'
-}, {
-  title: "Cart",
-  Icon: ShoppingBagOutlined,
-  href: "/cart"
-}, {
-  title: "Account",
-  Icon: User2,
-  href: "/profile"
-}];

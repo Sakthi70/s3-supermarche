@@ -11,10 +11,17 @@ import { Header, HeaderCart, HeaderLogin } from "components/header";
 import { MobileHeader, HeaderSearch } from "components/header/mobile-header";
 import { Topbar, TopbarLanguageSelector, TopbarSocialLinks } from "components/topbar"; 
 import Categories from "components/navbar/categories";
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, IconButton, useMediaQuery } from "@mui/material";
 import useHeader from "components/header/hooks/use-header";
 import LoginCartButtons from "components/header/components/login-cart-buttons";
 import DialogDrawer from "components/header/components/dialog-drawer";
+import { Footer2 } from "components/footer";
+import Newsletter from "components/newsletter/newsletter";
+import { MobileNavigationBar2 } from "components/mobile-navigation";
+import Scrollbar from "components/scrollbar/scrollbar";
+import { Logout } from "@mui/icons-material";
+import { logout } from "actions/auth";
+import { useSession } from "next-auth/react";
 // CUSTOM DATA MODEL
 
 
@@ -29,6 +36,8 @@ export default function ShopLayout2({
     topbar,
     mobileNavigation
   } = data;
+  const{data:session ,status}= useSession();
+  console.log(session)
   const [isFixed, setIsFixed] = useState(false);
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
   const {dialogOpen,sidenavOpen, toggleDialog, toggleSidenav } = useHeader();
@@ -44,7 +53,9 @@ export default function ShopLayout2({
         <HeaderSearch>
           <SearchInput />
         </HeaderSearch>
-
+        {DOWN_600  && status === 'authenticated' && <IconButton onClick={async() =>  await logout()}>
+          <Logout sx={{color:'grey.600'}} />
+        </IconButton> }
         {/* {!DOWN_600  && <HeaderLogin />}
         {!DOWN_600  && <HeaderCart /> } */}
         {!DOWN_600 &&
@@ -104,5 +115,12 @@ export default function ShopLayout2({
       /* BODY CONTENT */
     }
       {children}
+      
+    {!DOWN_600 &&  <Footer2 />}
+
+      <Newsletter image="/assets/images/newsletter/bg-2.png" />
+      {DOWN_600 && <MobileNavigationBar2>
+        {/* <Scrollbar>{SideNav}</Scrollbar> */}
+      </MobileNavigationBar2>}
     </Fragment>;
 }
