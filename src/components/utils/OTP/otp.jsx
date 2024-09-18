@@ -8,11 +8,13 @@ const OTP = ({open,handleClose, title, content, ok = 'close',submit='ok', onSubm
  const [error, seterror] = useState("")
 
   const handeleSubmit =() => {
-     if(otpValue.length !==6 || otpValue != otp){
-      seterror('Entered OTP is invalid')
-     }
+     if(otpValue.length ===6 && otpValue === otp){
       onSubmit();
       handleClose();
+    }else{
+      seterror('Entered OTP is invalid')
+    }
+      
   }
 
   return (

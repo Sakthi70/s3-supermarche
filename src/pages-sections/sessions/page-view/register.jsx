@@ -36,7 +36,7 @@ const RegisterPageView = () => {
   const {loading} =useApp();
 
   const [error, seterror] = useState("");
-  const [otpDailog, setotpDailog] = useState(true);
+  const [otpDailog, setotpDailog] = useState(false);
 // COMMON INPUT PROPS FOR TEXT FIELD
 const [otp, setotp] = useState("");
 
