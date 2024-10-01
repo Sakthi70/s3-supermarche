@@ -9,6 +9,7 @@ import { Paragraph } from "components/Typography";
 // CUSTOM UTILS LIBRARY FUNCTION
 
 import { currency } from "lib";
+import { Button } from "@mui/material";
 export default function PaymentSummary() {
   return <Card sx={{
     padding: {
@@ -28,5 +29,9 @@ export default function PaymentSummary() {
       <Paragraph fontSize={25} fontWeight={600} lineHeight={1} textAlign="right">
         {currency(2650)}
       </Paragraph>
+      <Divider sx={{my:2}} />
+      <Button variant="contained" color="primary" type="submit" fullWidth>
+                  Checkout Now
+                </Button>
     </Card>;
 }

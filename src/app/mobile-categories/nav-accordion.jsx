@@ -16,6 +16,7 @@ import renderChild from "./render-child";
 export default function NavAccordion({
   item: {
     name,
+    id,
     slug,
     child
   }
@@ -23,7 +24,7 @@ export default function NavAccordion({
   const [open, setOpen] = useState(false);
   const router = useRouter();
   return <Fragment>
-      <AccordionHeader  onDoubleClick={(e) =>  {e.preventDefault(); router.push(`/products/search/${slug}`)}} onClick={() => setOpen(state => !state)} sx={{
+      <AccordionHeader  onDoubleClick={(e) =>  {e.preventDefault(); router.push(`/categories/search/${id}`)}} onClick={() => setOpen(state => !state)} sx={{
       paddingInline: 0,
       paddingBlock: 0.5,
       cursor: "pointer",

@@ -15,6 +15,8 @@ import { H6, Small } from "components/Typography";
 import { logout } from "actions/auth";
 import { t } from "utils/util";
 import { PersonOutline } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 // STYLED COMPONENT
 
 const Divider = styled("div")(({
@@ -26,6 +28,10 @@ const Divider = styled("div")(({
 export default function AccountPopover({isAdmin = true}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const {data:session} = useSession();
+  const router = useRouter();
+
 
   const handleClose = () => setAnchorEl(null);
 
@@ -84,13 +90,16 @@ export default function AccountPopover({isAdmin = true}) {
         }
       }
     }}>
-        {isAdmin && <><Box px={2} pt={1}>
+        {isAdmin && <MenuItem><Box px={2} pt={1}>
           <H6>{t("User")}</H6>
           <Small color="grey.500">{t("Admin")}</Small>
-        </Box>
+        </Box> </MenuItem>}
 
-        <Divider /></>}
-        <MenuItem>{t("Profile")}</MenuItem>
+{isAdmin &&  <Divider />}
+        {!isAdmin && session.user.admin &&<MenuItem onClick={() => {router.push('/vendor/dashboard')}}>{t("Admin Dashboard")}</MenuItem>}
+
+{!isAdmin && session.user.admin && <Divider />}
+        <MenuItem onClick={() => {router.push('/profile')}}>{t("Profile")}</MenuItem>
         {/* <MenuItem>Settings</MenuItem> */}
         <Divider />
         <MenuItem onClick={signOut}>{t("Logout")}</MenuItem>

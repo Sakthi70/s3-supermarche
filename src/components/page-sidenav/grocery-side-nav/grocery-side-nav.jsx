@@ -29,7 +29,7 @@ export default function GrocerySideNav({
       <StyledCard elevation={3}>
         {categoryList.map((item, ind) => {
         if (item.child.length > 0) return <NavAccordion item={item} key={ind} />;
-        return <NavLink key={ind} href={`/products/search${item.slug}`} color="grey.700">
+        return <NavLink key={ind} href={`/categories/search/${item.id}`} color="grey.700">
               <ListItem title={item.name} icon={item.image} />
             </NavLink>;
       })}

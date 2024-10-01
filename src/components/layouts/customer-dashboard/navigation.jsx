@@ -45,38 +45,18 @@ export default function Navigation() {
 }
 const MENUS = [{
   title: "DASHBOARD",
-  list: [{
+  list: [
+    {
+      href: "/profile",
+      title: "Profile Info",
+      Icon: Person,
+      // count: 3
+    },
+    {
     href: "/orders",
     title: "Orders",
     Icon: ShoppingBagOutlined,
-    count: 5
-  }, {
-    href: "/wish-list",
-    title: "Wishlist",
-    Icon: FavoriteBorder,
-    count: 19
-  }, {
-    href: "/support-tickets",
-    title: "Support Tickets",
-    Icon: CustomerService,
-    count: 1
-  }]
-}, {
-  title: "ACCOUNT SETTINGS",
-  list: [{
-    href: "/profile",
-    title: "Profile Info",
-    Icon: Person,
-    count: 3
-  }, {
-    href: "/address",
-    title: "Addresses",
-    Icon: Place,
-    count: 16
-  }, {
-    href: "/payment-methods",
-    title: "Payment Methods",
-    Icon: CreditCard,
-    count: 4
-  }]
+    // count: 5
+  }, 
+]
 }];

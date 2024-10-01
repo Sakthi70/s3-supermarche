@@ -1463,19 +1463,22 @@ export const categoryMenus = [{
         title: "Add Address",
         url: "/address/d27d0e28-c35e-4085-af1e-f9f1b1bd9c34"
       }]
-    }, {
-      title: "Support tickets",
-      child: [{
-        title: "All tickets",
-        url: "/support-tickets"
-      }, {
-        title: "Ticket details",
-        url: "/support-tickets/when-will-my-product-arrive"
-      }]
-    }, {
-      title: "Wishlist",
-      url: "/wish-list"
-    }]
+    },
+    //  {
+    //   title: "Support tickets",
+    //   child: [{
+    //     title: "All tickets",
+    //     url: "/support-tickets"
+    //   }, {
+    //     title: "Ticket details",
+    //     url: "/support-tickets/when-will-my-product-arrive"
+    //   }]
+    // },
+    //  {
+    //   title: "Wishlist",
+    //   url: "/wish-list"
+    // }
+  ]
   }, {
     megaMenu: false,
     megaMenuWithSub: false,

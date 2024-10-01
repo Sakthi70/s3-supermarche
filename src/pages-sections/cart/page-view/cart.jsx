@@ -8,6 +8,8 @@ import useCart from "hooks/useCart";
 
 import CartItem from "../cart-item";
 import CheckoutForm from "../checkout-form";
+import PaymentSummary from "pages-sections/payment/payment-summery";
+import { CheckoutSummary } from "pages-sections/checkout/checkout-summery";
 export default function CartPageView() {
   const {
     state
@@ -31,7 +33,7 @@ export default function CartPageView() {
       /* CHECKOUT FORM */
     }
       <Grid item md={4} xs={12}>
-        <CheckoutForm />
+      <CheckoutSummary />
       </Grid>
     </Grid>;
 }

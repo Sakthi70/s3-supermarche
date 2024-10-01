@@ -68,7 +68,7 @@ setSelected(categoryList[0]);
       <OverlayScrollbar className="category-list">
         {selected && categoryList && categoryList.map((item, i) => <Tooltip key={i} title={item.name} placement="right" arrow>
             <CategoryListItem isActive={selected.name === item.name} onClick={() => {
-          if (item.child) setSelected(item);else router.push(`/products/search/${item.slug}`);
+          if (item.child) setSelected(item);else router.push(`/categories/search/${item.id}`);
         }}>
               {/* <IconComponent icon={item.icon} className="icon" /> */}
               {item.image && <Image src={item.image} width={30} height={30} alt={item.name} />}

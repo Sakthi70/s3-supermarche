@@ -16,6 +16,11 @@ import ProductPrice from "../product-price";
 import ProductTags from "./components/tags";
 import AddToCartButton from "./components/add-to-cart";
 import FavoriteButton from "./components/favorite-button"; 
+import { useSession } from "next-auth/react";
+import useApp from "hooks/useApp";
+import { useState } from "react";
+import QuantityButtons from "../product-card-1/components/quantity-buttons";
+import { calculateDiscountPercentage } from "utils/util";
 // STYLED COMPONENT
 
 const Wrapper = styled(Card)({
@@ -60,22 +65,30 @@ const ContentWrapper = styled("div")(({
 // ===========================================================
 export default function ProductCard9(props) {
   const {
-    imgUrl,
-    title,
-    price,
-    off,
-    rating,
-    id,
-    slug
+   id,
+   slug,
+  title,
+  price,
+  salePrice,
+  imgUrl,
+  tags,
   } = props || {};
   const {
     cartItem,
     handleCartAmountChange,
     isFavorite,
     toggleFavorite
-  } = useProduct(slug);
+  } = useProduct(id);
 
+
+  const { data: session, status } = useSession();
+  const {loading}=useApp();
+  const [dialogOpen, setdialogOpen] = useState(false)
+  
   const handleIncrementQuantity = () => {
+    if(status === 'unauthenticated'){
+      setdialogOpen(true)
+    }else{
     const product = {
       id,
       slug,
@@ -85,6 +98,7 @@ export default function ProductCard9(props) {
       qty: (cartItem?.qty || 0) + 1
     };
     handleCartAmountChange(product);
+  }
   };
 
   const handleDecrementQuantity = () => {
@@ -103,19 +117,19 @@ export default function ProductCard9(props) {
       {
       /* PRODUCT FAVORITE BUTTON */
     }
-      <FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
+      {/* <FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} /> */}
 
       <ContentWrapper>
         <div className="img-wrapper">
           {
           /* DISCOUNT PERCENT CHIP IF AVAILABLE */
         }
-          <DiscountChip discount={off} />
+          <DiscountChip discount={calculateDiscountPercentage(price,salePrice)} />
 
           {
           /* PRODUCT IMAGE / THUMBNAIL */
         }
-          <LazyImage src={imgUrl} alt={title} width={500} height={500} />
+          <LazyImage src={imgUrl} alt={title} width={100} height={100} />
         </div>
 
         <div className="content">
@@ -123,12 +137,12 @@ export default function ProductCard9(props) {
             {
             /* PRODUCT TAG LIST */
           }
-            <ProductTags tags={["Bike", "Motor", "Ducati"]} />
+            <ProductTags tags={tags} />
 
             {
             /* PRODUCT TITLE / NAME */
           }
-            <Link href={`/products/${slug}`}>
+            <Link href={`/products/${id}`}>
               <H5 fontWeight="700" mt={1} mb={2}>
                 {title}
               </H5>
@@ -137,18 +151,18 @@ export default function ProductCard9(props) {
             {
             /* PRODUCT RATING / REVIEW  */
           }
-            <Rating size="small" value={rating} color="warn" readOnly />
+            {/* <Rating size="small" value={rating} color="warn" readOnly /> */}
 
             {
             /* PRODUCT PRICE */
           }
-            <ProductPrice price={price} discount={off} />
+            <ProductPrice price={price} discount={salePrice} />
           </div>
 
           {
           /* PRODUCT ADD TO CART BUTTON */
         }
-          <AddToCartButton quantity={cartItem?.qty} handleDecrement={handleDecrementQuantity} handleIncrement={handleIncrementQuantity} />
+          <QuantityButtons quantity={cartItem?.qty || 0} handleIncrement={handleIncrementQuantity} handleDecrement={handleDecrementQuantity} />
         </div>
       </ContentWrapper>
     </Wrapper>;

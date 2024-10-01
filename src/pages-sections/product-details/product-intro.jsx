@@ -28,27 +28,18 @@ import { currency } from "lib";
 import productVariants from "data/product-variants";
 import { NO_IMAGE_FOR_PRODUCT } from "utils/constants";
 import Image from "next/image";
+import { Typography } from "@mui/material";
+import { useSearchParams } from "next/navigation";
 // CUSTOM DATA MODEL
 
 // ================================================================
 export default function ProductIntro({ product }) {
-  const { id, price, name, images, slug } = product || {};
+  const { id, price, name, images, slug,stock } = product || {};
   const { state, dispatch } = useCart();
+  const searchParams = useSearchParams();
+  const isPreview = searchParams.get('isPreview'); 
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectVariants, setSelectVariants] = useState({
-    option: "option 1",
-    type: "type 1",
-  });
-  // HANDLE CHANGE TYPE AND OPTIONS
-
-  const handleChangeVariant = (variantName, value) => () => {
-    setSelectVariants((state) => ({
-      ...state,
-      [variantName.toLowerCase()]: value,
-    }));
-  };
-  // CHECK PRODUCT EXIST OR NOT IN THE CART
-
+ 
   const cartItem = state.cart.find((item) => item.id === id);
   // HANDLE SELECT IMAGE
 
@@ -138,7 +129,7 @@ export default function ProductIntro({ product }) {
               width={300}
               height={300}
               loading="eager"
-              src={product.images.length > 0 ?  product.images[selectedImage]: NO_IMAGE_FOR_PRODUCT}
+              src={product.images &&product.images.length > 0 ?  product.images[selectedImage]: NO_IMAGE_FOR_PRODUCT}
               sx={{
                 objectFit: "contain",
               }}
@@ -159,10 +150,14 @@ export default function ProductIntro({ product }) {
             <H2 color="primary.main" mb={0.5} lineHeight="1">
               {currency(price)}
             </H2>
-            <Box color="inherit">Stock Available</Box>
+            {stock > 0 && <Box color="inherit">Stock Available</Box>}
           </Box>
 
           {/* ADD TO CART BUTTON */}
+          
+          
+          {stock < 1 && <Typography variant="h5" fontWeight={600} color={"error"}>{"Out of Stock"}</Typography>}
+          {(!isPreview && stock > 0) && <>
           {!cartItem?.qty ? (
             <Button
               color="primary"
@@ -196,6 +191,7 @@ export default function ProductIntro({ product }) {
 
               <Button
                 size="small"
+                disabled={cartItem?.qty >= stock}
                 sx={{
                   p: 1,
                 }}
@@ -206,7 +202,7 @@ export default function ProductIntro({ product }) {
                 <Add fontSize="small" />
               </Button>
             </FlexBox>
-          )}
+          )}</>}
 {product.isBrand && <><FlexBox alignItems="center" mb={1}>
             <div>Brand: </div>
             <H6>{product.brandName}</H6>

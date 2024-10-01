@@ -23,7 +23,7 @@ export default function ProductTags({
   tags
 }) {
   return <StyledRoot>
-      {tags.map(item => <Link href="#" key={item}>
+      {tags.map(item => <Link href={`/products/search/${item}`} key={item}>
           <p>{item}</p>
         </Link>)}
     </StyledRoot>;

@@ -28,6 +28,8 @@ import { auth } from "auth";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import DialogDrawer from "components/header/components/dialog-drawer";
+import Warning from "components/warning/warning";
+import useApp from "hooks/useApp";
 // ========================================================
 
 
@@ -58,8 +60,9 @@ export default function ProductCard1({
   } = useProduct(id);
 
   const { data: session, status } = useSession();
-
+  const {loading}=useApp();
   const [dialogOpen, setdialogOpen] = useState(false)
+  const [openDelete, setopenDelete] = useState(false);
 
   const handleIncrementQuantity = () => {
     if(status === 'unauthenticated'){
@@ -76,6 +79,13 @@ export default function ProductCard1({
     handleCartAmountChange(product);
   }
   };
+
+  const onDelete =async() =>{
+    loading(true)
+    setopenDelete(false);
+        await toggleDelete(id);
+        loading(false)
+  }
 
   const handleDecrementQuantity = () => {
     const product = {
@@ -94,11 +104,8 @@ export default function ProductCard1({
         /* DISCOUNT PERCENT CHIP IF AVAILABLE */
       }
         <DiscountChip discount={discount} />
-
-        {
-        /* HOVER ACTION ICONS */
-      }
-        <HoverActions  isEdit={isPreview} isToggleView={true} toggleView={toggleDialog} toggleDelete={toggleDelete} toggleEdit={toggleEdit} />
+        <Warning open={openDelete} handleClose={() => setopenDelete(false)} content={'Are you sure to delete the product?'} submit="Confirm" ok={'Cancel'} title={'Delete Product'} onSubmit={onDelete} isSubmit={true}/>
+        <HoverActions  isEdit={isPreview} isToggleView={true} isDelete={isPreview} toggleView={toggleDialog} toggleDelete={() => setopenDelete(true)} toggleEdit={toggleEdit} />
 
         {
         /* PRODUCT IMAGE / THUMBNAIL */
@@ -118,7 +125,7 @@ export default function ProductCard1({
         
           <ProductTitle title={title} slug={slug} />
 
-          <ProductPrice discount={productData.offerPrice} price={price} />
+          <ProductPrice discount={productData.salePrice} price={price} />
         </Box>
 
         {

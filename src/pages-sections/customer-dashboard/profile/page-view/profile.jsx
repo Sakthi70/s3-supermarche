@@ -7,6 +7,7 @@ import Person from "@mui/icons-material/Person";
 import UserInfo from "../user-info";
 import UserAnalytics from "../user-analytics";
 import DashboardHeader from "../../dashboard-header"; 
+import DeliveryAddress from "pages-sections/checkout/checkout-alt-form/delivery-address";
 // CUSTOM DATA MODEL
 
 
@@ -25,9 +26,11 @@ export default function ProfilePageView({
     }
       <UserAnalytics user={user} />
 
+        <DeliveryAddress/>
+
       {
       /* USER PROFILE INFO */
     }
-      <UserInfo user={user} />
+      {/* <UserInfo user={user} /> */}
     </Fragment>;
 }

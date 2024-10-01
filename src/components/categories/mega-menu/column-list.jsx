@@ -35,14 +35,14 @@ export default function ColumnList({
 
             <FlexBox py={1} gap={1.5} alignItems="center">
      {item.image ? <Image style={{borderRadius:'50%'}} src={item.image} width={40}  height={40} alt={item.name}/> : <Box width={40} height={40}></Box>}
-     <NavLink className="child-link" href={`/products/search${item.slug}`} key={ind}><Span fontWeight={600}>{item.name}</Span></NavLink>
+     <NavLink className="child-link" href={`/categories/search/${item.id}`} key={ind}><Span fontWeight={600}>{item.name}</Span></NavLink>
     </FlexBox>
                 {/* <div className="title-link">{item.name}</div> */}
 
                 {item.child?.map((sub, ind) =>
                 <FlexBox key={ind} py={1} gap={1.5} alignItems="center">
                 {sub.image ? <Image style={{borderRadius:'50%'}} src={sub.image} width={30}  height={30} alt={sub.name}/> : <Box width={30} height={30}></Box>}
-                <NavLink className="child-link" href={`/products/search${sub.slug}`} key={ind}>{sub.name}</NavLink>
+                <NavLink className="child-link" href={`/categories/search/${sub.id}`} key={ind}>{sub.name}</NavLink>
                </FlexBox>
                 )}
               </Grid>)}

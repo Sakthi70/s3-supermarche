@@ -20,13 +20,19 @@ import { StyledTableRow, CategoryWrapper, StyledTableCell, StyledIconButton } fr
 import { Box, Typography } from "@mui/material";
 import { NO_IMAGE } from "utils/constants";
 import ProductPrice from "components/product-cards/product-price";
+import ProductViewDialog from "components/products-view/product-view-dialog";
+import Link from "next/link";
+import Warning from "components/warning/warning";
+import { deleteProduct } from "actions/products";
+import useApp from "hooks/useApp";
 // ========================================================================
 
 
 // ========================================================================
 export default function ProductRow({
   product,
-  categories
+  categories,
+  onDeleteProduct
 }) {
   const {
     name,
@@ -41,11 +47,24 @@ export default function ProductRow({
     slug
   } = product || {};
   const router = useRouter();
+  const {loading}=useApp();
   const [productPublish, setProductPublish] = useState(published);
+  const [openDailog, setopenDailog] = useState(false);
+  const [openDelete, setopenDelete] = useState(false);
   const category = categories.find(x=> x.id === product.categoryId).name ?? ""
   
+  const onDelete =async() =>{
+    loading(true)
+    setopenDelete(false);
+        await onDeleteProduct(id);
+        loading(false)
+  }
+
   return <StyledTableRow tabIndex={-1} role="checkbox">
+     <ProductViewDialog  isPreview={true} openDialog={openDailog} handleCloseDialog={() => {setopenDailog(!openDailog)}} product={product}  />
+      <Warning open={openDelete} handleClose={() => setopenDelete(false)} content={'Are you sure to delete the product?'} submit="Confirm" ok={'Cancel'} title={'Delete Product'} onSubmit={onDelete} isSubmit={true}/>
       <StyledTableCell align="left">
+      <Link href={ `/products/${id}?isPreview=true`} >
         <FlexBox alignItems="center" gap={1.5}>
           <Avatar alt={name} src={images.length > 0 ? images[0]: NO_IMAGE} sx={{
           borderRadius: 2
@@ -56,6 +75,7 @@ export default function ProductRow({
             <Small color="grey.600">#{id.split("-")[0]}</Small>
           </div>
         </FlexBox>
+        </Link>
       </StyledTableCell>
 
       <StyledTableCell align="left">
@@ -83,11 +103,11 @@ export default function ProductRow({
           <Edit />
         </StyledIconButton>
 
-        <StyledIconButton>
+        <StyledIconButton onClick={() => setopenDailog(true)}>
           <RemoveRedEye />
         </StyledIconButton>
 
-        <StyledIconButton>
+        <StyledIconButton onClick={() => setopenDelete(true)}>
           <Delete />
         </StyledIconButton>
       </StyledTableCell>

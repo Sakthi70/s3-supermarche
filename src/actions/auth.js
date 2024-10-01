@@ -39,6 +39,8 @@ try{
   await createUser({
            email:formData.email,
            name: formData.name,
+           phone: formData.phone,
+           dob: formData.dob,
           hashedPassword: hash
       }
   );

@@ -18,11 +18,12 @@ import useMuiTable from "hooks/useMuiTable";
 import ProductRow from "../product-row";
 import SearchArea from "../../search-box";
 import PageWrapper from "../../page-wrapper"; 
-import { getProducts } from "actions/products";
+import { deleteProduct, getProducts } from "actions/products";
 import { calculateDiscountPercentage, t } from "utils/util";
 import useApp from "hooks/useApp";
 import ProductCard1 from "components/product-cards/product-card-1/product-card";
 import { Box, Grid2 } from "@mui/material";
+import { useRouter } from "next/navigation";
 // CUSTOM DATA MODEL
 
 
@@ -67,7 +68,7 @@ const tableHeading = [{
 export default function ProductsPageView() {
   const [productList, setProductList] = useState([]); 
   const { content } = useApp();
-
+  const router = useRouter();
 
   const { categories } = content || { categories: [] };
 
@@ -81,6 +82,12 @@ export default function ProductsPageView() {
   const getProductsList =async() => {
    await getProducts().then(({products}) => setProductList(products));
   } 
+
+  const onDeleteProduct=async(id)=>{
+    await deleteProduct(id).then(async() => {
+      await getProductsList();
+    }).catch(e => {});
+  }
 
   useEffect(() => {
     getProductsList();
@@ -121,7 +128,7 @@ export default function ProductsPageView() {
               <TableHeader order={order} hideSelectBtn orderBy={orderBy} heading={tableHeading} rowCount={productList.length} numSelected={selected.length} onRequestSort={handleRequestSort} />
 
               <TableBody>
-                {filteredProducts.map((product, index) => <ProductRow key={index} product={product} categories={categories} />)}
+                {filteredProducts.map((product, index) => <ProductRow key={index} product={product} categories={categories}  onDeleteProduct={onDeleteProduct}/>)}
               </TableBody>
             </Table>
           </TableContainer>
@@ -133,7 +140,7 @@ export default function ProductsPageView() {
       </Card> : <Grid2 container >
       {filteredProducts.map(item => 
       <Grid2 size={{lg:12, sm:6, md:4, lg:3}} width={1} p={2} key={item.id}>
-            <ProductCard1 isPreview={true} hideRating id={item.id} slug={item.slug} price={item.price} title={item.name} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.salePrice)} productData={item} />
+            <ProductCard1 toggleDelete={onDeleteProduct} toggleEdit={() => router.push(`/admin/products/${item.id}`)} isPreview={true} hideRating id={item.id} slug={item.slug} price={item.price} title={item.name} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.salePrice)} productData={item} />
           </Grid2>)}</Grid2>}
     </PageWrapper>;
 }

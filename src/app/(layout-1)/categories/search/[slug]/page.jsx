@@ -1,8 +1,8 @@
 
 // PAGE VIEW COMPONENT
-import { ProductSearchPageView } from "pages-sections/product-details/page-view";
+import { CategorySearchPageView } from "pages-sections/product-details/page-view";
 export const metadata = {
-  title: "Product Search - S3 Supermarche",
+  title: "Category Search - S3 Supermarche",
   description: `S3 Supermarche E-commerce is a friendly Online store`,
   authors: [{
     name: "RAJASEKAR",
@@ -10,8 +10,9 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
-export default function ProductSearch({
+export default  function CategorySearch({
   params
 }) {
-  return <ProductSearchPageView />;
+
+  return <CategorySearchPageView />;
 }

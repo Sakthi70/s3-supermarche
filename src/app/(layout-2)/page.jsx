@@ -13,7 +13,7 @@ export const metadata = {
 };
 
 
-export default async function GroceryTwo() {
+export default function GroceryTwo() {
 
   return <GroceryTwoPageView />;
 }

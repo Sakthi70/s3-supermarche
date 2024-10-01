@@ -59,6 +59,68 @@ export async function getRandomProducts(categoryIds) {
   return shuffledProducts;
 }
 
+export async function productsCategorySearch(categoryIds) {
+  const products = await prisma.product.findMany({
+    where: {
+      AND: [
+      {categoryId: {
+        in: categoryIds,
+      }
+    },
+    {
+      enabled : true
+    }
+    ]
+    },
+    include: {
+      category: {
+        select: {
+          name: true,
+          enabled: true
+        },
+      },
+    },
+  });
+
+  const filteredProducts = products.filter(product => product.category.enabled);
+
+  return filteredProducts;
+}
+
+
+
+export async function productsSearch(searchString) {
+  const products = await prisma.product.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: searchString,
+            mode: 'insensitive', 
+          },
+        },
+        {
+          tags: {
+            hasSome: searchString.split(' ')// Optional: case insensitive for tags
+          },
+        },
+      ],
+    },
+    include: {
+      category: {
+        select: {
+          name: true,
+          enabled: true
+        },
+      },
+    },
+  });
+
+  const filteredProducts = products.filter(product => product.category.enabled);
+
+  return filteredProducts;
+}
+
 export async function getProductById(productId) {
   try {
     const product = await prisma.product.findUnique({
@@ -78,4 +140,12 @@ export async function getProductById(productId) {
   } catch (error) {
     throw error;
   } 
+}
+
+export async function deleteProduct(id){
+  const deleteProduct = await prisma.product.delete({
+  where: {
+    id: id,
+  },
+    })
 }

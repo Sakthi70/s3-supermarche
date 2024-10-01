@@ -25,13 +25,14 @@ export default function CategoryList({
   return <StyledRoot open={open} position={position}>
       {categoryList && categoryList.map(item => {
       const {
+        id,
         slug,
         name,
         child,
         image,
       } = item;
       const MegaMenu =  MegaMenu1;
-      return <CategoryListItem key={name} href={`/products/search${slug}`} icon={image} title={name} caret={child.length >0} render={child.length >0 ? <MegaMenu data={child} banner={null} /> : null} />;
+      return <CategoryListItem key={name} href={`/categories/search/${id}`} icon={image} title={name} caret={child.length >0} render={child.length >0 ? <MegaMenu data={child} banner={null} /> : null} />;
     })}
     </StyledRoot>;
 }

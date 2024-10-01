@@ -27,19 +27,15 @@ import ProductsListView from "components/products-view/products-list-view";
 
 import productDatabase from "data/product-database";
 import { useParams } from "next/navigation";
-import { productsSearch } from "actions/products";
+import {  buildTreebyId, getAllCategoriesByOption, getMinMaxPrice } from "utils/util";
 import useApp from "hooks/useApp";
-import { buildTreebyId, formatCount, getMinMaxPrice } from "utils/util";
+import { productsCategorySearch } from "actions/products";
 // TYPE
 
 const SORT_OPTIONS = [
   {
     label: "Relevance",
     value: "relevance",
-  },
-  {
-    label: "Date",
-    value: "date",
   },
   {
     label: "Price Low to High",
@@ -51,38 +47,33 @@ const SORT_OPTIONS = [
   },
 ];
 const initialFilters = {
+  sales: [],
   price: [0, 0],
 };
-export default  function ProductSearchPageView() {
+export default function CategorySearchPageView() {
   const {slug} =useParams();
   const {content }= useApp();
   const {categories}= content || {categories:[]};
   const [view, setView] = useState("grid");
   const [sortBy, setSortBy] = useState("relevance");
   const [filters, setFilters] = useState({ ...initialFilters });
-  // const featuredProducts = await api.getFeaturedProducts();
-  // const bestHomeProducts = await api.getBestHomeProducts();
   const [productData, setproductData] = useState([]);
   const [categoryList, setcategoryList] = useState([])
-  const downMd = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  // const featuredProducts = await api.getFeaturedProducts();
+  // const bestHomeProducts = await api.getBestHomeProducts();
 
-  function decodeUrl(encodedStr) {
-    try {
-      return decodeURIComponent(encodedStr);
-    } catch (e) {
-      console.error("Invalid encoded URI:", e);
-      return null; // Return null or handle the error as needed
-    }
-  }
+ 
+  
 
   useEffect(() => {
     if(slug){
-        getproductsBySearch();
+        getproductsByCategory();
     }
   }, [slug])
 
-  const getproductsBySearch =async()=>{
-            let prods = await productsSearch(slug.map(x => decodeUrl(x)).join(' '));
+  const getproductsByCategory =async()=>{
+;          let categor = getAllCategoriesByOption(categories ?? [], slug);
+            let prods = await productsCategorySearch(categor);
             let filterCategory = prods.map(x => x.categoryId).reduce((acc, value) => {
               if (!acc.includes(value)) {
                 acc.push(value);
@@ -95,6 +86,15 @@ export default  function ProductSearchPageView() {
 
             setproductData(prods.map((x,i) => {return {...x,relevance:i}}));
   }
+
+
+
+
+  
+  
+  
+
+  const downMd = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const handleChangeFilters = (key, values) => {
     setFilters((prev) => ({ ...prev, [key]: values }));
@@ -112,22 +112,24 @@ export default  function ProductSearchPageView() {
       return (a.salePrice || a.price ) - (b.salePrice || b.price );
   });
 
+  
+
   const {min,max} =  getMinMaxPrice(productData);
 
   useEffect(() => {
     handleChangeFilters('price',[min,max])
   }, [min,max])
-
+  // const PRODUCTS = [...(bestHomeProducts ?? []),...(featuredProducts??[])];
   return (
     <div className="bg-white pt-2 pb-4">
       <Container>
         {/* FILTER ACTION AREA */}
         <FlexBetween flexWrap="wrap" gap={2} mb={2}>
           <div>
-            <H5 lineHeight={1} mb={1}>
-              {`Searching for ${slug.map(x => decodeUrl(x)).join(' ')}`}
+            {/* <H5 lineHeight={1} mb={1}>
+              Searching for “ tomato ”
             </H5>
-            <Paragraph color="grey.600">{`${formatCount(productData.length)} results found`}</Paragraph>
+            <Paragraph color="grey.600">48 results found</Paragraph> */}
           </div>
 
           <FlexBox alignItems="center" columnGap={4} flexWrap="wrap">
@@ -186,7 +188,7 @@ export default  function ProductSearchPageView() {
                   )}
                 >
                   <Box px={3} py={2}>
-                  <ProductFilterCard
+                    <ProductFilterCard
                     min={min}
                     max={max}
                       filters={filters}
@@ -214,12 +216,12 @@ export default  function ProductSearchPageView() {
             }}
           >
             <ProductFilterCard
-                    min={min}
-                    max={max}
-                      filters={filters}
-                      changeFilters={handleChangeFilters}
-                      categoryList={categoryList}
-                    />
+              filters={filters}
+              changeFilters={handleChangeFilters}
+              categoryList={categoryList}
+              min={min}
+              max={max}
+            />
           </Grid>
 
           {/* PRODUCT VIEW AREA */}

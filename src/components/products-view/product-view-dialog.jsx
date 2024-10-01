@@ -106,7 +106,7 @@ export default function ProductViewDialog(props) {
                 {`CATEGORY: ${product.category ? product.category.name :''}`}
               </Paragraph>
 
-<ProductPrice discount={product.offerPrice} price={product.price} isHigh={true} />
+<ProductPrice discount={product.salePrice} price={product.price} isHigh={true} />
 
               {/* <FlexBox alignItems="center" gap={1} mt={1}>
                 <Rating color="warn" value={4} readOnly />

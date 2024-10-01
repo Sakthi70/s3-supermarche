@@ -29,11 +29,17 @@ export default function CheckoutSummary() {
         {currency(2610)}
       </Paragraph>
 
-      <Stack spacing={2} mt={3}>
+      {/* <Stack spacing={2} mt={3}>
         <TextField placeholder="Voucher" variant="outlined" size="small" fullWidth />
         <Button variant="outlined" color="primary" fullWidth>
           Apply Voucher
         </Button>
       </Stack>
+      <Divider sx={{
+      my: 2
+    }} /> */}
+     <Button variant="contained" color="primary" fullWidth>
+          Checkout Now
+        </Button>
     </Card>;
 }

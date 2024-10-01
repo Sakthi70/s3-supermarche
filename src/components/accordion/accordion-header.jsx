@@ -13,10 +13,11 @@ export default function AccordionHeader(props) {
     open,
     children,
     showIcon = true,
+    onClick,
     ...others
   } = props;
   return <RootContainer open={open} {...others}>
       {children}
-      {showIcon ? <ChevronRight className="caret" fontSize="small" /> : null}
+      {showIcon ? <ChevronRight className="caret" fontSize="small" onClick={onClick} /> : null}
     </RootContainer>;
 }

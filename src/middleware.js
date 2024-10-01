@@ -1,7 +1,7 @@
 
 import { auth } from 'auth';
 import { NextResponse } from 'next/server';
-const protectedRoutes = ["/vendor", "/admin",'/cart'];
+const protectedRoutes = ["/vendor", "/admin",'/cart','/profile'];
 const adminprotectedRoutes = ["/vendor", "/admin"];
 const unProtectedRoutes = ["/register", "/login","/reset-password"];
 

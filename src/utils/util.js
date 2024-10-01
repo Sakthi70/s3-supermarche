@@ -137,3 +137,42 @@ export function generateOTP(length = 6) {
   const max = Math.pow(10, length) - 1;
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+export function buildTreebyId(items, filterIds) {
+  const itemMap = {};
+  const tree = [];
+
+  items.forEach(item => {
+    if (filterIds.includes(item.id) && item.enabled) {
+      itemMap[item.id] = { ...item, child: [] };
+    }
+  });
+
+  for (const item of Object.values(itemMap)) {
+    if (item.parentId && itemMap[item.parentId]) {
+      itemMap[item.parentId].child.push(item);
+    } else {
+      tree.push(item);
+    }
+  }
+
+  return tree;
+
+}
+
+export const getMinMaxPrice = (products) => {
+  if (products.length === 0) return { min: 0, max: 0 };
+
+  const prices = products.map(product => product.salePrice || product.price);
+  
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  
+  return { min: minPrice, max: maxPrice };
+};
+
+export const formatCount = (count) => {
+  if (count < 1000) return count.toString();
+  if (count < 1_000_000) return (count / 1000).toFixed(0) + 'k';
+  return (count / 1_000_000).toFixed(0) + 'm';
+};

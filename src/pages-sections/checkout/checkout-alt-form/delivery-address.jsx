@@ -13,13 +13,16 @@ import NewAddressForm from "./new-address-form";
 import EditAddressForm from "./edit-address-form"; 
 // GLOBAL CUSTOM COMPONENTS
 
-import { H6, Paragraph } from "components/Typography";
+import { H2, H6, Paragraph } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
+import Place from "@mui/icons-material/Place";
 
 
 // ==============================================================
 const DeliveryAddress = ({
   values,
+  selected= false,
+  isSelection=false,
   handleFieldValueChange
 }) => {
   const [addressList, setAddressList] = useState([...DUMMY_ADDRESS_LIST]);
@@ -48,13 +51,19 @@ const DeliveryAddress = ({
 
   return <Card sx={{
     p: 3,
-    mb: 3
+    my: 3
   }}>
       {
       /* HEADING & BUTTON SECTION */
     }
       <FlexBetween mb={4}>
-        <Heading number={2} title="Delivery Address" mb={0} />
+        {/* <Heading number={2} title="Delivery Address" mb={0} /> */}
+        <FlexBox alignItems="center" gap={1.5}>
+          <Place color="primary" />
+          <H2 my={0} lineHeight={1} ellipsis>
+            {'My Addresses'}
+          </H2>
+        </FlexBox>
         <NewAddressForm handleAddNewAddress={handleAddNewAddress} />
       </FlexBetween>
 
@@ -63,14 +72,14 @@ const DeliveryAddress = ({
     }
       <Grid container spacing={3}>
         {addressList.map((item, ind) => <Grid item md={4} sm={6} xs={12} key={ind}>
-            <Card onClick={() => handleFieldValueChange(item.street1, "address")} sx={{
+            <Card onClick={isSelection ? () => handleFieldValueChange(item.street1, "address"): null} sx={{
           padding: 2,
           boxShadow: "none",
-          cursor: "pointer",
+          cursor: isSelection ? "pointer":"default",
           border: "1px solid",
           position: "relative",
           backgroundColor: "grey.100",
-          borderColor: item.street1 === values.address ? "primary.main" : "transparent"
+          borderColor:  selected ? "primary.main" :  "grey.400"
         }}>
               <FlexBox position="absolute" top={5} right={5}>
                 <IconButton size="small" onClick={() => setEditAddressId(item.id)}>

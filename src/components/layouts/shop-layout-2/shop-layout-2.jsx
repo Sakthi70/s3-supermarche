@@ -37,7 +37,6 @@ export default function ShopLayout2({
     mobileNavigation
   } = data;
   const{data:session ,status}= useSession();
-  console.log(session)
   const [isFixed, setIsFixed] = useState(false);
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
   const {dialogOpen,sidenavOpen, toggleDialog, toggleSidenav } = useHeader();

@@ -69,12 +69,12 @@ export default function PageStepper({
     }
   }, [pathname]);
   return <Container className="mt-2 mb-2">
-      <Box mb={3} display={{
+      {/* <Box mb={3} display={{
       sm: "block",
       xs: "none"
     }}>
         <Stepper stepperList={STEPPER_LIST} selectedStep={selectedStep} onChange={handleStepChange} />
-      </Box>
+      </Box> */}
 
       {children}
     </Container>;
