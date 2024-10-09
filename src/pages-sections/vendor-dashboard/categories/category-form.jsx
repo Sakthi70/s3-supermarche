@@ -36,6 +36,7 @@ import {
   Typography,
 } from "@mui/material";
 import { t } from "utils/util";
+import _ from "lodash";
 // FORM FIELDS VALIDATION
 
 const VALIDATION_SCHEMA = yup.object().shape({
@@ -130,11 +131,11 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
           await deleteUpload(category.image, "Category");
           data.image = "";
         }
-        if (files.length > 0) {
-          result = await imageUpload(files[0], "Category");
-          data.image = result;
+        if (files.length > 0 && _.isObject(files[0])) {
+          data.image = await imageUpload(files[0], "Category");
+        }else if(files.length > 0){
+          data.image = (files[0] ?? "").trim();
         }
-
         await updateCategory(data, category.id).then(async(value) => {
           await catCrud.updateCategory(value);
           router.replace(slugId ?  `/admin/categories/view/${slugId}` : "/admin/categories")
@@ -144,7 +145,6 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
       let pId = null;
       if (values.parent !== "") {
         parentId = categories.find((x) => x.slug === values.parent).id;
-        console.log(parentId)
         pId = parentId;
         if (
           categories
@@ -172,8 +172,10 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
       }
       if (!isError) {
         let result = "";
-        if (files.length > 0) {
+        if (files.length > 0 && _.isObject(files[0])) {
           result = await imageUpload(files[0], "Category");
+        }else if(files.length > 0){
+          result = (files[0] ?? "").trim();
         }
         const { parent, ...data } = values;
         await createCategory(
@@ -310,7 +312,11 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
                 <Grid item xs={12}>
                   {files.length < 1 && (
                     <DropZone
+                      isBoth={true}
+                      urlTitle="Category Image"
                       multiple={false}
+                      urlValues={files.filter(x => !_.isObject(x))}
+                      setFieldValue={(name,val) => {if(val){ setFiles([...files, val])}}}
                       title={t("Drop & drag category image")}
                       onChange={(files) => handleChangeDropZone(files)}
                     />
@@ -322,7 +328,7 @@ export default function CategoryForm({ isEdit, category = {}, slug,slugId }) {
                           <Box
                             component="img"
                             alt={t("Category")}
-                            src={file.preview}
+                            src={!_.isObject(file) ? file : file.preview}
                             width="100%"
                           />
                           <StyledClear onClick={handleFileDelete(file)} />

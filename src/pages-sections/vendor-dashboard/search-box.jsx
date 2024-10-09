@@ -16,19 +16,14 @@ export default function SearchArea({
   buttonText = "Add Product",
   url = "/",
   handleSearch =() => {},
-  handleBulk =() => {},
-  isBulk=false,
-  bulkText =""
+  isAdditional=false,
+  comps,
 }) {
   const downSM = useMediaQuery(theme => theme.breakpoints.down("sm"));
   return <FlexBox mb={2} gap={2} justifyContent="space-between" flexWrap="wrap">
       <SearchInput placeholder={searchPlaceholder} onChange={handleSearch}/>
       <Box display={'flex'} justifyContent={'end'} gap={2}>
-{isBulk && <Button  color="info" fullWidth={downSM} variant="outlined" onClick={handleBulk} startIcon={<Add />}  sx={{
-      minHeight: 44
-    }}>
-        {bulkText}
-      </Button>}
+      {isAdditional && comps()}
       <Button href={url} color="info" fullWidth={downSM} variant="contained" startIcon={<Add />} LinkComponent={Link} sx={{
       minHeight: 44
     }}>

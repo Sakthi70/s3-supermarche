@@ -22,6 +22,7 @@ import { deleteUpload } from "utils/cloudinary";
 import useApp from "hooks/useApp";
 import { Chip } from "@mui/material";
 import { stringAvatar } from "utils/util";
+import { NO_IMAGE } from "utils/constants";
 // ========================================================================
 
 // ========================================================================
@@ -62,7 +63,7 @@ export default function CategoryRow({ category,  selected,slugId }) {
       <StyledTableCell align="left">
         {image && 
         <Avatar
-alt={name} src={image} sx={ {borderRadius: 2}}
+alt={name} src={(image && image !== '')  ? image: NO_IMAGE} sx={ {borderRadius: 2}}
         />}
       </StyledTableCell>
       <StyledTableCell align="left">{slug}</StyledTableCell>

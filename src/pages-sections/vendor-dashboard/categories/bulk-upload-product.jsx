@@ -6,8 +6,8 @@ import React, { useState } from 'react'
 import Papa from 'papaparse';
 
 
-const BulkUploadCategory = ({open = true, handleClose, uploadCategory}) => {
-  const [categories, setCategories] = useState([])
+const BulkUploadProduct = ({open = true, handleClose, uploadProduct}) => {
+  const [products, setProducts] = useState([])
     const handleChangeDropZone = async(files) => {
         if (files) {
           Papa.parse(files[0], {
@@ -15,7 +15,7 @@ const BulkUploadCategory = ({open = true, handleClose, uploadCategory}) => {
             header: true,
             complete: async function(results) {
                 let arr = results.data
-                setCategories(arr);
+                setProducts(arr.filter(y => !Object.values(y).every(x => x === null || x === '')));
             }}
           )
         }
@@ -25,12 +25,12 @@ const BulkUploadCategory = ({open = true, handleClose, uploadCategory}) => {
         open={open}
       >
         <Typography variant='h6' color="primary.main" p={1} textAlign={'center'} fontWeight={700}  >
-                  {'Bulk Upload Category'}
+                  {'Bulk Upload Product'}
                 </Typography>
         <Divider/>
         <DialogContent>
-       {categories.length < 1 ?  <DropZone
-                title="Drag & drop Category File here"
+       {products.length < 1 ?  <DropZone
+                title="Drag & drop Product File here"
                   multiple={false}
                   accept={{
                     'text/csv': [".csv"]
@@ -39,15 +39,15 @@ const BulkUploadCategory = ({open = true, handleClose, uploadCategory}) => {
                   imageSize='CSV ONLY'
                 /> :
                 <Typography variant='subtitle2' color="primary.info" p={1} textAlign={'center'} fontWeight={700}  >
-                  {categories.length + ' categories available to upload'}
+                  {products.length + ' Products available to upload'}
                 </Typography>
                 }
 
                
         </DialogContent>
         <DialogActions sx={{alignItems:'center', justifyContent:'center', textAlign:'center'}}>
-          <Button onClick={() => {setCategories([]); handleClose();}} color="primary" >{'Cancel'}</Button>
-          <Button variant="contained" disabled={categories.length < 1} color="primary" size='small' onClick={() =>{ uploadCategory(categories);setCategories([])}}>
+          <Button onClick={() => {setProducts([]); handleClose();}} color="primary" >{'Cancel'}</Button>
+          <Button variant="contained" disabled={products.length < 1} color="primary" size='small' onClick={() =>{ uploadProduct(products);setProducts([])}}>
             {'Submit'}
           </Button>
         </DialogActions>
@@ -55,4 +55,4 @@ const BulkUploadCategory = ({open = true, handleClose, uploadCategory}) => {
   )
 }
 
-export default BulkUploadCategory
+export default BulkUploadProduct

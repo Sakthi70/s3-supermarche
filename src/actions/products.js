@@ -19,6 +19,12 @@ export async function createProduct(product){
   return {products}
 }
 
+export const createMultipleProducts = async(value) => {
+  let products = await prisma.product.createMany({
+    data: value,
+  });
+  return products
+}
 
 export async function updateProductById(product, id){
   const productData = await prisma.product.update({

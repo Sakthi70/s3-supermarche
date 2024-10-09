@@ -17,8 +17,19 @@ module.exports = {
     CLOUD_NAME: process.env.CLOUD_NAME },
   publicRuntimeConfig: { theme: "DEFAULT", currency: "EUR" },
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "ui-lib.com" }],
-    domains: ['res.cloudinary.com'],
+      domains: [
+       'res.cloudinary.com'
+      ],
+      remotePatterns: [
+        {
+          protocol: "http",
+          hostname: "**",
+        },
+        {
+          protocol: "https",
+          hostname: "**",
+        },
+      ],
   },
   webpack: (config) => {
     config.resolve.alias.canvas = false;

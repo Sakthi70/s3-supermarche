@@ -77,6 +77,7 @@ const PRODUCT_VALUE =  {
   category: "",
   brandName: "",
   brandImage: null,
+  limit:null,
   images: [],
   shortDescription:"",
   salePrice: "",
@@ -113,25 +114,26 @@ export default function ProductForm({ isEdit = false, product }) {
         price: values.price,
         salePrice: values.salePrice === "" ? null : values.salePrice,
         stock: values.stock,
+        limit:values.limit === "" ? null:  values.limit,
         type: values.type,
         value: values.value,
         shortDescription: values.shortDescription
       }
 
+      let result = [...values.images.filter(x=> !_.isObject(x))];
       if(values.images.filter(x=> _.isObject(x)).length > 0){
-        
-        let result = [...values.images.filter(x=> !_.isObject(x))];
-        for(let i= 0; i<values.images.filter(x=> _.isObject(x)).length; i++){
-          let image =  await imageUpload(values.images[i], 'Product');
+        let objImages = values.images.filter(x=> _.isObject(x));
+        for(let i= 0; i<objImages.length; i++){
+          let image =  await imageUpload(objImages[i], 'Product');
           result.push(image);
         }
-        data.images= result;
-    }
+      }
+      data.images= result;
     if(values.isBrand && _.isObject(values.brandImage)){
         let image =  await imageUpload(values.brandImage, 'Brand');
       data.brandImage= image;
     }else{
-      data.brandImage = null;
+      data.brandImage = (values.brandImage && values.brandImage.trim() === '') ?  null : values.brandImage;
     }
     await updateProductById(data,product.id).then(values => {
       router.push('/admin/products'); 
@@ -148,6 +150,7 @@ export default function ProductForm({ isEdit = false, product }) {
       brandName: values.isBrand ? values.brandName : '',
       price: values.price,
       salePrice: values.salePrice === "" ? null : values.salePrice,
+      limit:values.limit === "" ? null : values.limit,
       stock: values.stock,
       type: values.type,
       value: values.value,
@@ -157,8 +160,14 @@ export default function ProductForm({ isEdit = false, product }) {
         
         let result = [];
         for(let i= 0; i<values.images.length; i++){
-          let image =  await imageUpload(values.images[i], 'Product');
-          result.push(image);
+          if(_.isObject(values.images[i])){
+            let image =  await imageUpload(values.images[i], 'Product');
+            result.push(image);
+          }else{
+            if(values.images[i] && values.images[i].trim() !== ''){
+              result.push(values.images[i]);
+            }
+          }
         }
         data.images= result;
     }
@@ -166,7 +175,7 @@ export default function ProductForm({ isEdit = false, product }) {
         let image =  await imageUpload(values.brandImage, 'Brand');
       data.brandImage= image;
     }else{
-      data.brandImage= null;
+      data.brandImage = (values.brandImage && values.brandImage.trim() === '') ?  null : values.brandImage;
     }
     await createProduct( data).then(values => {
       router.push('/admin/products'); 
@@ -205,8 +214,12 @@ export default function ProductForm({ isEdit = false, product }) {
           };
           // HANDLE DELETE UPLOAD IMAGE
         
-          const handleFileDelete = (file,name)  => {
-            setFieldValue(name, values[name].filter((item) => item.name !== file.name))
+          const handleFileDelete = (file,name,index)  => {
+            setFieldValue(name, values[name].filter((item, ind) => ind !== index))
+          };
+
+          const handleFileDelete1 = (file,name)  => {
+            setFieldValue(name, null);
           };
 
           const typeChange = (event) => {
@@ -281,6 +294,12 @@ export default function ProductForm({ isEdit = false, product }) {
               <Grid item xs={12} sm={values.isBrand ? 6: 12}>
                 <DropZone
                   multiple={true}
+                  isBoth={true}
+                  name={'images'}
+                  urlTitle="Product Images"
+                  urlValues={values.images.filter(x => !_.isObject(x))}
+                      setFieldValue={(name,val) => {if(val){ setFieldValue(name,[...values.images, val])}}}
+
                   onChange={(files) => handleChangeDropZone(files, 'images')}
                 />
 
@@ -289,7 +308,7 @@ export default function ProductForm({ isEdit = false, product }) {
                     return (
                       <UploadImageBox key={index}>
                         <Box component="img" src={ _.isObject(file) ? file.preview: file} width="100%" />
-                        <StyledClear onClick={() => handleFileDelete(file,'images')} />
+                        <StyledClear onClick={() => handleFileDelete(file,'images',index)} />
                       </UploadImageBox>
                     );
                   })}
@@ -308,7 +327,12 @@ export default function ProductForm({ isEdit = false, product }) {
                   onBlur={handleBlur}
                   onChange={handleChange}
                 />
-                {(!values.brandImage || !_.isObject(values.brandImage)) && <DropZone
+                {( values.brandImage === null && !_.isObject(values.brandImage)) && <DropZone
+                  isBoth={true}
+                  name={'brandImage'}
+                  urlTitle="Brand Images"
+                  urlValues={_.isObject(values.brandImage) ? "" : values.brandImage}
+                      setFieldValue={setFieldValue}
                 title={t("Drag & drop brand image here")}
                   multiple={false}
                   onChange={(files) => handleChangeDropZone(files, 'brandImage', false)}
@@ -318,7 +342,7 @@ export default function ProductForm({ isEdit = false, product }) {
                   {values.brandImage && values.brandImage &&
                       <UploadImageBox >
                         <Box component="img" src={_.isObject(values.brandImage) ? values.brandImage.preview: values.brandImage} width="100%" />
-                        <StyledClear onClick={() => handleFileDelete(values.brandImage,'brandImage')} />
+                        <StyledClear onClick={() => handleFileDelete1(values.brandImage,'brandImage')} />
                       </UploadImageBox>
                   }
                 </FlexBox>
@@ -357,6 +381,7 @@ export default function ProductForm({ isEdit = false, product }) {
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
+                <Box display={'flex'} gap={2}>
                 <TextField
                   fullWidth
                   name="stock"
@@ -371,6 +396,22 @@ export default function ProductForm({ isEdit = false, product }) {
                   helperText={touched.stock && errors.stock}
                   error={Boolean(touched.stock && errors.stock)}
                 />
+                <TextField
+                  fullWidth
+                  name="limit"
+                  type="number"
+                  color="info"
+                  size="medium"
+                  label={t("Limit")}
+                  placeholder={t("Limit")}
+                  onBlur={handleBlur}
+                  value={values.limit}
+                  onChange={handleChange}
+                  helperText={touched.limit && errors.limit}
+                  error={Boolean(touched.limit && errors.limit)}
+                />
+                </Box>
+               
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField

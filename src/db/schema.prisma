@@ -133,6 +133,7 @@ model Product {
   price          Float
   salePrice     Float?
   stock          Int
+  limit          Int?
   isBrand         Boolean          @default(false)
   type            String
   value           String

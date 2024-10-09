@@ -1,4 +1,4 @@
-import { useCallback } from "react"; 
+import { useCallback, useState } from "react"; 
 // MUI
 
 import Box from "@mui/material/Box";
@@ -11,6 +11,9 @@ import { useDropzone } from "react-dropzone";
 
 import { H5, Small } from "./Typography"; 
 import { t } from "utils/util";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Image, Link } from "@mui/icons-material";
+import MultiField from "./utils/MultiField";
 // ========================================================
 
 
@@ -19,12 +22,18 @@ export default function DropZone({
   onChange,
   imageSize = t("Upload 280*280 image"),
   title = t("Drag & drop product image here"),
+  urlTitle='',
+  urlValues,
+  name='',
+  setFieldValue,
+  isBoth = false,
   multiple = false,
   accept = {
     "image/*": [".png", ".gif", ".jpeg", ".jpg"]
   }
 }) {
   const onDrop = useCallback(acceptedFiles => onChange(acceptedFiles), [onChange]);
+  const [uploadType, setuploadType] = useState('image');
   const {
     getRootProps,
     getInputProps,
@@ -35,7 +44,24 @@ export default function DropZone({
     multiple: multiple,
     accept: accept
   });
-  return <Box py={4} px={{
+  return <Box>
+   {isBoth && <Box sx={{display:'flex',justifyContent:'end',pb:1}}>
+  <ToggleButtonGroup
+  color="primary"
+  value={uploadType}
+  exclusive
+  onChange={(e,val) =>{setuploadType(val)}}
+>
+
+<ToggleButton value="image" >
+    <Image />
+  </ToggleButton>
+  <ToggleButton value="url" >
+    <Link />
+    </ToggleButton>
+</ToggleButtonGroup>
+</Box>}
+  {uploadType === 'image' ? <Box py={4} px={{
     md: 10,
     xs: 4
   }} display="flex" minHeight="200px" textAlign="center" alignItems="center" borderRadius="10px" border="1.5px dashed" flexDirection="column" borderColor="grey.300" justifyContent="center" bgcolor={isDragActive ? "grey.200" : "grey.100"} sx={{
@@ -67,5 +93,9 @@ export default function DropZone({
       </Button>
 
       <Small color="grey.600">{imageSize}</Small>
+    </Box> : <MultiField multiple={false}  label={urlTitle}  name={name}
+                values={urlValues}
+                setFieldValue={setFieldValue}
+                color="info"/>}
     </Box>;
 }

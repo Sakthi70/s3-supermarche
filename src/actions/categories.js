@@ -21,6 +21,13 @@ export const createCategory = async(value, file) => {
     return category
 }
 
+export const createMultipleCategory = async(value) => {
+  let category = await prisma.category.createMany({
+    data: value,
+  });
+  return category
+}
+
 export const updateCategory = async(value, id) => {
   let category = await prisma.category.update({
     where: {

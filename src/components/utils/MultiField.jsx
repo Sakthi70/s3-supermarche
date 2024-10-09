@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from '@mui/material';
 import React from 'react'
 
-const MultiField = ({setFieldValue, name, label,values, color='info'}) => {
+const MultiField = ({setFieldValue, name, label,values, color='info',multiple=true}) => {
     const filter = (searchText, key) => {
         return key.toLowerCase().includes(searchText.toLowerCase());
       };
@@ -9,14 +9,17 @@ const MultiField = ({setFieldValue, name, label,values, color='info'}) => {
     
   return (
     <Autocomplete
-                      multiple
+                      multiple={multiple}
                       freeSolo
                       isOptionEqualToValue={filter}
                       options={[]}
+                      getOptionLabel={() => ""}
                       ChipProps={{color:color}}
                       value={values}
                       onChange={(e, newval, reason) => {
-                        setFieldValue(name, newval);
+                        if(newval){
+                          setFieldValue(name, newval);
+                        }
                       }}
                       renderInput={(params) => (
                         <TextField

@@ -27,6 +27,7 @@ import { Paragraph } from "components/Typography";
 import { FlexBox } from "components/flex-box";
 import HoverActions from "components/product-cards/product-card-1/components/hover-actions";
 import { ImageWrapper, StyledBazaarCard,ContentWrapper } from "components/product-cards/product-card-1/styles";
+import { NO_IMAGE } from "utils/constants";
 // ========================================================================
 
 // ========================================================================
@@ -60,7 +61,7 @@ export default function CategoryGrid({ category,  selected,slugId }) {
   return (
     <StyledBazaarCard hoverEffect={{}}>
     <ImageWrapper>
-      <Image src={image} alt={category.name} width={100} height={100} sx={{height:230, width:'100%', objectFit: 'contain'}} />
+      <Image src={(image && image !== '')  ? image: NO_IMAGE} alt={category.name} width={100} height={100} sx={{height:230, width:'100%', objectFit: 'contain'}} />
       <HoverActions isEdit={true} isToggleView={true} isDelete={(_count.categories < 1 && _count.products < 1 )}  toggleView={() => router.push(`/admin/categories/view/${id}`)} toggleEdit={handleNavigate} toggleDelete={onDelete} />
       </ImageWrapper>
       <ContentWrapper>
