@@ -23,10 +23,12 @@ export default function CreateCategoryPageView() {
          parent= categories.find(x => x.id === category.parentId).slug
       }
       setSelectedCategory({...category, parent})
+    }else{
+      setSelectedCategory({})
     }
   }, [categories])
   return <PageWrapper title={t("Create Category")}>
-    {selectedCategory ?
-      <CategoryForm  isEdit={false} slug={selectedCategory.slug}  slugId={selectedCategory.id}/> : <Box height={500} display={'flex'} alignItems={'center'} justifyContent={'center'}><CircularProgress /></Box>}
+    {selectedCategory !== null ?
+      <CategoryForm  isEdit={false} slug={selectedCategory?.slug}  slugId={selectedCategory?.id}/> : <Box height={500} display={'flex'} alignItems={'center'} justifyContent={'center'}><CircularProgress /></Box>}
     </PageWrapper>;
 }

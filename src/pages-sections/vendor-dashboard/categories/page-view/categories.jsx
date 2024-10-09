@@ -100,7 +100,7 @@ const CategoriesPageView = ({}) => {
 
   const uploadMultipleProducts = async (arr) => {
     let genProducts = arr.map((x) => {
-      let isBrand = !x.isBrand || x.isBrand == "" ? false : x.isBrand;
+      let isBrand = !x.isBrand || x.isBrand == "" ? false : x.isBrand === 'true';
       return {
         ...x,
         isBrand: isBrand,
