@@ -26,7 +26,7 @@ import Warning from "components/warning/warning";
 import { updateUserPassword } from "actions/user";
 import { useRouter } from "next/navigation";
 
-const ResetPassword = () => {
+const ResetPassword = ({isEdit= false,email,executeCallBack}) => {
 
   const [otp, setotp] = useState("");
   const [error, seterror] = useState("");
@@ -69,13 +69,13 @@ const ResetPassword = () => {
     setFieldValue,
     handleSubmit
   } = useFormik({
-    initialValues,
+    initialValues : isEdit ? {...initialValues,isverified:true,email:email}: initialValues ,
     validationSchema,
     onSubmit: async(values) => {
       if(values.isverified){
         loading(true);
         await updateUserPassword(values).then(() => {
-          router.replace('/login')
+          isEdit ? executeCallBack(): router.replace('/login')
         }).finally(() => loading(false))
       }else{
         loading(true);
@@ -142,10 +142,10 @@ const ResetPassword = () => {
       {
       /* BOTTOM LINK AREA */
     }
-      <FlexRowCenter mt={3} justifyContent="center" gap={1}>
+     {!isEdit && <FlexRowCenter mt={3} justifyContent="center" gap={1}>
         Don&apos;t have an account?
         <BoxLink title="Register" href="/register" />
-      </FlexRowCenter>
+      </FlexRowCenter>}
       
     </Fragment>;
 };

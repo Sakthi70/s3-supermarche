@@ -78,12 +78,12 @@ const RegisterPageView = () => {
     agreement: yup.bool(),
     dob: yup
       .date()
-      .required()
-      .test("age", "You must be 18 or older", function (dob) {
-        const cutoff = new Date();
-        cutoff.setFullYear(cutoff.getFullYear() - 18);
-        return dob <= cutoff;
-      }),
+      .required("Birth date is required")
+      // .test("age", "You must be 18 or older", function (dob) {
+      //   const cutoff = new Date();
+      //   cutoff.setFullYear(cutoff.getFullYear() - 18);
+      //   return dob <= cutoff;
+      // }),
     // .test("agreement", "You have to agree with our Terms and Conditions!", value => value === true)
     // .required("You have to agree with our Terms and Conditions!")
   });

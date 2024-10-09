@@ -9,6 +9,17 @@ export const finduserByEmail =async(email) => {
       });
 }
 
+export const finduserById =async(userId) => {
+   let user =  await prisma.user.findUnique({
+    
+    where: {
+      id: userId,
+    },
+    });
+    const {hashedPassword, ...userDetails} = user;
+    return userDetails
+}
+
 export const createUser = async(data)=> {
     await prisma.user.create({
         data: data
@@ -30,4 +41,17 @@ export const updateUserPassword = async(data)=> {
         console.error('Error updating user:', error);
         throw new Error('Could not update user');
       } 
+}
+
+export const updateUserDetail = async(data,id)=> {
+  try {
+      const updatedUser = await prisma.user.update({
+        where: { id },
+        data: data
+      });
+      return updatedUser;
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new Error('Could not update user');
+    } 
 }

@@ -29,6 +29,8 @@ export default function CreateCategoryPageView() {
   }, [categories])
   return <PageWrapper title={t("Create Category")}>
     {selectedCategory !== null ?
-      <CategoryForm  isEdit={false} slug={selectedCategory?.slug}  slugId={selectedCategory?.id}/> : <Box height={500} display={'flex'} alignItems={'center'} justifyContent={'center'}><CircularProgress /></Box>}
+      <CategoryForm  isEdit={false} slug={selectedCategory?.slug}  slugId={selectedCategory?.id}/> : <PageLoader/>}
     </PageWrapper>;
 }
+
+export const PageLoader = () => <Box height={500} display={'flex'} alignItems={'center'} justifyContent={'center'}><CircularProgress /></Box>;

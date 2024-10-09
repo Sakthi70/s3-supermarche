@@ -43,6 +43,8 @@ export default function DashboardHeader({
   title,
   buttonText,
   href,
+  custom = false,
+  customComp,
   Icon
 }) {
   const isTablet = useMediaQuery(theme => theme.breakpoints.down(1025));
@@ -70,9 +72,9 @@ export default function DashboardHeader({
           </SideNav>
         </div>
 
-        {!isTablet && buttonText ? HEADER_LINK : null}
+        {!isTablet && buttonText ? custom? customComp(): HEADER_LINK : null}
       </FlexBox>
 
-      {isTablet && buttonText ? <Box mt={2}>{HEADER_LINK}</Box> : null}
+      {isTablet && buttonText ? <Box mt={2}>{custom? customComp(): HEADER_LINK}</Box> : null}
     </StyledBox>;
 }

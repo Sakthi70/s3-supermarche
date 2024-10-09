@@ -5,9 +5,9 @@ import CameraEnhance from "@mui/icons-material/CameraEnhance";
 // GLOBAL CUSTOM COMPONENTS
 
 import FlexBox from "components/flex-box/flex-box";
-export default function ProfilePicUpload() {
+export default function ProfilePicUpload({image, onImageChange}) {
   return <FlexBox alignItems="flex-end" mb={3}>
-      <Avatar alt="user" src="/assets/images/faces/ralph.png" sx={{
+      <Avatar alt="user" src={image} sx={{
       height: 64,
       width: 64
     }} />
@@ -19,6 +19,6 @@ export default function ProfilePicUpload() {
         <CameraEnhance fontSize="small" />
       </IconButton>
 
-      <Box type="file" display="none" accept="image/*" component="input" id="profile-image" onChange={e => console.log(e.target.files)} />
+      <Box type="file" display="none" accept="image/*" component="input" id="profile-image" onChange={e => onImageChange(e.target.files[0])} />
     </FlexBox>;
 }

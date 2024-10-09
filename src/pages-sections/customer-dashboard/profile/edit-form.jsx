@@ -5,35 +5,58 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"; 
 // FORMIK
-
+import "yup-phone-lite";
 import { Formik } from "formik"; 
 // YUP
 
 import * as yup from "yup"; 
+import { MuiTelInput } from "mui-tel-input";
+import { H6 } from "components/Typography";
+import { Box } from "@mui/material";
+import { MobileDatePicker } from "@mui/x-date-pickers";
+import { updateUserDetail } from "actions/user";
+import { useRouter } from "next/navigation";
+import { deleteUpload, imageUpload } from "utils/cloudinary";
+import _ from "lodash";
 // CUSTOM DATA MODEL
 
 
 // ==============================================================
 export default function ProfileEditForm({
-  user
+  user,oldImage,newImage,id
 }) {
   const INITIAL_VALUES = {
     email: user.email || "",
-    contact: user.phone || "",
-    last_name: user.name.lastName || "",
-    first_name: user.name.firstName || "",
-    birth_date: new Date(user.dateOfBirth) || new Date()
+    phone: user.phone || "",
+    name: user.name || "",
+    dob: new Date(user.dob) || new Date()
   };
   const VALIDATION_SCHEMA = yup.object().shape({
-    first_name: yup.string().required("First name is required"),
-    last_name: yup.string().required("Last name is required"),
+    name: yup.string().required("Name is required"),
     email: yup.string().email("invalid email").required("Email is required"),
-    contact: yup.string().required("Contact is required"),
-    birth_date: yup.date().required("Birth date is required")
+    phone: yup
+    .string()
+    .phone("FR", "Please enter a valid phone number")
+    .required("Phone number is required"),
+    dob: yup.date().required("Birth date is required")
   });
 
+  const router = useRouter();
+
   const handleFormSubmit = async values => {
-    console.log(values);
+    let data = {
+      name: values.name.trim(),
+      phone: values.phone,
+      dob: values.dob,
+    };
+        if (oldImage && oldImage === "") {
+          await deleteUpload(oldImage, "Profile");
+          data.image = "";
+        }
+        if (newImage && _.isObject(newImage)) {
+          data.image = await imageUpload(newImage, "Profile");
+        }
+    await updateUserDetail(data,id).then(() => router.replace('/profile'))
   };
 
   return <Formik onSubmit={handleFormSubmit} initialValues={INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA}>
@@ -45,38 +68,61 @@ export default function ProfileEditForm({
       handleBlur,
       handleSubmit,
       setFieldValue
-    }) => <form onSubmit={handleSubmit}>
+    }) => {
+      const handlePhoneChange = (newValue) => {
+        setFieldValue("phone", newValue);
+      };
+    return <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item md={6} xs={12}>
-              <TextField fullWidth name="first_name" label="First Name" onBlur={handleBlur} onChange={handleChange} value={values.first_name} error={!!touched.first_name && !!errors.first_name} helperText={touched.first_name && errors.first_name} />
+              <TextField fullWidth name="name" label="Name" onBlur={handleBlur} onChange={handleChange} value={values.name} error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <TextField fullWidth name="last_name" label="Last Name" onBlur={handleBlur} onChange={handleChange} value={values.last_name} error={!!touched.last_name && !!errors.last_name} helperText={touched.last_name && errors.last_name} />
+              <TextField fullWidth disabled name="email" type="email" label="Email" onBlur={handleBlur} value={values.email} onChange={handleChange} error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <TextField fullWidth name="email" type="email" label="Email" onBlur={handleBlur} value={values.email} onChange={handleChange} error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
+            <Box>
+              
+              <MuiTelInput
+                forceCallingCode
+                disableDropdown
+                sx={{ mb: 1.5 }}
+                langOfCountryName="fr"
+                fullWidth
+                // InputProps={{ size: "small", sx: { p: 0.5 } }}
+                error={!!touched.phone && !!errors.phone}
+                helperText={touched.phone && errors.phone}
+                defaultCountry="FR"
+                value={values.phone}
+                onChange={handlePhoneChange}
+              />
+            </Box>
+              {/* <TextField fullWidth label="Phone" name="phone" onBlur={handleBlur} value={values.phone} onChange={handleChange} error={!!touched.phone && !!errors.phone} helperText={touched.phone && errors.phone} /> */}
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <TextField fullWidth label="Phone" name="contact" onBlur={handleBlur} value={values.contact} onChange={handleChange} error={!!touched.contact && !!errors.contact} helperText={touched.contact && errors.contact} />
-            </Grid>
-
-            <Grid item md={6} xs={12}>
-              <DatePicker label="Birth Date" value={values.birth_date} onChange={newValue => setFieldValue("birth_date", newValue)} slots={{
-            textField: TextField
-          }} slotProps={{
-            textField: {
-              sx: {
-                mb: 1
-              },
-              size: "small",
-              fullWidth: true,
-              error: Boolean(!!touched.birth_date && !!errors.birth_date),
-              helperText: touched.birth_date && errors.birth_date
-            }
-          }} />
+            <MobileDatePicker
+                disableFuture
+                
+                format="dd-MM-yyyy"
+                sx={{
+                  "& .MuiInputBase-input": {
+                    // padding: 1.5,
+                  },
+                }}
+                value={values.dob}
+                slotProps={{
+                  toolbar:{hidden:true},
+                  textField: {
+                    error: !!touched.dob && !!errors.dob,
+                    helperText: touched.dob && errors.dob,
+                    fullWidth:true
+                  },
+                }}
+                onChange={(newValue) => setFieldValue("dob", newValue)}
+              />
             </Grid>
 
             <Grid item xs={12}>
@@ -85,6 +131,7 @@ export default function ProfileEditForm({
               </Button>
             </Grid>
           </Grid>
-        </form>}
+        </form>
+      }}
     </Formik>;
 }

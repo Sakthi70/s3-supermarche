@@ -8,6 +8,7 @@ import { H3, H5, Paragraph, Small } from "components/Typography";
 // CUSTOM UTILS LIBRARY FUNCTION
 
 import { currency } from "lib"; 
+import { Box } from "@mui/material";
 // CUSTOM DATA MODEL
 
 
@@ -37,24 +38,21 @@ export default function UserAnalytics({
         p: "1rem 1.5rem",
         alignItems: "center"
       }}>
-          <Avatar alt={user.name.firstName} src={user.avatar} sx={{
+          <Avatar alt={user.name} src={user.image} sx={{
           height: 64,
           width: 64
         }} />
 
           <FlexBetween flexWrap="wrap" flex={1}>
             <div>
-              <H5>{`${user.name.firstName} ${user.name.lastName}`}</H5>
+              <H5>{`${user.name}`}</H5>
 
-              <FlexBox alignItems="center" gap={1}>
-                <Paragraph color="grey.600">Balance:</Paragraph>
-                <Paragraph color="primary.main">{currency(500)}</Paragraph>
-              </FlexBox>
             </div>
-
+            <Box>
+            <Paragraph color="grey.600">{user.email}</Paragraph>
             <Paragraph color="grey.600" letterSpacing={3}>
-              SILVER USER
-            </Paragraph>
+             {user.phone}
+            </Paragraph></Box>
           </FlexBetween>
         </Card>
       </Grid>

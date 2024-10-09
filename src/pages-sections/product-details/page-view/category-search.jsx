@@ -25,7 +25,6 @@ import ProductsGridView from "components/products-view/products-grid-view";
 import ProductsListView from "components/products-view/products-list-view";
 // PRODUCT DATA
 
-import productDatabase from "data/product-database";
 import { useParams } from "next/navigation";
 import {  buildTreebyId, getAllCategoriesByOption, getMinMaxPrice } from "utils/util";
 import useApp from "hooks/useApp";
