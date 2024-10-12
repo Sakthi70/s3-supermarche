@@ -17,18 +17,20 @@ export default function SearchArea({
   url = "/",
   handleSearch =() => {},
   isAdditional=false,
+  isSearch=false,
+  isCreate = true,
   comps,
 }) {
   const downSM = useMediaQuery(theme => theme.breakpoints.down("sm"));
   return <FlexBox mb={2} gap={2} justifyContent="space-between" flexWrap="wrap">
-      <SearchInput placeholder={searchPlaceholder} onChange={handleSearch}/>
+     {isSearch && <SearchInput placeholder={searchPlaceholder} onChange={handleSearch}/>}
       <Box display={'flex'} justifyContent={'end'} gap={2}>
       {isAdditional && comps()}
-      <Button href={url} color="info" fullWidth={downSM} variant="contained" startIcon={<Add />} LinkComponent={Link} sx={{
+      {isCreate && <Button href={url} color="info" fullWidth={downSM} variant="contained" startIcon={<Add />} LinkComponent={Link} sx={{
       minHeight: 44
     }}>
         {buttonText}
-      </Button>
+      </Button>}
       </Box>
     </FlexBox>;
 }

@@ -23,7 +23,7 @@ import _ from "lodash";
 
 // ==============================================================
 export default function ProfileEditForm({
-  user,oldImage,newImage,id
+  user,oldImage,newImage,id ,isAdmin= false
 }) {
   const INITIAL_VALUES = {
     email: user.email || "",
@@ -56,7 +56,7 @@ export default function ProfileEditForm({
         if (newImage && _.isObject(newImage)) {
           data.image = await imageUpload(newImage, "Profile");
         }
-    await updateUserDetail(data,id).then(() => router.replace('/profile'))
+    await updateUserDetail(data,id).then(() => router.replace(isAdmin ? '/admin/customers': '/profile'))
   };
 
   return <Formik onSubmit={handleFormSubmit} initialValues={INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA}>
@@ -79,7 +79,7 @@ export default function ProfileEditForm({
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <TextField fullWidth disabled name="email" type="email" label="Email" onBlur={handleBlur} value={values.email} onChange={handleChange} error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
+              <TextField fullWidth disabled={!isAdmin} name="email" type="email" label="Email" onBlur={handleBlur} value={values.email} onChange={handleChange} error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
             </Grid>
 
             <Grid item md={6} xs={12}>

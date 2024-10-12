@@ -22,7 +22,14 @@ export const tableHeading = [{
   id: "orders",
   label: "No Of Orders",
   align: "left"
-}, {
+},
+{
+  id: "admin",
+  label: "Admin",
+  align: "left"
+},
+
+{
   id: "action",
   label: "Action",
   align: "center"

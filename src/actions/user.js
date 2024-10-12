@@ -26,6 +26,57 @@ export const createUser = async(data)=> {
     });
 }
 
+export const getUsers = async()=>{
+  let users = await prisma.user.findMany({
+    where :{
+      enabled:true
+    },
+    include: {
+      _count: {
+        select:{
+            orders:true
+        }
+      }
+    }
+  })
+  return users 
+}
+
+export const deleteCustomer = async (id,count) => {
+  if (count > 0) {
+    return await prisma.user.update({
+      where: { id: id },
+      data: { email: "",  enabled:false },
+    });
+  } else {
+    await prisma.session.deleteMany({
+      where : {
+        userId: id
+      }
+    });
+    await prisma.authenticator.deleteMany({
+      where : {
+        userId: id
+      }
+    });
+    await prisma.account.deleteMany({
+      where : {
+        userId: id
+      }
+    });
+    await prisma.address.deleteMany({
+      where : {
+        userId: id
+      }
+    });
+    return await prisma.user.delete({
+      where : {
+        id: id
+      }
+    });
+  }
+}
+
 export const updateUserPassword = async(data)=> {
     const {email, password} = data;
     const hash = saltAndHashPassword(password);

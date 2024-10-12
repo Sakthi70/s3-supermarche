@@ -1,0 +1,1 @@
+export { default as DynaicmPageView } from "./page";

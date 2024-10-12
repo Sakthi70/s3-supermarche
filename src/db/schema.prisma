@@ -1,6 +1,7 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 generator client {
@@ -18,13 +19,16 @@ model User {
   emailVerified  DateTime?
   image          String?
   isAdmin        Boolean         @default(false)
+  enabled        Boolean         @default(true)
   Session        Session[]
   Account        Account?
   // Optional for WebAuthn support
   Authenticator  Authenticator[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  addresses      Address[]
+  orders         Order[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  
 }
 
 model Account {
@@ -113,31 +117,81 @@ model Banner {
   type        Int
   expires     DateTime?
   image       String?
-  slug       String?
+  slug        String?
   enabled     Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
 
 model Product {
-  id             String           @id @default(cuid())
-  name          String
-  shortDescription String           @db.Text
-  description    String           @db.Text
-  category       Category         @relation(fields: [categoryId], references: [id])
-  categoryId     String
-  tags            String[]
-  images          String[]
-  brandName      String?
-  brandImage     String?
-  price          Float
-  salePrice     Float?
-  stock          Int
-  limit          Int?
-  isBrand         Boolean          @default(false)
-  type            String
-  value           String
-  enabled        Boolean          @default(true)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id               String   @id @default(cuid())
+  name             String
+  shortDescription String   @db.Text
+  description      String   @db.Text
+  category         Category @relation(fields: [categoryId], references: [id])
+  categoryId       String
+  tags             String[]
+  images           String[]
+  brandName        String?
+  brandImage       String?
+  price            Float
+  salePrice        Float?
+  stock            Int
+  limit            Int?
+  isBrand          Boolean  @default(false)
+  type             String
+  value            String
+  enabled          Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Address {
+  id      String @id @default(cuid())
+  name    String
+  address String
+  city    String
+  phone   String
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model Pages {
+  id      String  @id @default(cuid())
+  pageId  String
+  name    String
+  color   Int?
+  content String
+  image   String?
+}
+
+model Settings {
+  id              String   @id @default(cuid())
+  footerImage     String?
+  description     String
+  thirdHeader     String   @default("")
+  secondHeader    String   @default("")
+  facebook        String   @default("")
+  youtube         String   @default("")
+  instagram       String   @default("")
+  twitter         String   @default("")
+  shipping        Float    @default(0)
+  vat             Float    @default(0)
+  phone           String
+  email           String
+  cities          String[]
+}
+
+model FooterLinks {
+  id   String @id @default(cuid())
+  name String
+  url  String
+  col  Int
+}
+
+model Order {
+  id   String @id @default(cuid())
+  userId  String
+  status  String   @default("Pending")
+  user    User   @relation(fields: [userId], references: [id])
 }

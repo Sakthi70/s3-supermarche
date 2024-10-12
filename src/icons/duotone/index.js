@@ -28,6 +28,7 @@ import UserProfile from "./UserProfile";
 import ProjectChart from "./ProjectChart";
 import AccountSetting from "./AccountSetting";
 import AdminEcommerce from "./AdminEcommerce";
+import Location from './Location';
 export default {
   Apps,
   Chat,
@@ -58,5 +59,6 @@ export default {
   SiteSetting,
   ProjectChart,
   AdminEcommerce,
-  AccountSetting
+  AccountSetting,
+  Location
 };

@@ -6,17 +6,17 @@ import TextField from "@mui/material/TextField";
 
 import { H4 } from "components/Typography";
 
-const ShippingVatForm = () => {
-  const initialValues = {
-    vat: 2,
-    shipping: 10
-  };
+const ShippingVatForm = ({values,onSave}) => {
+
 
   const handleFormSubmit = async values => {
-    console.log(values);
+    await onSave({
+      vat: parseFloat(values.vat == "" ? '0': values.vat ),
+      shipping: parseFloat(values.shipping == "" ? '0': values.shipping)
+    })
   };
 
-  return <Formik onSubmit={handleFormSubmit} initialValues={initialValues}>
+  return <Formik onSubmit={handleFormSubmit} initialValues={values}>
       {({
       values,
       errors,

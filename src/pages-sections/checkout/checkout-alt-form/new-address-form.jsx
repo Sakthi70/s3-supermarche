@@ -18,14 +18,10 @@ import { H5 } from "components/Typography";
 // CUSTOM DATA MODEL
 
 const validationSchema = yup.object({
-  street2: yup.string(),
   name: yup.string().required("required"),
-  street1: yup.string().required("required"),
-  phone: yup.number().required("required"),
+  address: yup.string().required("required"),
   city: yup.string().required("required"),
-  state: yup.string().required("required"),
-  country: yup.string().required("required"),
-  zip: yup.number().required("required")
+  phone: yup.number().required("required"),
 }); 
 // ==================================================================
 
@@ -40,13 +36,9 @@ export default function NewAddressForm({
 
   const initialValues = {
     name: "UI Lib",
-    street1: "321, Subid Bazaar",
-    street2: "",
+    address: "321, Subid Bazaar",
     phone: "01789123456",
     city: "Sylhet",
-    state: "Sylhet",
-    country: "Bangladesh",
-    zip: 4336
   };
   const {
     handleChange,
@@ -81,7 +73,7 @@ export default function NewAddressForm({
               </Grid>
 
               <Grid item sm={6} xs={12}>
-                <TextField fullWidth type="text" name="street1" label="Street line 1" value={values.street1} onChange={handleChange} helperText={touched.street1 && errors.street1} error={touched.street1 && Boolean(errors.street1)} />
+                <TextField fullWidth type="text" name="address" label="Address" value={values.address} onChange={handleChange} helperText={touched.address && errors.address} error={touched.address && Boolean(errors.address)} />
               </Grid>
 
               <Grid item sm={6} xs={12}>
@@ -91,23 +83,6 @@ export default function NewAddressForm({
               <Grid item sm={6} xs={12}>
                 <TextField fullWidth type="text" name="phone" value={values.phone} onChange={handleChange} label="Enter Your Phone" helperText={touched.phone && errors.phone} error={touched.phone && Boolean(errors.phone)} />
               </Grid>
-
-              <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="city" label="City" value={values.city} onChange={handleChange} helperText={touched.city && errors.city} error={touched.city && Boolean(errors.city)} />
-              </Grid>
-
-              <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="state" label="State" value={values.state} onChange={handleChange} helperText={touched.state && errors.state} error={touched.state && Boolean(errors.state)} />
-              </Grid>
-
-              <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="zip" label="Zip" type="number" value={values.zip} onChange={handleChange} helperText={touched.zip && errors.zip} error={touched.zip && Boolean(errors.zip)} />
-              </Grid>
-
-              <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="country" label="Country" value={values.country} onChange={handleChange} helperText={touched.country && errors.country} error={touched.country && Boolean(errors.country)} />
-              </Grid>
-
               <Grid item sm={6} xs={12}>
                 <Button color="primary" variant="contained" type="submit">
                   Save

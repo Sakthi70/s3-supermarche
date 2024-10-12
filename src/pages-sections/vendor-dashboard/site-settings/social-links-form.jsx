@@ -16,26 +16,20 @@ import AppleStore from "icons/AppleStore";
 // GLOBAL CUSTOM COMPONENT
 
 import { H4 } from "components/Typography";
+import { Email, Phone } from "@mui/icons-material";
 
-const SocialLinksForm = () => {
-  const initialValues = {
-    facebook: "",
-    twitter: "",
-    instagram: "",
-    linkedin: "",
-    youtube: "",
-    play_store: "",
-    app_store: ""
-  };
+const SocialLinksForm = ({values, onSave}) => {
+ 
 
   const handleFormSubmit = async values => {
-    console.log(values);
+   await onSave(values)
   };
 
-  return <Formik onSubmit={handleFormSubmit} initialValues={initialValues}>
+  return <Formik onSubmit={handleFormSubmit} initialValues={values}>
       {({
       values,
       handleChange,
+      handleBlur,
       handleSubmit
     }) => <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
@@ -43,6 +37,21 @@ const SocialLinksForm = () => {
               <H4>Social Links</H4>
             </Grid>
 
+            <Grid item md={6} xs={12}>
+              <TextField fullWidth name="phone" color="info" size="medium" label="Phone" onBlur={handleBlur} value={values.phone} onChange={handleChange} placeholder="0000000000" InputProps={{
+            startAdornment: <Phone fontSize="small" color="info" sx={{
+              mr: 1
+            }} />
+          }} />
+            </Grid>
+
+            <Grid item md={6} xs={12}>
+              <TextField fullWidth color="info" name="email" size="medium" label="Email" onBlur={handleBlur} value={values.email} onChange={handleChange} placeholder="email@example.com" InputProps={{
+            startAdornment: <Email fontSize="small" color="info" sx={{
+              mr: 1
+            }} />
+          }} />
+            </Grid>
             <Grid item md={6} xs={12}>
               <TextField fullWidth color="info" size="medium" name="facebook" label="Facebook" value={values.facebook} onChange={handleChange} placeholder="https://example.com" InputProps={{
             startAdornment: <Facebook fontSize="small" color="info" sx={{
@@ -78,26 +87,6 @@ const SocialLinksForm = () => {
             <Grid item xs={12}>
               <Divider />
             </Grid>
-{/* 
-            <Grid item xs={12}>
-              <H4>App Links</H4>
-            </Grid>
-
-            <Grid item md={6} xs={12}>
-              <TextField fullWidth color="info" size="medium" name="play_store" label="Play Store" value={values.play_store} onChange={handleChange} placeholder="https://example.com" InputProps={{
-            startAdornment: <PlayStore fontSize="small" color="info" sx={{
-              mr: 1
-            }} />
-          }} />
-            </Grid>
-
-            <Grid item md={6} xs={12}>
-              <TextField fullWidth color="info" size="medium" name="app_store" label="App Store" value={values.app_store} onChange={handleChange} placeholder="https://example.com" InputProps={{
-            startAdornment: <AppleStore fontSize="small" color="info" sx={{
-              mr: 1
-            }} />
-          }} />
-            </Grid> */}
 
             <Grid item xs={12}>
               <Button type="submit" color="info" variant="contained">

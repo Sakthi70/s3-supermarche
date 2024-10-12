@@ -25,6 +25,7 @@ import { auth } from "auth";
 import Loading from "./loading";
 import AppProvider from "contexts/AppContext";
 import './style.css';
+import CookieConsent from "components/consent/CookieConsent";
 export default async function RootLayout({
   children
 }) {
@@ -42,6 +43,7 @@ export default async function RootLayout({
               </CartProvider>
               {/* <GoogleAnalytics gaId="G-XKPD36JXY0" /> */}
             </SessionProvider>
+       <CookieConsent/>
           </ThemeProvider>
         </AppProvider>
       </SettingsProvider>

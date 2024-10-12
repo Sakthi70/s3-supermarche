@@ -12,15 +12,7 @@ export const navigation = [{
 {
   name: t("Banners"),
   icon: duotone.ProjectChart,
-  // children: [{
-    // name: "Category List",
     path: "/admin/banners"
-  // }, 
-  // {
-  //   name: "Create Category",
-  //   path: "/admin/categories/create"
-  // }
-// ]
 },
  {
   name: t("Categories"),
@@ -29,8 +21,18 @@ export const navigation = [{
  
 },
 {
+  name: "Pages",
+  icon: duotone.Apps,
+  path: "/admin/pages"
+}, 
+{
   name: t("Products"),
   icon: duotone.Products,
+    path: "/admin/products"
+},
+{
+  name: t("Supported Cities"),
+  icon: duotone.Location,
     path: "/admin/products"
 },
 //  {
@@ -62,6 +64,7 @@ export const navigation = [{
   icon: duotone.Customers,
   path: "/admin/customers"
 }, 
+
 // {
 //   name: "Refunds",
 //   icon: duotone.Refund,
@@ -137,11 +140,6 @@ export const navigation = [{
 //   icon: duotone.ElementHub,
 //   path: "/vendor/support-tickets"
 // }, 
-{
-  name: "Account Settings",
-  icon: duotone.AccountSetting,
-  path: "/vendor/account-settings"
-}, 
 {
   name: "Site Settings",
   icon: duotone.SiteSetting,

@@ -164,7 +164,6 @@ export default function Editor({value,rteRef,isEditable=true,error = false,helpe
             // example), but can be changed to "standard" to remove the outlined
             // field border from the editor
             variant: "outlined",
-          
             MenuBarProps: {
               hide: false,
             },

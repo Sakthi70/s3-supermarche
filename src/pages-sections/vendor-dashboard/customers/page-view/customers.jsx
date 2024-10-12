@@ -20,13 +20,44 @@ import PageWrapper from "../../page-wrapper";
 // TABLE HEAD COLUMN DATA
 
 import { tableHeading } from "../table-heading"; 
+import { useEffect, useState } from "react";
+import { deleteCustomer, getUsers, updateUserDetail } from "actions/user";
+import useApp from "hooks/useApp";
+import { useSession } from "next-auth/react";
 // =============================================================================
 
 
 // =============================================================================
 export default function CustomersPageView({
-  customers
 }) {
+
+
+  const {data} =useSession();
+
+  const {loading} = useApp();
+  
+  
+  const [customers, setcustomers] = useState([]);
+  useEffect(() => {
+      getcustomers();
+  }, [])
+  
+  const getcustomers =async()=>{
+    loading(true)
+    await getUsers().then((users) => setcustomers(users.filter( x=> x.id !== data.user.id))).finally(() => loading(false))
+  }
+
+  const onDelete =async(id, count)=> {
+    loading(true);
+    await deleteCustomer(id, count).then(async() => await getcustomers()).finally(() => loading(false))
+  }
+
+  const onUpdate =async(id,isAdmin) => {
+    loading(true);
+    await updateUserDetail({isAdmin:!isAdmin}, id).then(async() => await getcustomers()).finally(() => loading(false))
+  }
+
+
   const {
     order,
     orderBy,
@@ -38,8 +69,9 @@ export default function CustomersPageView({
   } = useMuiTable({
     listData: customers
   });
+    
   return <PageWrapper title="Customers">
-      <SearchArea handleSearch={() => {}} buttonText="Add Customer" url="/admin/customers" searchPlaceholder="Search Customer..." />
+      <SearchArea isCreate={false}    searchPlaceholder="Search Customer..." />
 
       <Card>
         <Scrollbar>
@@ -50,7 +82,7 @@ export default function CustomersPageView({
               <TableHeader order={order} hideSelectBtn orderBy={orderBy} heading={tableHeading} numSelected={selected.length} rowCount={filteredList.length} onRequestSort={handleRequestSort} />
 
               <TableBody>
-                {filteredList.map(customer => <CustomerRow customer={customer} key={customer.id} />)}
+                {filteredList.map(customer => <CustomerRow customer={customer} updateUser={onUpdate} deleteUser={onDelete} key={customer.id} />)}
               </TableBody>
             </Table>
           </TableContainer>
