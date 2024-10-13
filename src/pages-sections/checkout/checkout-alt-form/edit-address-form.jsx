@@ -1,92 +1,118 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
+// MUI
+
 import Grid from "@mui/material/Grid";
-import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 import DialogContent from "@mui/material/DialogContent";
+// FORMIK
+
 import { useFormik } from "formik";
-import * as yup from "yup"; 
-// GLOBAL CUSTOM COMPONENT
+// YUP
+
+import * as yup from "yup";
+// LOCAL CUSTOM COMPONENT
 
 import { H5 } from "components/Typography";
+import useApp from "hooks/useApp";
+import { Divider, FormControl, FormHelperText, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { useEffect } from "react";
+// CUSTOM DATA MODEL
+
 const validationSchema = yup.object({
-  address2: yup.string(),
-  name: yup.string().required("Name is required!"),
-  address1: yup.string().required("Address is required!"),
-  phone: yup.number().required("Phone is required!")
-}); 
-// ================================================================
+  name: yup.string().required("required"),
+  address: yup.string().required("required"),
+  city: yup.string().required("required"),
+  phone: yup.number().required("required"),
+});
+// ==================================================================
 
 
-// ================================================================
-export default function EditAddressForm(props) {
+// ==================================================================
+export default function EditAddressForm({
+  handleEditAddress,
+  openModal,
+  handleCloseModal,
+  currentAddress
+}) {
+
+  const { content } = useApp();
+
+  const { settings } = content
+
   const {
-    active,
-    address,
-    changeEditAddressId,
-    handleEditAddress
-  } = props;
-  const [openModal, setOpenModal] = useState(active);
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    changeEditAddressId();
-  };
-
-  const initialValues = {
-    name: address.name,
-    phone: address.phone,
-    street1: address.street1,
-    street2: address.street2
-  };
-  const {
-    values,
-    touched,
-    errors,
-    handleBlur,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    setFieldValue,
+    errors,
+    resetForm,
+    touched,
+    values
   } = useFormik({
-    initialValues,
+    initialValues: currentAddress,
     validationSchema,
-    onSubmit: values => {
-      handleEditAddress(address.id, { ...values,
-        id: address.id
-      });
+    onSubmit: (values, {
+      resetForm
+    }) => {
+      handleEditAddress(values);
       handleCloseModal();
+      resetForm({});
     }
   });
-  return <Dialog open={openModal} onClose={handleCloseModal} sx={{
-    zIndex: 99999
-  }}>
+  useEffect(() => {
+      resetForm({values:currentAddress})
+  }, [openModal])
+  
+  return <Fragment>
+    <Dialog open={openModal} >
       <DialogContent>
         <H5 mb={4}>Edit Address Information</H5>
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item sm={6} xs={12}>
-              <TextField fullWidth name="name" type="text" label="Enter Your Name" value={values.name} onBlur={handleBlur} onChange={handleChange} helperText={touched.name && errors.name} error={touched.name && Boolean(errors.name)} />
+              <TextField fullWidth type="text" name="name" value={values.name} label="Enter Your Name" onChange={handleChange} helperText={touched.name && errors.name} error={touched.name && Boolean(errors.name)} />
             </Grid>
 
             <Grid item sm={6} xs={12}>
-              <TextField fullWidth type="text" name="street1" label="Address line 1" onBlur={handleBlur} value={values.street1} onChange={handleChange} helperText={touched.street1 && errors.street1} error={touched.street1 && Boolean(errors.street1)} />
+              <TextField fullWidth type="text" name="address" label="Address" value={values.address} onChange={handleChange} helperText={touched.address && errors.address} error={touched.address && Boolean(errors.address)} />
             </Grid>
 
             <Grid item sm={6} xs={12}>
-              <TextField fullWidth type="text" name="street2" label="Address line 2" onBlur={handleBlur} value={values.street2} onChange={handleChange} helperText={touched.street2 && errors.street2} error={touched.street2 && Boolean(errors.street2)} />
+              <FormControl size="small" fullWidth error={ touched.city && Boolean(errors.city)}>
+                <InputLabel>City</InputLabel>
+                <Select
+                  value={values.city}
+                  size="small"
+                  label="City"
+                  onChange={(e) => setFieldValue('city', e.target.value)}
+                >
+                  {settings.cities.map((x,index) => <MenuItem key={index} value={x}>{x}</MenuItem>)}
+                </Select>
+                <FormHelperText>{touched.city && errors.city}</FormHelperText>
+              </FormControl>
             </Grid>
 
             <Grid item sm={6} xs={12}>
-              <TextField fullWidth type="text" name="phone" label="Enter Your Phone" onBlur={handleBlur} value={values.phone} onChange={handleChange} helperText={touched.phone && errors.phone} error={touched.phone && Boolean(errors.phone)} />
+              <TextField fullWidth type="text" name="phone" value={values.phone} onChange={handleChange} label="Enter Your Phone" helperText={touched.phone && errors.phone} error={touched.phone && Boolean(errors.phone)} />
             </Grid>
-
-            <Grid item sm={6} xs={12}>
+            <Grid item sm={6}  xs={12}>
+            <Button color="primary" sx={{mr:1}} variant="text" onClick={handleCloseModal}>
+                Cancel
+              </Button>
               <Button color="primary" variant="contained" type="submit">
                 Save
               </Button>
             </Grid>
+            <Grid item xs={12}><Divider /></Grid>
+            <Typography pt={1} px={3} color="textSecondary" variant="subtitle2" fontStyle={'italic'}>
+
+              If your city is not listed, we are still working to reach our service to your city
+            </Typography>
           </Grid>
         </form>
       </DialogContent>
-    </Dialog>;
+    </Dialog>
+  </Fragment>;
 }

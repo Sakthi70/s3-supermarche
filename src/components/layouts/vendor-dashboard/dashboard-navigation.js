@@ -30,11 +30,7 @@ export const navigation = [{
   icon: duotone.Products,
     path: "/admin/products"
 },
-{
-  name: t("Supported Cities"),
-  icon: duotone.Location,
-    path: "/admin/products"
-},
+
 //  {
 //   name: "Brands",
 //   icon: duotone.Apps,

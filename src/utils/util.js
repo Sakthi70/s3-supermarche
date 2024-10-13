@@ -128,6 +128,10 @@ export function calculateDiscountPercentage(originalPrice, discountedPrice) {
   return Math.round(discountPercentage);
 }
 
+export function calculatePercentageValue(percentage, value) {
+  return (percentage / 100) * value;
+}
+
 export function t(key) {
   return i18next.t(key, { key });
 }

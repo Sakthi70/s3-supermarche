@@ -21,7 +21,7 @@ import QuantityButtons from "./components/quantity-buttons";
 // STYLED COMPONENTS
 
 import { ImageWrapper, ContentWrapper, StyledBazaarCard } from "./styles"; 
-import { getRandomItem } from "utils/util";
+import { calculateDiscountPercentage, getRandomItem } from "utils/util";
 import { NO_IMAGE_FOR_PRODUCT } from "utils/constants";
 import Image from "next/image";
 import { auth } from "auth";
@@ -30,6 +30,7 @@ import { useState } from "react";
 import DialogDrawer from "components/header/components/dialog-drawer";
 import Warning from "components/warning/warning";
 import useApp from "hooks/useApp";
+import { CategoryWrapper } from "pages-sections/vendor-dashboard/styles";
 // ========================================================
 
 
@@ -39,9 +40,11 @@ export default function ProductCard1({
   slug,
   title,
   price,
+  salePrice,
   imgUrl,
   rating = 5,
   hideRating,
+  variant,
   hoverEffect,
   discount = 5,
   showProductSize,
@@ -72,7 +75,11 @@ export default function ProductCard1({
       id,
       slug,
       price,
-      imgUrl,
+      salePrice,
+      limit: productData.limit,
+      stock: productData.stock,
+      variant,
+      imgUrl:imgUrl.length > 0 ? imgUrl[0] : NO_IMAGE_FOR_PRODUCT,
       name: title,
       qty: (cartItem?.qty || 0) + 1
     };
@@ -92,7 +99,11 @@ export default function ProductCard1({
       id,
       slug,
       price,
-      imgUrl,
+      salePrice,
+      variant,
+      limit: productData.limit,
+      stock: productData.stock,
+      imgUrl:imgUrl.length > 0 ? imgUrl[0] : NO_IMAGE_FOR_PRODUCT,
       name: title,
       qty: (cartItem?.qty || 0) - 1
     };
@@ -103,7 +114,7 @@ export default function ProductCard1({
         {
         /* DISCOUNT PERCENT CHIP IF AVAILABLE */
       }
-        <DiscountChip discount={discount} />
+        <DiscountChip discount={calculateDiscountPercentage(price,salePrice)} />
         <Warning open={openDelete} handleClose={() => setopenDelete(false)} content={'Are you sure to delete the product?'} submit="Confirm" ok={'Cancel'} title={'Delete Product'} onSubmit={onDelete} isSubmit={true}/>
         <HoverActions  isEdit={isPreview} isToggleView={true} isDelete={isPreview} toggleView={toggleDialog} toggleDelete={() => setopenDelete(true)} toggleEdit={toggleEdit} />
 
@@ -120,18 +131,20 @@ export default function ProductCard1({
     }
       <ProductViewDialog handleIncrementQuantity={handleIncrementQuantity} isPreview={isPreview} openDialog={openModal} handleCloseDialog={toggleDialog} product={productData} />
 
-      <ContentWrapper>
-        <Box flex="1 1 0" minWidth="0px" mr={1}>
+      <ContentWrapper style={{justifyContent:'space-between'}}>
+        <Box  minWidth="0px" mr={1}>
         
-          <ProductTitle title={title} slug={slug} />
-
-          <ProductPrice discount={productData.salePrice} price={price} />
+          <ProductTitle title={title} slug={id} />
+        <ProductPrice discount={salePrice} price={price} />
         </Box>
 
         {
-        /* PRODUCT QUANTITY HANDLER BUTTONS */
-      }
-       {!isPreview  && <QuantityButtons quantity={cartItem?.qty || 0} handleIncrement={handleIncrementQuantity} handleDecrement={handleDecrementQuantity} />}
+          /* PRODUCT QUANTITY HANDLER BUTTONS */
+        }
+      <Box  minWidth="0px" display={'flex'} justifyContent={'end'} flexDirection={'column'} gap={1} alignItems={'end'} >
+        {(variant && variant !="") &&<CategoryWrapper>{variant}</CategoryWrapper>}
+       {!isPreview  && <QuantityButtons limit={productData.limit} stock={productData.stock}  quantity={cartItem?.qty || 0} handleIncrement={handleIncrementQuantity} handleDecrement={handleDecrementQuantity} />}
+      </Box>
       </ContentWrapper>
       <DialogDrawer
         dialogOpen={dialogOpen}

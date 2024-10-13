@@ -29,6 +29,7 @@ export default function ProductCard5(props) {
     id,
     title,
     price,
+    salePrice,
     imgUrl,
     rating,
     hideRating,
@@ -49,6 +50,7 @@ export default function ProductCard5(props) {
       id,
       slug,
       price,
+      salePrice,
       imgUrl,
       name: title,
       qty: (cartItem?.qty || 0) + 1
@@ -61,6 +63,7 @@ export default function ProductCard5(props) {
       id,
       slug,
       price,
+      salePrice,
       imgUrl,
       name: title,
       qty: (cartItem?.qty || 0) - 1

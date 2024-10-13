@@ -42,7 +42,7 @@ export default function MiniCart({
   };
 
   const getTotalPrice = () => {
-    return cartList.reduce((acc, item) => acc + item.price * item.qty, 0);
+    return cartList.filter(x => x.stock > 0).reduce((acc, item) => acc + (item.salePrice || item.price) * item.qty, 0);
   };
 
   const handleNavigate = path => () => {

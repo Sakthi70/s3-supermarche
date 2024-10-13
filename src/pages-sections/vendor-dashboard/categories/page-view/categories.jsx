@@ -112,7 +112,7 @@ const CategoriesPageView = ({}) => {
           !x.images || x.images == ""
             ? []
             : x.images.split("||").map((x) => x.trim()),
-        type: !x.type || x.type == "" ? "Other" : x.type,
+        type: "Other",
         categoryId: slug,
         price: parseFloat(x.price ?? 0),
         salePrice:

@@ -31,7 +31,10 @@ export default function ProductsListView({ products }) {
           key={item.id}
           title={item.name}
           price={item.price}
+          limit={item.limit}
+          stock={item.stock}
           salePrice={item.salePrice}
+          variant={item.value}
           imgUrl={
             item.images.length > 0 ? item.images[0] : NO_IMAGE_FOR_PRODUCT
           }

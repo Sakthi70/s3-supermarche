@@ -5,7 +5,13 @@ import { shuffleArray } from 'utils/util';
 
 export async function getProducts(){
   const products = await prisma.product.findMany({
-    
+    include :{
+      category: {
+        select: {
+          name: true
+        },
+      },
+    }
   });
   return {products}
 }
@@ -56,13 +62,24 @@ export async function getRandomProducts(categoryIds) {
         },
       },
     },
-    take: 100, // Fetch more than 10 to ensure randomness
+    take: 10, // Fetch more than 10 to ensure randomness
   });
 
   // Shuffle the products and take the first 10
-  const shuffledProducts = shuffleArray(products).slice(0, 10);
+  // const shuffledProducts = shuffleArray(products).slice(0, 10);
 
-  return shuffledProducts;
+  return products;
+}
+
+export async function productsInCart(productIds){
+  const products = await prisma.product.findMany({
+    where: {
+      id: {
+        in: productIds,
+      },
+    }
+  });
+  return products;
 }
 
 export async function productsCategorySearch(categoryIds) {

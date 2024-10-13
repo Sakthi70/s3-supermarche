@@ -8,57 +8,65 @@ import SocialLinks from "./components/social-links";
 // GLOBAL CUSTOM COMPONENTS
 
 import BazaarImage from "components/BazaarImage";
-import { Paragraph } from "components/Typography"; 
+import { H6, Paragraph } from "components/Typography"; 
 // DATA
 
 import { CUSTOMER_CARE_LINKS } from "./data"; 
 // STYLED COMPONENTS
 
 import { StyledFooter, StyledLink } from "./styles";
+import useApp from "hooks/useApp";
+import { FOOTER_IMAGE } from "utils/constants";
+import { Typography } from "@mui/material";
 export default function Footer2() {
-  return <StyledFooter sx={{
-    padding: 5,
+  const {content} =useApp();
+  const {settings,footerLinks}= content;
+  return <Box sx={{
+    mb: {
+      md: 0,
+      // sm:4,
+      xs: 8
+    }
+  }}><StyledFooter sx={{
+    padding: 2,
     color: "white",
     // borderRadius: 2,
     bgcolor: "#141850",
-    // mb: {
-    //   md: 2,
-    //   xs: 10
-    // }
+   
   }}>
       <Grid container spacing={6}>
-        <Grid item sm={6} xs={12}>
+        <Grid item sm={4} xs={12}>
           <Link href="/">
-            <BazaarImage mb={2.5} src="/assets/images/s3/s3-logo-admin.png" sx={{width:'100%', maxWidth:250}} alt="logo" />
+            <BazaarImage mb={2.5} src={settings.footerImage ?? FOOTER_IMAGE} sx={{width:'100%', maxWidth:250}} alt="logo" />
           </Link>
 
-          <Paragraph mb={2.5} color="grey.500" maxWidth="370px">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor libero id et, in
-            gravida. Sit diam duis mauris nulla cursus. Erat et lectus vel ut sollicitudin elit at
-            amet.
-          </Paragraph>
-
-          {/* <AppStore /> */}
-        </Grid>
-
-        <Grid item sm={6} xs={12}>
-          {
-          /* CUSTOMER CARE LINKS */
-        }
-          <Box mb={2} mt={{
-          md: 6,
-          xs: 2
-        }}>
-            {CUSTOMER_CARE_LINKS.map((item, ind) => <StyledLink href="/" key={ind}>
-                {item}
-              </StyledLink>)}
-          </Box>
-
-          {
-          /* SOCIAL LINKS WITH ICON */
-        }
+          <div dangerouslySetInnerHTML={{__html: settings.description ?? ""}}></div>
           <SocialLinks />
         </Grid>
+
+        <Grid item sm={4} xs={12}>
+        <H6>{settings.secondHeader}</H6>
+          <Box mb={2}  mt={2}>
+            {footerLinks.filter(x=> x.col ===2).map((item, ind) => <StyledLink href={item.url} key={ind}>
+                {item.name}
+              </StyledLink>)}
+          </Box>
+        </Grid>
+        <Grid item sm={4} xs={12}>
+        <H6>{settings.thirdHeader}</H6>
+          <Box mb={2}  mt={2}>
+            {footerLinks.filter(x=> x.col ===3).map((item, ind) => <StyledLink href={item.url} key={ind}>
+                {item.name}
+              </StyledLink>)}
+          </Box>
+        </Grid>
       </Grid>
-    </StyledFooter>;
+      
+    </StyledFooter> 
+    
+    <Box color={'white'} p={1} bgcolor={'GrayText'} width={1} justifyContent={'space-between'} gap={1}  display={{xs:'grid', sm:'flex'}}>
+      <Typography fontWeight={600} fontStyle={'italic'} variant="caption">{`S3 Supermarche 2024 © All rights reserved`}</Typography>
+        <Typography fontWeight={600} fontStyle={'italic'} variant="caption">{`Made by Geeo Technologies © 2024`}</Typography>
+      </Box>
+    </Box>;
 }

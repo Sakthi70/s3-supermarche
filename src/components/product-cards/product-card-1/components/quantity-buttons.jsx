@@ -16,10 +16,11 @@ export default function QuantityButtons(props) {
   const {
     quantity,
     handleDecrement,
-    handleIncrement
+    handleIncrement,
+    limit,stock
   } = props || {};
   return <FlexBox  alignItems="center" className="add-cart" flexDirection="row-reverse" justifyContent={quantity ? "space-between" : "flex-start"}>
-      <Button color="primary" variant="outlined" onClick={handleIncrement} sx={{
+      <Button disabled={quantity >= stock || (limit && quantity>=limit)} color="primary" variant="outlined" onClick={handleIncrement} sx={{
       padding: "3px"
     }}>
         <Add fontSize="small" />

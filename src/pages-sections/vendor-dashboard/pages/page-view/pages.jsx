@@ -1,6 +1,6 @@
 "use client"
 
-import { Delete, Edit } from '@mui/icons-material'
+import { ContentCopy, Delete, Edit } from '@mui/icons-material'
 import { Box, Card, CardActionArea, CardMedia, Grid2, IconButton } from '@mui/material'
 import { deletePage, getPages } from 'actions/pages'
 import { H2 } from 'components/Typography'
@@ -40,7 +40,7 @@ const PagesView = () => {
         url="/admin/pages/create"
       />
       <Grid2 container spacing={2}>
-        {pages.map(page => <Grid2 size={{xs:12, sm:6}}>
+        {pages.map((page,index) => <Grid2 key={index} size={{xs:12, sm:6}}>
                 <Card>
                 <Box sx={{display:'flex', position:'relative'}}>
         <CardMedia
@@ -51,6 +51,7 @@ const PagesView = () => {
           alt={page.name}
         />
         <Box display={'flex'} justifyContent={'end'} gap={1} sx={{position:'absolute',top: 5, right:5}}>
+            <IconButton onClick={() => navigator.clipboard.writeText(`/pages/${page.pageId}`)}><ContentCopy/></IconButton>
             <IconButton onClick={() => router.push(`/admin/pages/${page.id}`)}><Edit/></IconButton>
             <IconButton onClick={()=> setselectedId(page.id)}><Delete/></IconButton>
         </Box>

@@ -15,6 +15,9 @@ export const finduserById =async(userId) => {
     where: {
       id: userId,
     },
+    include:{
+      addresses : true
+    }
     });
     const {hashedPassword, ...userDetails} = user;
     return userDetails
@@ -40,6 +43,28 @@ export const getUsers = async()=>{
     }
   })
   return users 
+}
+
+export const createAddress = async(data) =>{
+  return await prisma.address.create({
+    data: data
+});
+}
+
+export const updateAddress = async(address) =>{
+  const {id, ...data} = address;
+  return await prisma.address.update({
+    data: data,
+    where:{id}
+});
+}
+
+export const deleteAddress = async(id) =>{
+  return await prisma.address.delete({
+    where: {
+      id
+    }
+});
 }
 
 export const deleteCustomer = async (id,count) => {

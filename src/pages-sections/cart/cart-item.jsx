@@ -29,6 +29,8 @@ export default function CartItem({
   name,
   qty,
   price,
+  salePrice,
+  limit,stock,
   imgUrl,
   slug
 }) {
@@ -44,6 +46,8 @@ export default function CartItem({
         id,
         name,
         price,
+        salePrice,
+        limit,stock,
         imgUrl,
         qty: amount,
         slug
@@ -52,7 +56,7 @@ export default function CartItem({
   };
 
   return <Wrapper>
-      <Image alt={name} width={140} height={140} display="block" src={imgUrl || "/assets/images/products/iphone-xi.png"} />
+      <Image alt={name} width={140} height={140} display="block" src={imgUrl} />
 
       {
       /* DELETE BUTTON */
@@ -66,8 +70,8 @@ export default function CartItem({
       </IconButton>
 
       <FlexBox p={2} rowGap={2} width="100%" flexDirection="column">
-        <Link href={`/products/${slug}`}>
-          <Span ellipsis fontWeight="600" fontSize={18}>
+        <Link href={`/products/${id}`}>
+          <Span  fontWeight="600" fontSize={18}>
             {name}
           </Span>
         </Link>
@@ -77,11 +81,11 @@ export default function CartItem({
       }
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
           <Span color="grey.600">
-            {currency(price)} x {qty}
+            {currency((salePrice || price))} x {qty}
           </Span>
 
           <Span fontWeight={600} color="primary.main">
-            {currency(price * qty)}
+            {currency((salePrice ||price) * qty)}
           </Span>
         </FlexBox>
 
@@ -101,7 +105,7 @@ export default function CartItem({
 
           <Button color="primary" sx={{
           p: "5px"
-        }} variant="outlined" onClick={handleCartAmountChange(qty + 1)}>
+        }} variant="outlined" disabled={qty >= stock || (limit && qty>=limit)} onClick={handleCartAmountChange(qty + 1)}>
             <Add fontSize="small" />
           </Button>
         </FlexBox>

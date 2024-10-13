@@ -7,8 +7,6 @@ import useCart from "hooks/useCart";
 // LOCAL CUSTOM COMPONENTS
 
 import CartItem from "../cart-item";
-import CheckoutForm from "../checkout-form";
-import PaymentSummary from "pages-sections/payment/payment-summery";
 import { CheckoutSummary } from "pages-sections/checkout/checkout-summery";
 export default function CartPageView() {
   const {
@@ -23,10 +21,12 @@ export default function CartPageView() {
         name,
         id,
         price,
+        salePrice,
+        limit,stock,
         qty,
         slug,
         imgUrl
-      }) => <CartItem id={id} key={id} qty={qty} name={name} slug={slug} price={price} imgUrl={imgUrl} />)}
+      }) => <CartItem id={id} limit={limit} stock={stock} key={id} qty={qty} name={name} slug={slug} salePrice={salePrice} price={price} imgUrl={imgUrl} />)}
       </Grid>
 
       {

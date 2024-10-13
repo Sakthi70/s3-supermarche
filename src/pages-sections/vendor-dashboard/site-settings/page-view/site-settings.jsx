@@ -43,20 +43,16 @@ const SiteSettingsPageView = () => {
 
 
   const [settings, setSettings] = useState();
-  const {loading} =useApp();
+  const {loading,content,getAllSettings} =useApp();
 
 
   useEffect(() => {
-    getSetting();
-  }, [])
+    setSettings(content.settings);
+  }, [content.settings])
 
-  const getSetting =async()=>{
-      await getSettings().then((settings) => setSettings(settings))
-  }
   const saveSettings = async(data) => {
       loading(true);
-      await updateSettings({...data, id: settings.id}).then(async() => await getSetting()).finally(() => loading(false));
-
+      await updateSettings({...data, id: settings.id}).then(async() =>  getAllSettings()).finally(() => loading(false));
   }
   
 

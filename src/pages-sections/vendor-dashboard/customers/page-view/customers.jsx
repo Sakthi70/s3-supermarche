@@ -38,6 +38,7 @@ export default function CustomersPageView({
   
   
   const [customers, setcustomers] = useState([]);
+  const [search, setsearch] = useState("");
   useEffect(() => {
       getcustomers();
   }, [])
@@ -67,11 +68,11 @@ export default function CustomersPageView({
     handleChangePage,
     handleRequestSort
   } = useMuiTable({
-    listData: customers
+    listData: customers.filter(x => x.name.includes(search) || x.email.includes(search) || x.phone.includes(search))
   });
     
   return <PageWrapper title="Customers">
-      <SearchArea isCreate={false}    searchPlaceholder="Search Customer..." />
+      <SearchArea isCreate={false}  isSearch={true}  handleSearch={(e) =>  setsearch(e.target.value)}  searchPlaceholder="Search Customer..." />
 
       <Card>
         <Scrollbar>

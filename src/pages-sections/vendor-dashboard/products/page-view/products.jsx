@@ -48,6 +48,11 @@ const tableHeading = [{
   align: "left"
 },
 {
+  id: "limit",
+  label: "Limit",
+  align: "center"
+},
+{
   id: "value",
   label: "Variant",
   align: "left"
@@ -114,10 +119,11 @@ export default function ProductsPageView() {
     handleChangePage,
     handleRequestSort
   } = useMuiTable({
-    listData: filteredProducts
+    listData: filteredProducts.filter(x => x.name.includes(search) || x.value.includes(search) || x.brandName.includes(search) || x.tags.includes(search) || x.category.name.includes(search))
   });
+
   return <PageWrapper title={t("Product List")} isView={true} type={view} toggleView={(val) => {localStorage.setItem('productsListOption', val);setview(val);}}>
-      <SearchArea handleSearch={() => {}} buttonText={t("Add Product")} url="/admin/products/create" searchPlaceholder={`${t("Search Product")}...`} />
+      <SearchArea isSearch={true} handleSearch={(e) => { setSearch(e.target.value)}} buttonText={t("Add Product")} url="/admin/products/create" searchPlaceholder={`${t("Search Product")}...`} />
 
       {view==='list'? <Card>
         <Scrollbar autoHide={false}>
@@ -128,7 +134,7 @@ export default function ProductsPageView() {
               <TableHeader order={order} hideSelectBtn orderBy={orderBy} heading={tableHeading} rowCount={productList.length} numSelected={selected.length} onRequestSort={handleRequestSort} />
 
               <TableBody>
-                {filteredProducts.map((product, index) => <ProductRow key={index} product={product} categories={categories}  onDeleteProduct={onDeleteProduct}/>)}
+                {filteredList.map((product, index) => <ProductRow key={index} product={product} categories={categories}  onDeleteProduct={onDeleteProduct}/>)}
               </TableBody>
             </Table>
           </TableContainer>
@@ -138,9 +144,9 @@ export default function ProductsPageView() {
           <TablePagination onChange={handleChangePage} count={Math.ceil(productList.length / rowsPerPage)} />
         </Stack>
       </Card> : <Grid2 container >
-      {filteredProducts.map(item => 
+      {filteredList.map(item => 
       <Grid2 size={{lg:12, sm:6, md:4, lg:3}} width={1} p={2} key={item.id}>
-            <ProductCard1 toggleDelete={onDeleteProduct} toggleEdit={() => router.push(`/admin/products/${item.id}`)} isPreview={true} hideRating id={item.id} slug={item.slug} price={item.price} title={item.name} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.salePrice)} productData={item} />
+            <ProductCard1 toggleDelete={onDeleteProduct} toggleEdit={() => router.push(`/admin/products/${item.id}`)} isPreview={true} hideRating id={item.id} slug={item.slug} price={item.price} salePrice={item.salePrice} variant={item.value} title={item.name} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.salePrice)} productData={item} />
           </Grid2>)}</Grid2>}
     </PageWrapper>;
 }

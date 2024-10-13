@@ -3,7 +3,7 @@ import { Navbar, NavigationList } from "components/navbar";
 import { LAYOUT_DATA } from "utils/constants";
 // API FUNCTIONS
 
-export default async function Layout({
+export default function Layout({
   children
 }) {
   const data = LAYOUT_DATA; 

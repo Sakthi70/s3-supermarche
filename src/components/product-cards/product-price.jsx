@@ -21,7 +21,7 @@ export default function ProductPrice({
       </Paragraph>}
 
       {(discount && discount > 0) ? <Box component="del" fontWeight={600} color="grey.600">
-          {currency(price)}
+          {currency(discount)}
         </Box> : null}
     </FlexBox>;
 }

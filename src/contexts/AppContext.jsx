@@ -1,6 +1,7 @@
 "use client";
 
 import { getCategories,createCategory as cCategroy } from "actions/categories";
+import { getFooterLinks, getSettings } from "actions/settings";
 import useSettings from "hooks/useSettings";
 import { createContext, useEffect, useState } from "react"; 
 // ============================================================
@@ -14,11 +15,14 @@ import { createContext, useEffect, useState } from "react";
 const initialValues
  = {
   categories: [],
-  products: []
+  products: [],
+  settings:{},
+  footerLinks:[]
 };
 export const AppContext = createContext({
   content: initialValues,
   loading : arg => {},
+  getAllSettings: ()=>{},
   categories: {
   updateCategory: arg => {},
   createCategory: arg => {},
@@ -30,7 +34,7 @@ export default function AppProvider({
 }) {
   const [content, setContent] = useState(initialValues);
 
-  const {settings, updateSettings} = useSettings();
+  const { updateSettings} = useSettings();
 
 
   const createCategory = async(category) => {
@@ -55,18 +59,29 @@ export default function AppProvider({
     
   }
 
+  const getAllSettings = async() => {
+  await getSettings().then((setting) => setContent((val) => { return {...val, settings:setting}}))
+  await getFooterLinks().then((footerLinks) => setContent((val) => { return {...val, footerLinks}}))
+  }
+
   const loading =(value)=> {
      updateSettings({ loading: value})
   }
 
+  const loadAllData =async()=>{
+     loading(true);
+    await getAllCategories();
+    await getAllSettings();
+     loading(false);
+  }
+
   useEffect(() => {
-    loading(true);
-    getAllCategories();
-    loading(false);
+    loadAllData();
   }, []);
   return <AppContext.Provider value={{
     content,
     loading,
+    getAllSettings,
     categories: {
       createCategory,
       updateCategory,

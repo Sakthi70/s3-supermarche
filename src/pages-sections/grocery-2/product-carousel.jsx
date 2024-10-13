@@ -36,7 +36,7 @@ export default function ProductCarousel({
 
       <Carousel slidesToShow={4} responsive={responsive}>
         {products.map(item => <Box py={0.5} key={item.id}>
-            <ProductCard1 hideRating id={item.id} slug={item.slug} price={item.price} title={item.name} rating={item.rating} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.offerPrice)} productData={item} />
+            <ProductCard1 hideRating id={item.id} slug={item.slug} variant={item.value} price={item.price} salePrice={item.salePrice} title={item.name} rating={item.rating} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.offerPrice)} productData={item} />
           </Box>)}
       </Carousel>
     </div>;

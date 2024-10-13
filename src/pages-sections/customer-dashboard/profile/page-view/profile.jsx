@@ -9,13 +9,13 @@ import UserAnalytics from "../user-analytics";
 import DashboardHeader from "../../dashboard-header"; 
 import DeliveryAddress from "pages-sections/checkout/checkout-alt-form/delivery-address";
 import { useSession } from "next-auth/react";
-import { finduserById } from "actions/user";
+import { createAddress, deleteAddress, finduserById, updateAddress } from "actions/user";
 import { PageLoader } from "pages-sections/vendor-dashboard/categories/page-view/create-category";
 import { Box, Button, Dialog, useMediaQuery } from "@mui/material";
 import Link from "next/link";
-import { Wrapper } from "pages-sections/sessions/styles";
 import ResetPassword from "pages-sections/sessions/page-view/reset-password";
 import Warning from "components/warning/warning";
+import useApp from "hooks/useApp";
 // CUSTOM DATA MODEL
 
 
@@ -24,6 +24,7 @@ export default function ProfilePageView() {
   const [userDetail, setuserDetail] = useState()
   const [isconfirm, setisconfirm] = useState(false)
   const [dailogOpen, setdailogOpen] = useState(false)
+  const {loading} =useApp()
   const {data:session, status} = useSession();
   useEffect(() => {
    if(session.user){
@@ -35,6 +36,24 @@ export default function ProfilePageView() {
   const getUserDetails =async(id) => {
    await finduserById(id).then(x => setuserDetail(x));
   } 
+
+  const handleAddNewAddress =async(address)=>{
+      loading(true);
+      await createAddress({...address, userId: session.user?.id}).then(async() => await getUserDetails(session.user.id)).finally(()=> loading(false))
+  }
+
+  const handleDeleteAddress = async(id)=>{
+    loading(true);
+      await deleteAddress(id).then(async() => await getUserDetails(session.user.id)).finally(()=> loading(false))
+ 
+  }
+
+  const handleEditAddress =async(data)=>{
+    loading(true);
+      await updateAddress(data).then(async() => await getUserDetails(session.user.id)).finally(()=> loading(false))
+ 
+  }
+
 
   const HeaderComp = () => <Box display={'flex'} gap={2}>
     <Button  color="primary" onClick={()=>setdailogOpen(true)}  sx={{
@@ -73,7 +92,7 @@ export default function ProfilePageView() {
      
       <UserAnalytics user={userDetail} />
 
-        <DeliveryAddress/> 
+        <DeliveryAddress handleEditAddress={handleEditAddress} handleDeleteAddress={handleDeleteAddress} handleAddNewAddress={handleAddNewAddress} userId={userDetail.id} addresses={userDetail?.addresses}/> 
 
       
     </Fragment> : <PageLoader/> }</>;

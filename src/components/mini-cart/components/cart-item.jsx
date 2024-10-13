@@ -25,7 +25,7 @@ export default function MiniCartItem({
 }) {
   return <FlexBox py={2} px={2.5} key={item.id} alignItems="center" borderBottom="1px solid" borderColor="divider">
       <FlexBox alignItems="center" flexDirection="column">
-        <Button size="small" color="primary" variant="outlined" onClick={handleCartAmountChange(item.qty + 1, item)} sx={{
+        <Button size="small" disabled={item.qty >= item.stock || (item.limit && item.qty>=item.limit)} color="primary" variant="outlined" onClick={handleCartAmountChange(item.qty + 1, item)} sx={{
         height: 28,
         width: 28,
         borderRadius: 50
@@ -53,18 +53,18 @@ export default function MiniCartItem({
       </Link>
 
       <Box flex="1" textOverflow="ellipsis" whiteSpace="nowrap" overflow="hidden">
-        <Link href={`/products/${item.slug}`}>
+        <Link href={`/products/${item.id}`}>
           <H6 ellipsis className="title">
             {item.name}
           </H6>
         </Link>
 
         <Tiny color="grey.600">
-          {currency(item.price)} x {item.qty}
+          {currency(item.salePrice || item.price)} x {item.qty}
         </Tiny>
 
         <H6 color="primary.main" mt={0.5}>
-          {currency(item.qty * item.price)}
+          {currency(item.qty * item.salePrice || item.price)}
         </H6>
       </Box>
 

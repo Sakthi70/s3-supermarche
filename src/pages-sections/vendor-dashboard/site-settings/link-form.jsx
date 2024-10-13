@@ -18,26 +18,23 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 const LinkForm = () => {
 
   const [links, setLinks] = useState();
-  const {loading} =useApp();
+  const {loading,content,getAllSettings} =useApp();
 
 
   useEffect(() => {
-    getLinks();
-  }, [])
+    setLinks(content.footerLinks);
+  }, [content.footerLinks])
 
-  const getLinks =async()=>{
-      await getFooterLinks().then((footerLinks) => {setLinks(footerLinks)})
-  }
 
   const handleFormSubmit = async values => {
     loading(true);
-    await createFooterLinks(values.links.filter(x=> !(!x.id && x.name.trim() === '' && x.url.trim() === ''))).then(async() => await getLinks()).finally(() => loading(false))
+    await createFooterLinks(values.links.filter(x=> !(!x.id && x.name.trim() === '' && x.url.trim() === ''))).then(async() => getAllSettings()).finally(() => loading(false))
   };
   
 
   const handleDelete =async(id)=> {
     loading(true)
-      await deleteFooterLink(id).finally(() => loading(false))
+      await deleteFooterLink(id).then(() => getAllSettings()).finally(() => loading(false))
   }
 
   if(!links){

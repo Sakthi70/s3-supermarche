@@ -33,6 +33,7 @@ export default function ProductCard14({
     title,
     thumbnail,
     price,
+    salePrice,
     discount
   } = product || {};
   const {
@@ -45,6 +46,7 @@ export default function ProductCard14({
       id,
       slug,
       price,
+      salePrice,
       name: title,
       imgUrl: thumbnail,
       qty: (cartItem?.qty || 0) + 1
@@ -57,6 +59,7 @@ export default function ProductCard14({
       id,
       slug,
       price,
+      salePrice,
       name: title,
       imgUrl: thumbnail,
       qty: (cartItem?.qty || 0) - 1

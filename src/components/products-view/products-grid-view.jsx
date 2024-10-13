@@ -19,7 +19,6 @@ export default function ProductsGridView({
   const handleChange = (event, value) => {
     setPage(value);
   };
-
   const displayItemCount = () => {
     const start = (page - 1) * countperPage + 1;
     const end = Math.min(page * countperPage, products.length);
@@ -28,7 +27,7 @@ export default function ProductsGridView({
   return <Fragment>
       <Grid container spacing={3}>
         {products.slice((page - 1) *countperPage,((page - 1) *countperPage)+countperPage).map(item => <Grid item lg={4} sm={6} xs={12} key={item.id}>
-            <ProductCard1 hideRating id={item.id} slug={item.slug} price={item.price} title={item.name} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.salePrice)} productData={item} />
+            <ProductCard1 hideRating id={item.id} slug={item.slug} price={item.price} salePrice={item.salePrice} variant={item.value} title={item.name} imgUrl={item.images} discount={calculateDiscountPercentage(item.price,item.salePrice)} productData={item} />
           </Grid>)}
       </Grid>
 

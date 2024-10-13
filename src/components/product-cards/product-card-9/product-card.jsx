@@ -21,6 +21,8 @@ import useApp from "hooks/useApp";
 import { useState } from "react";
 import QuantityButtons from "../product-card-1/components/quantity-buttons";
 import { calculateDiscountPercentage } from "utils/util";
+import { CategoryWrapper } from "pages-sections/vendor-dashboard/styles";
+import { Divider } from "@mui/material";
 // STYLED COMPONENT
 
 const Wrapper = styled(Card)({
@@ -39,7 +41,7 @@ const ContentWrapper = styled("div")(({
     width: 150,
     flexShrink: 0,
     position: "relative",
-    backgroundColor: theme.palette.grey[200]
+    // backgroundColor: theme.palette.grey[200]
   },
   "& .content": {
     flex: 1,
@@ -69,7 +71,9 @@ export default function ProductCard9(props) {
    slug,
   title,
   price,
+  limit,stock,
   salePrice,
+  variant,
   imgUrl,
   tags,
   } = props || {};
@@ -93,6 +97,9 @@ export default function ProductCard9(props) {
       id,
       slug,
       price,
+      salePrice,
+      variant,
+      limit,stock,
       imgUrl,
       name: title,
       qty: (cartItem?.qty || 0) + 1
@@ -106,6 +113,9 @@ export default function ProductCard9(props) {
       id,
       slug,
       price,
+      salePrice,
+      variant,
+      limit,stock,
       imgUrl,
       name: title,
       qty: (cartItem?.qty || 0) - 1
@@ -132,6 +142,7 @@ export default function ProductCard9(props) {
           <LazyImage src={imgUrl} alt={title} width={100} height={100} />
         </div>
 
+          <Divider sx={{width:{sx:1, sm:0}}}/>
         <div className="content">
           <div>
             {
@@ -147,6 +158,7 @@ export default function ProductCard9(props) {
                 {title}
               </H5>
             </Link>
+            <CategoryWrapper>{variant}</CategoryWrapper>
 
             {
             /* PRODUCT RATING / REVIEW  */
@@ -162,7 +174,7 @@ export default function ProductCard9(props) {
           {
           /* PRODUCT ADD TO CART BUTTON */
         }
-          <QuantityButtons quantity={cartItem?.qty || 0} handleIncrement={handleIncrementQuantity} handleDecrement={handleDecrementQuantity} />
+          <QuantityButtons limit={limit} stock={stock} quantity={cartItem?.qty || 0} handleIncrement={handleIncrementQuantity} handleDecrement={handleDecrementQuantity} />
         </div>
       </ContentWrapper>
     </Wrapper>;

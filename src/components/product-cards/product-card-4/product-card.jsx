@@ -28,6 +28,7 @@ export default function ProductCard4(props) {
     id,
     title,
     price,
+    salePrice,
     imgUrl,
     rating,
     hideRating,
@@ -48,6 +49,7 @@ export default function ProductCard4(props) {
       id,
       slug,
       price,
+      salePrice,
       imgUrl,
       name: title,
       qty: (cartItem?.qty || 0) + 1
@@ -60,6 +62,7 @@ export default function ProductCard4(props) {
       id,
       slug,
       price,
+      salePrice,
       imgUrl,
       name: title,
       qty: (cartItem?.qty || 0) - 1

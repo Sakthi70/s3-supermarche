@@ -131,7 +131,7 @@ const PaymentDetails = ({
         </Collapse>
       </Box>
 
-      <Button fullWidth type="submit" color="primary" variant="contained">
+      <Button fullWidth  color="primary" variant="contained">
         Place Order
       </Button>
     </Card>;

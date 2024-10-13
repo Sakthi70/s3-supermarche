@@ -34,7 +34,7 @@ import { useSearchParams } from "next/navigation";
 
 // ================================================================
 export default function ProductIntro({ product }) {
-  const { id, price, name, images, slug,stock } = product || {};
+  const { id, price, name, images, slug,stock,limit } = product || {};
   const { state, dispatch } = useCart();
   const searchParams = useSearchParams();
   const isPreview = searchParams.get('isPreview'); 
@@ -53,6 +53,7 @@ export default function ProductIntro({ product }) {
         price,
         qty: amount,
         name: name,
+        stock,limit,
         imgUrl: images.length > 0 ? images[0] : NO_IMAGE_FOR_PRODUCT ,
         id,
         slug,
@@ -191,7 +192,7 @@ export default function ProductIntro({ product }) {
 
               <Button
                 size="small"
-                disabled={cartItem?.qty >= stock}
+                disabled={cartItem?.qty >= stock || (limit && cartItem?.qty >= limit)}
                 sx={{
                   p: 1,
                 }}

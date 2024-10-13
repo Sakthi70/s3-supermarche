@@ -448,7 +448,7 @@ export default function ProductForm({ isEdit = false, product }) {
                   error={Boolean(touched.salePrice && errors.salePrice)}
                 />
               </Grid>
-            <Grid item sm={6} xs={12}>
+            {/* <Grid item sm={6} xs={12}>
                 <FormControl fullWidth>
                   <InputLabel>
                     {t("Variant Type")}
@@ -462,7 +462,7 @@ export default function ProductForm({ isEdit = false, product }) {
                     <MenuItem value={'Colour'}>{t("Colour")}</MenuItem>
                   </Select>
                 </FormControl>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
             {values.type === 'Other' ? (
               <TextField

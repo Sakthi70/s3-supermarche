@@ -44,14 +44,15 @@ export default function ProductRow({
     enabled,
     id,
     published,
-    slug
+    limit,
+    slug,category
   } = product || {};
   const router = useRouter();
   const {loading}=useApp();
   const [productPublish, setProductPublish] = useState(published);
   const [openDailog, setopenDailog] = useState(false);
   const [openDelete, setopenDelete] = useState(false);
-  const category = categories.find(x=> x.id === product.categoryId).name ?? ""
+  // const category = categories.find(x=> x.id === product.categoryId).name ?? ""
   
   const onDelete =async() =>{
     loading(true)
@@ -79,7 +80,7 @@ export default function ProductRow({
       </StyledTableCell>
 
       <StyledTableCell align="left">
-        <CategoryWrapper>{category}</CategoryWrapper>
+        <CategoryWrapper>{category?.name}</CategoryWrapper>
       </StyledTableCell>
 
       {/* <StyledTableCell align="left">
@@ -93,6 +94,7 @@ export default function ProductRow({
       <StyledTableCell align="left">{
        <ProductPrice discount={salePrice} price={price} />}</StyledTableCell>
        <StyledTableCell align="left"><ProductStock stock={stock}/></StyledTableCell>
+       <StyledTableCell align="center">{limit}</StyledTableCell>
        <StyledTableCell align="center">{value}</StyledTableCell>
       <StyledTableCell align="left">
         <BazaarSwitch color="info" checked={enabled} onChange={() => setProductPublish(state => !state)} />

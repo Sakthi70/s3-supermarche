@@ -58,9 +58,9 @@ const FooterForm = ({ settings, onSave }) => {
       };
       return <form onSubmit={handleSubmit}>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={values.footerImage ? 6:12}>
             {values.footerImage ? 
-            <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
+            <FlexBox position={'relative'} flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
               <Box component={'img'} src={_.isObject(values.footerImage) ? values.footerImage.preview : values.footerImage}>
               </Box>
               <StyledClear onClick={() => setFieldValue('footerImage',null)} />

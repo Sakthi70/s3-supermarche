@@ -19,9 +19,10 @@ import { Footer2 } from "components/footer";
 import Newsletter from "components/newsletter/newsletter";
 import { MobileNavigationBar2 } from "components/mobile-navigation";
 import Scrollbar from "components/scrollbar/scrollbar";
-import { Logout } from "@mui/icons-material";
+import { AdminPanelSettings, Logout } from "@mui/icons-material";
 import { logout } from "actions/auth";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 // CUSTOM DATA MODEL
 
 
@@ -37,6 +38,7 @@ export default function ShopLayout2({
     mobileNavigation
   } = data;
   const{data:session ,status}= useSession();
+  const router =useRouter();
   const [isFixed, setIsFixed] = useState(false);
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
   const {dialogOpen,sidenavOpen, toggleDialog, toggleSidenav } = useHeader();
@@ -52,6 +54,9 @@ export default function ShopLayout2({
         <HeaderSearch>
           <SearchInput />
         </HeaderSearch>
+        {DOWN_600  && status === 'authenticated' && session.user?.admin && <IconButton onClick={async() =>  router.push('/vendor/dashboard')}>
+          <AdminPanelSettings sx={{color:'grey.600'}} />
+        </IconButton> }
         {DOWN_600  && status === 'authenticated' && <IconButton onClick={async() =>  await logout()}>
           <Logout sx={{color:'grey.600'}} />
         </IconButton> }
@@ -105,19 +110,11 @@ export default function ShopLayout2({
         toggleDialog={toggleDialog}
         toggleSidenav={toggleSidenav}
       />
-      {
-      /* NAVIGATION BAR */
-    }
-      {/* {navbar ?? <Divider />} */}
-
-      {
-      /* BODY CONTENT */
-    }
       {children}
       
-    {!DOWN_600 &&  <Footer2 />}
-
-      <Newsletter image="/assets/images/newsletter/bg-2.png" />
+    {/* {!DOWN_600 &&  <Footer2 />} */}
+    <Footer2 />
+      {/* <Newsletter image="/assets/images/newsletter/bg-2.png" /> */}
       {DOWN_600 && <MobileNavigationBar2>
         {/* <Scrollbar>{SideNav}</Scrollbar> */}
       </MobileNavigationBar2>}

@@ -42,7 +42,7 @@ export default function AccountPopover({isAdmin = true}) {
      {isAdmin && <IconButton sx={{
       padding: 0
     }} aria-haspopup="true" onClick={e => setAnchorEl(e.currentTarget)} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
-        <Avatar alt={t("Admin")} src="/assets/images/avatars/001-man.svg" />
+        <Avatar alt={t("Admin")} src={session.user?.image ??"/assets/images/avatars/001-man.svg"} />
       </IconButton>}
 
      {!isAdmin && <IconButton onClick={e => setAnchorEl(e.currentTarget)}>
@@ -91,7 +91,7 @@ export default function AccountPopover({isAdmin = true}) {
       }
     }}>
         {isAdmin && <MenuItem><Box px={2} pt={1}>
-          <H6>{t("User")}</H6>
+          <H6>{session.user?.name}</H6>
           <Small color="grey.500">{t("Admin")}</Small>
         </Box> </MenuItem>}
 

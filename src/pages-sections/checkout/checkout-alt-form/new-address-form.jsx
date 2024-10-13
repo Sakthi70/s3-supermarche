@@ -1,20 +1,23 @@
-import { Fragment, useState } from "react"; 
+import { Fragment, useState } from "react";
 // MUI
 
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
-import DialogContent from "@mui/material/DialogContent"; 
+import DialogContent from "@mui/material/DialogContent";
 // FORMIK
 
-import { useFormik } from "formik"; 
+import { useFormik } from "formik";
 // YUP
 
-import * as yup from "yup"; 
+import * as yup from "yup";
 // LOCAL CUSTOM COMPONENT
 
-import { H5 } from "components/Typography"; 
+import { H5 } from "components/Typography";
+import useApp from "hooks/useApp";
+import { Divider, FormControl, FormHelperText, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { useEffect } from "react";
 // CUSTOM DATA MODEL
 
 const validationSchema = yup.object({
@@ -22,7 +25,7 @@ const validationSchema = yup.object({
   address: yup.string().required("required"),
   city: yup.string().required("required"),
   phone: yup.number().required("required"),
-}); 
+});
 // ==================================================================
 
 
@@ -34,16 +37,22 @@ export default function NewAddressForm({
 
   const handleCloseModal = () => setOpenModal(false);
 
+  const { content } = useApp();
+
+  const { settings } = content
+
   const initialValues = {
-    name: "UI Lib",
-    address: "321, Subid Bazaar",
-    phone: "01789123456",
-    city: "Sylhet",
+    name: "",
+    address: "",
+    phone: "",
+    city: "",
   };
   const {
     handleChange,
     handleSubmit,
+    setFieldValue,
     errors,
+    resetForm,
     touched,
     values
   } = useFormik({
@@ -57,40 +66,63 @@ export default function NewAddressForm({
       resetForm({});
     }
   });
+  useEffect(() => {
+      resetForm({values:initialValues})
+  }, [openModal])
+  
   return <Fragment>
-      <Button color="primary" variant="outlined" onClick={() => setOpenModal(true)}>
-        Add New Address
-      </Button>
+    <Button color="primary" variant="outlined" onClick={() => setOpenModal(true)}>
+      Add New Address
+    </Button>
 
-      <Dialog open={openModal} onClose={handleCloseModal}>
-        <DialogContent>
-          <H5 mb={4}>Add New Address Information</H5>
+    <Dialog open={openModal} >
+      <DialogContent>
+        <H5 mb={4}>Add New Address Information</H5>
 
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item sm={6} xs={12}>
-                <TextField fullWidth type="text" name="name" value={values.name} label="Enter Your Name" onChange={handleChange} helperText={touched.name && errors.name} error={touched.name && Boolean(errors.name)} />
-              </Grid>
-
-              <Grid item sm={6} xs={12}>
-                <TextField fullWidth type="text" name="address" label="Address" value={values.address} onChange={handleChange} helperText={touched.address && errors.address} error={touched.address && Boolean(errors.address)} />
-              </Grid>
-
-              <Grid item sm={6} xs={12}>
-                <TextField fullWidth type="text" name="street2" label="Address line 2" value={values.street2} onChange={handleChange} helperText={touched.street2 && errors.street2} error={touched.street2 && Boolean(errors.street2)} />
-              </Grid>
-
-              <Grid item sm={6} xs={12}>
-                <TextField fullWidth type="text" name="phone" value={values.phone} onChange={handleChange} label="Enter Your Phone" helperText={touched.phone && errors.phone} error={touched.phone && Boolean(errors.phone)} />
-              </Grid>
-              <Grid item sm={6} xs={12}>
-                <Button color="primary" variant="contained" type="submit">
-                  Save
-                </Button>
-              </Grid>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={3}>
+            <Grid item sm={6} xs={12}>
+              <TextField fullWidth type="text" name="name" value={values.name} label="Enter Your Name" onChange={handleChange} helperText={touched.name && errors.name} error={touched.name && Boolean(errors.name)} />
             </Grid>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </Fragment>;
+
+            <Grid item sm={6} xs={12}>
+              <TextField fullWidth type="text" name="address" label="Address" value={values.address} onChange={handleChange} helperText={touched.address && errors.address} error={touched.address && Boolean(errors.address)} />
+            </Grid>
+
+            <Grid item sm={6} xs={12}>
+              <FormControl fullWidth size="small" error={ touched.city && Boolean(errors.city)}>
+                <InputLabel>City</InputLabel>
+                <Select
+                  value={values.city}
+                  size="small"
+                  label="City"
+                  onChange={(e) => setFieldValue('city', e.target.value)}
+                >
+                  {settings.cities.map((x,index) => <MenuItem key={index} value={x}>{x}</MenuItem>)}
+                </Select>
+                <FormHelperText>{touched.city && errors.city}</FormHelperText>
+              </FormControl>
+            </Grid>
+
+            <Grid item sm={6} xs={12}>
+              <TextField fullWidth type="text" name="phone" value={values.phone} onChange={handleChange} label="Enter Your Phone" helperText={touched.phone && errors.phone} error={touched.phone && Boolean(errors.phone)} />
+            </Grid>
+            <Grid item sm={6}  xs={12}>
+            <Button color="primary" sx={{mr:1}} variant="text" onClick={handleCloseModal}>
+                Cancel
+              </Button>
+              <Button color="primary" variant="contained" type="submit">
+                Save
+              </Button>
+            </Grid>
+            <Grid item xs={12}><Divider /></Grid>
+            <Typography pt={1} px={3} color="textSecondary" variant="subtitle2" fontStyle={'italic'}>
+
+              If your city is not listed, we are still working to reach our service to your city
+            </Typography>
+          </Grid>
+        </form>
+      </DialogContent>
+    </Dialog>
+  </Fragment>;
 }
