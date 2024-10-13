@@ -14,7 +14,7 @@ import _ from "lodash";
 import { Box } from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import { StyledClear } from "../styles";
-import { deleteUpload } from "utils/cloudinary";
+import { deleteUpload, imageUpload } from "utils/cloudinary";
 
 const FooterForm = ({ settings, onSave }) => {
 

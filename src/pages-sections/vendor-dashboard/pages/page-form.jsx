@@ -10,7 +10,7 @@ import _ from 'lodash';
 import PageContentWithEditor from "components/utils/PageContentWithEditor";
 import { ColorPicker } from 'mui-color';
 import useApp from 'hooks/useApp';
-import { imageUpload } from 'utils/cloudinary';
+import { deleteUpload, imageUpload } from 'utils/cloudinary';
 import { createPage, updatePage } from 'actions/pages';
 
 
