@@ -64,7 +64,8 @@ const getData =async() => {
   setbestName( best ? best.name : "S3 Supermarche");
   let additionalCategories = getAllCategoriesByOption(categories, additional ? additional.id : null);
   additionalCategories = _.compact(additionalCategories);
-  setaddName(additionalCategories.length > 1 ? additionalCategories.slice(0,2).map(x => categories.find(y => y.id === x) && categories.find(y => y.id === x).name).join(', ') : categories.find(x => x.id === additionalCategories[0]).name);
+  setaddName(additionalCategories.length > 1 ?
+     additionalCategories.slice(0,2).map(x => categories.find(y => y.id === x) && categories.find(y => y.id === x).name).join(', ') : categories.find(x => x.id === additionalCategories[0]) ? categories.find(x => x.id === additionalCategories[0]).name: "");
   await getRandomProducts(additionalCategories).then((addProds) => setadditionalProducts(addProds));
   setloading(false)
 }

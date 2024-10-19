@@ -29,7 +29,6 @@ import { useRouter } from "next/navigation";
 // ==============================================================
 export default function ShopLayout2({
   children,
-  navbar,
   data
 }) {
   const {

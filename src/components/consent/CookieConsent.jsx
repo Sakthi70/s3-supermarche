@@ -2,6 +2,7 @@
 import React from "react";
 import { hasCookie, setCookie } from "cookies-next";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, SnackbarContent, useMediaQuery} from "@mui/material";
+import './index.css';
 
 const CookieConsent = (props) => {
   const [showConsent, setShowConsent] = React.useState(true);
@@ -24,20 +25,23 @@ const CookieConsent = (props) => {
     return null;
   }
 
-  const action = (
-    <Button color="primary" size="small" onClick={acceptCookie}>
-      Accept
-    </Button>
-  );
-
-
+  
   return (
-    <Box position={'sticky'} p={2} sx={{bottom:0, zIndex:1999}}>
-    <SnackbarContent
-    message="This website uses cookies to improve user experience. By using our website you consent to all cookies in accordance with our Cookie Policy."
-    action={action}
-  />
-  </Box>
+  <div className="wrapper show">
+      <header>
+        <i className="bx bx-cookie"></i>
+        <h2>Cookies Consent</h2>
+      </header>
+
+      <div className="data">
+        <p>This website use cookies to help you have a superior and more relevant browsing experience on the website. </p>
+      </div>
+
+      <div className="buttons">
+        <button className="button" id="acceptBtn" onClick={acceptCookie}>Accept</button>
+      </div>
+    </div>
+
   );
 };
 

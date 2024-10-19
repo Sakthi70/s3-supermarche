@@ -41,6 +41,9 @@ const reducer = (state, action) => {
       }
       localStorage.setItem(state.user?.id, JSON.stringify([...cartList, cartItem]) );
       return { ...state, cart: [...cartList, cartItem] };
+    case "EMPTY_CART":
+      localStorage.setItem(state.user?.id, JSON.stringify([]) );
+      return { ...state, cart: [] };
     case "REINITIALIZE":
        return action.payload
     default: {

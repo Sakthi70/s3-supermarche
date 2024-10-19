@@ -42,7 +42,7 @@ const DeliveryAddress = ({
     my: 3
   }}>
       <Warning open={selectedId} content={'Are you sure to delete the address?'} title={'Delete Address'} ok="Cancel" isSubmit={true} onSubmit={async()=>{await handleDeleteAddress(selectedId); setselectedId(null)}} handleClose={() => setselectedId(null)} submit="Delete" />
-      <FlexBetween mb={4}>
+      <FlexBetween mb={4} sx={{flexDirection:{xs:'column', sm:'row'}}} gap={2}>
         <FlexBox alignItems="center" gap={1.5}>
           <Place color="primary" />
           <H2 my={0} lineHeight={1} ellipsis>
